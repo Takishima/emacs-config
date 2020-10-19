@@ -83,15 +83,15 @@
 (use-package irony
   :ensure t
   :after company
-  :hook ((after-init . global-company-mode)
-	 (irony-mode . company-irony-setup-begin-commands)
-	 (c++-mode-hook . irony-mode)
-	 (c-mode-hook . irony-mode)
-	 (objc-mode-hook . irony-mode)
-	 )
+  ;; :hook (
+  ;;        (irony-mode . company-irony-setup-begin-commands)
+  ;;        (c++-mode-hook . irony-mode)
+  ;;        (c-mode-hook . irony-mode)
+  ;;        (objc-mode-hook . irony-mode)
+  ;;        )
   :config
-  (eval-after-load 'company
-    '(add-to-list 'company-backends 'company-irony))
+  ;; (eval-after-load 'company
+  ;;   '(add-to-list 'company-backends 'company-irony))
   (config-with-system darwin
     (add-to-list 'irony-additional-clang-options
 		 (concat "-I"(file-name-as-directory
@@ -113,11 +113,6 @@
       [remap complete-symbol] 'counsel-irony))
   (add-hook 'irony-mode-hook 'my-irony-mode-hook)
   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-
-  ;; (optional) adds CC special commands to `company-begin-commands' in order to
-  ;; trigger completion at interesting places, such as after scope operator
-  ;;     std::|
-  (add-hook 'irony-mode-hook 'company-irony-setup-begin-commands)
   )
 
 (use-package flycheck-irony

@@ -42,7 +42,7 @@
 (use-package elpy
   :ensure t
   :init
-  (elpy-enable)
+  ;; (elpy-enable)
   :bind (:map elpy-mode-map
 	      ("<M-left>" . nil)
 	      ("<M-right>" . nil)

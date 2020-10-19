@@ -125,7 +125,9 @@
 ;; Load Company mode
 
 (use-package company
-  :ensure t)
+  :ensure t
+  :hook (after-init . global-company-mode)
+  )
 
 (use-package flycheck
   :ensure t)
