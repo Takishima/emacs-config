@@ -119,6 +119,126 @@
 
 ;; ========================================================================== ;;
 
+(use-package lsp-mode
+  :hook ((prog-mode . (lambda ()
+                        (unless (derived-mode-p 'emacs-lisp-mode 'lisp-mode)
+                          (lsp-deferred))))
+         (lsp-mode . lsp-enable-which-key-integration))
+  :config
+  (setq gc-cons-threshold (* 100 1024 1024)
+	read-process-output-max (* 1024 1024)
+	treemacs-space-between-root-nodes nil
+	company-idle-delay 0.1
+	company-minimum-prefix-length 3
+	lsp-idle-delay 0.1
+	lsp-completion-provider :capf
+        ;; Prevent constant auto-formatting...
+        lsp-enable-on-type-formatting nil
+        lsp-enable-indentation nil
+	;; be more ide-ish
+	lsp-headerline-breadcrumb-enable t)
+  (lsp-register-custom-settings '(("pyls.plugins.flake8.enabled" t t)))
+  )
+
+;; Taken from https://tychoish.com/post/emacs-and-lsp-mode/
+(use-package lsp-ui
+  :ensure t
+  :after (lsp-mode)
+  :commands lsp-ui-doc-hide
+  :bind (:map lsp-ui-mode-map
+         ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+         ([remap xref-find-references] . lsp-ui-peek-find-references)
+         ("C-c u" . lsp-ui-imenu))
+  :init (setq lsp-ui-doc-enable t
+         lsp-ui-doc-use-webkit nil
+         lsp-ui-doc-header nil
+         lsp-ui-doc-delay 0.2
+         lsp-ui-doc-include-signature t
+         lsp-ui-doc-alignment 'at-point
+         lsp-ui-doc-use-childframe nil
+         lsp-ui-doc-border (face-foreground 'default)
+         lsp-ui-peek-enable t
+         lsp-ui-peek-show-directory t
+         lsp-ui-sideline-update-mode 'line
+         lsp-ui-sideline-enable t
+         lsp-ui-sideline-show-code-actions t
+         lsp-ui-sideline-show-hover nil
+         lsp-ui-sideline-ignore-duplicate t)
+  :config
+  (add-to-list 'lsp-ui-doc-frame-parameters '(right-fringe . 8))
+
+  ;; `C-g'to close doc
+  (advice-add #'keyboard-quit :before #'lsp-ui-doc-hide)
+
+  ;; Reset `lsp-ui-doc-background' after loading theme
+  (add-hook 'after-load-theme-hook
+       (lambda ()
+         (setq lsp-ui-doc-border (face-foreground 'default))
+         (set-face-background 'lsp-ui-doc-background
+                              (face-background 'tooltip))))
+
+  ;; WORKAROUND Hide mode-line of the lsp-ui-imenu buffer
+  ;; @see https://github.com/emacs-lsp/lsp-ui/issues/243
+  (defadvice lsp-ui-imenu (after hide-lsp-ui-imenu-mode-line activate)
+    (setq mode-line-format nil))
+
+  (defun lsp-update-server ()
+       "Update LSP server."
+       (interactive)
+       ;; Equals to `C-u M-x lsp-install-server'
+       (lsp-install-server t))
+  )
+
+;; Debug
+(use-package dap-mode
+  :ensure t
+  :defines dap-python-executable
+  :functions dap-hydra/nil
+  :diminish
+  :after (lsp-mode)
+  :functions dap-hydra/nil
+  :hook ((dap-mode . dap-ui-mode)
+         (dap-session-created . (lambda (&_rest) (dap-hydra)))
+         (dap-stopped . (lambda (_args) (dap-hydra)))
+         (dap-terminated . (lambda (&_rest) (dap-hydra/nil)))
+         (python-mode . (lambda () (require 'dap-python)))
+         ((c-mode c++-mode objc-mode swift-mode) . (lambda () (require 'dap-lldb)))
+         (powershell-mode . (lambda () (require 'dap-pwsh))))
+  :init
+  (setq dap-auto-configure-features '(sessions locals breakpoints expressions controls))
+  (when (executable-find "python3")
+    (setq dap-python-executable "python3"))
+  )
+
+
+(use-package lsp-ivy
+  :ensure t
+  :commands lsp-ivy-workspace-symbol)
+
+(use-package lsp-treemacs
+  :after (lsp-mode treemacs)
+  :ensure t
+  :commands lsp-treemacs-errors-list
+  :init (lsp-treemacs-sync-mode 1)
+  ;; :bind (:map lsp-mode-map
+  ;;        ("M-9" . lsp-treemacs-errors-list))
+  )
+
+(use-package treemacs
+  :ensure t
+  :commands (treemacs)
+  :after (lsp-mode))
+
+;; Taken from https://github.com/seagle0128/.emacs.d/blob/master/lisp/init-lsp.el
+;; Python: pyright
+;; (use-package lsp-pyright
+;;   :ensure t
+;;   :hook (python-mode . (lambda () (require 'lsp-pyright)))
+;;   :init (when (executable-find "python3")
+;;           (setq lsp-pyright-python-executable-cmd "python3")))
+
+;; ========================================================================== ;;
+
 (let* (
        (dir-path (file-name-as-directory (concat config-dotemacs-lisp "programming")))
        (skip-file (concat dir-path "skip.txt"))

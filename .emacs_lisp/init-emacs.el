@@ -53,6 +53,13 @@
 	      
 ;; ========================================================================== ;;
 
+;; which-key
+(use-package which-key
+  :config
+  (which-key-mode +1))
+
+;; ========================================================================== ;;
+
 ;; Disable auto backup files
 (custom-set-variables '(make-backup-files nil))
 
