@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: ifndef
+# key: ifndef
+# --
+#ifndef ${1:MACRO}
+$0
+#endif // !$1

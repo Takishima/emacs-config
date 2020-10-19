@@ -1,0 +1,4 @@
+*.elc
+.emacs_lisp/config/init-*.el
+.emacs_lisp/custom.el
+.yas-compiled-snippets.el

@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: python
+# key: pycode
+# --
+\`\`\`python
+$1
+\`\`\`
+$0

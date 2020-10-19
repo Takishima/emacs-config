@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: ifz
+# key: ifz
+# --
+if [ -z "$$1" ]; then
+   $0
+fi

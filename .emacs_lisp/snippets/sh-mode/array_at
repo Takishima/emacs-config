@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: array_at
+# key: at
+# --
+\${${1:array}[@]}
