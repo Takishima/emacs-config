@@ -42,15 +42,15 @@
 
 ;; ========================================================================== ;;
 
+(global-set-key (kbd "s-r") 'revert-buffer)
+(global-set-key (kbd "s-R") 'revert-all-buffers)
+
 (config-with-system darwin
   (setq mac-command-modifier 'meta
 	mac-option-modifier 'super
 	default-input-method "MacOSX")
   
-  (global-set-key (kbd "s-r") 'revert-buffer)
-  (global-set-key (kbd "s-R") 'revert-all-buffers)
-
-  ;; Swiss keyboard layout...
+  ;; Apple Swiss keyboard layout...
   (global-set-key (kbd "s-g") (lambda() (interactive) (insert "@")))
   (global-set-key (kbd "s-3") (lambda() (interactive) (insert "#")))
   (global-set-key (kbd "s-4") (lambda() (interactive) (insert "Ç")))
@@ -64,6 +64,8 @@
   ;; (global-set-key (kbd "±") 'text-scale-increase)
   ;; (global-set-key (kbd "–") 'text-scale-decrease)
   )
+
+;; ========================================================================== ;;
 
 (provide 'init-keybindings)
 
