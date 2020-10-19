@@ -61,9 +61,12 @@
 
 ;; ========================================================================== ;;
 
+(use-package diminish
+  :ensure t)
+
 (use-package ivy
   :ensure t
-  :diminish (ivy-mode . "")
+  :diminish (ivy-mode counsel-mode)
   :bind
   (:map ivy-mode-map
 	("C-x C-r" . counsel-recentf)
@@ -104,7 +107,7 @@
 	))))
   (setq magit-completing-read-function 'ivy-completing-read)
   )
-;; (ivy-mode 1)
+(ivy-mode 1)
 
 ;; ========================================================================== ;;
 ;; Load Yasnippet
