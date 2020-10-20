@@ -54,7 +54,8 @@
   (:map cmake-mode-map
 	(("C-c i" . compile-in-iterm)
 	 ))
-  :hook cmake-mode
+  :hook
+  (cmake-mode . cmake-format-mode)
   )
 
 ;; -------------------------------------------------------------------------- ;;
