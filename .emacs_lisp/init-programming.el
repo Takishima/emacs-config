@@ -105,6 +105,8 @@
 
 (use-package editorconfig
   :ensure t
+  :config
+  (editorconfig-mode 1)
   )
 
 (use-package editorconfig-generate
@@ -240,6 +242,7 @@
 
 ;; ========================================================================== ;;
 
+(byte-recompile-directory (concat config-dotemacs-lisp "programming") 0)
 (let* (
        (dir-path (file-name-as-directory (concat config-dotemacs-lisp "programming")))
        (skip-file (concat dir-path "skip.txt"))
