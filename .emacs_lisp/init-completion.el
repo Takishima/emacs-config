@@ -112,8 +112,8 @@
 ;; ========================================================================== ;;
 ;; Load Yasnippet
 
-(unless (boundp config-yasnippet-dir)
-  (defconst config-yasnippet-dir (concat config-dotemacs-lisp "snippets/"))
+(unless (boundp 'config-yasnippet-dir)
+  (defconst config-yasnippet-dir (concat config-dotemacs-lisp "snippets/")))
 
 (use-package yasnippet
   :ensure t
