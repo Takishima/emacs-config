@@ -81,7 +81,7 @@ This requires the pytest package to be installed."
 
 ;; ========================================================================== ;;
 
-(use-package python-mode
+(use-package python
   :ensure nil
   :init
   (progn
@@ -102,6 +102,44 @@ This requires the pytest package to be installed."
      "';'.join(module_completion('''%s'''))\n"
      python-shell-completion-string-code
      "';'.join(get_ipython().Completer.all_completions('''%s'''))\n"))
+  )
+
+;; -------------------------------------------------------------------------- ;;
+
+(use-package lsp-pyright
+  :ensure t
+  :after lsp-mode
+  :hook (python-mode . (lambda ()
+                         (require 'lsp-pyright)
+                         (lsp-deferred)))  ; or lsp-deferred
+  :custom
+  (lsp-pyright-auto-import-completions nil)
+  (lsp-pyright-typechecking-mode "off")
+  (lsp-pyright-python-executable-cmd "python3")
+  :config
+  (fk/async-process
+   "npm outdated -g | grep pyright | wc -l" nil
+   (lambda (process output)
+     (pcase output
+       ("0\n" (message "Pyright is up to date."))
+       ("1\n" (message "A pyright update is available.")))))
+  )
+
+;; -------------------------------------------------------------------------- ;;
+
+(use-package pyvenv
+  :ensure t
+  :after python
+  :config
+  (defun fk/activate-pyvenv ()
+    "Activate python environment according to the `.venv' file."
+    (interactive)
+    (pyvenv-mode)
+    (let* ((pdir (projectile-project-root)) (pfile (concat pdir ".venv")))
+      (if (file-exists-p pfile)
+          (pyvenv-workon (with-temp-buffer
+                           (insert-file-contents pfile)
+                           (nth 0 (split-string (buffer-string))))))))
   )
 
 ;; -------------------------------------------------------------------------- ;;

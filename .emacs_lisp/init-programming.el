@@ -127,22 +127,22 @@
                         (unless (derived-mode-p 'emacs-lisp-mode 'lisp-mode 'python-mode)
                           (lsp-deferred))))
          (lsp-mode . lsp-enable-which-key-integration))
-  :config
-  (setq gc-cons-threshold (* 100 1024 1024)
-	read-process-output-max (* 1024 1024)
-	treemacs-space-between-root-nodes nil
-	company-idle-delay 0.1
-	company-minimum-prefix-length 3
-	lsp-idle-delay 0.1
-	lsp-completion-provider :capf
-        ;; Prevent constant auto-formatting...
-        lsp-enable-on-type-formatting nil
-        lsp-enable-indentation nil
-	;; be more ide-ish
-	lsp-headerline-breadcrumb-enable t
-        ;; python-related settings
-        lsp-pyls-plugins-autopep8-enabled nil
-        lsp-pyls-plugins-yapf-enabled t)
+  :custom
+  (gc-cons-threshold (* 100 1024 1024))
+  (read-process-output-max (* 1024 1024))
+  (treemacs-space-between-root-nodes nil)
+  (company-idle-delay 0.1)
+  (company-minimum-prefix-length 3)
+  (lsp-idle-delay 0.1)
+  (lsp-completion-provider :capf)
+  ;; Prevent constant auto-formatting...)
+  (lsp-enable-on-type-formatting nil)
+  (lsp-enable-indentation nil)
+  ;; be more ide-ish)
+  (lsp-headerline-breadcrumb-enable t)
+  ;; python-related settings)
+  (lsp-pyls-plugins-autopep8-enabled nil)
+  (lsp-pyls-plugins-yapf-enabled t  )
   )
 
 ;; Taken from https://tychoish.com/post/emacs-and-lsp-mode/
@@ -154,21 +154,25 @@
          ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
          ([remap xref-find-references] . lsp-ui-peek-find-references)
          ("C-c u" . lsp-ui-imenu))
-  :init (setq lsp-ui-doc-enable t
-         lsp-ui-doc-use-webkit nil
-         lsp-ui-doc-header nil
-         lsp-ui-doc-delay 0.2
-         lsp-ui-doc-include-signature t
-         lsp-ui-doc-alignment 'at-point
-         lsp-ui-doc-use-childframe nil
-         lsp-ui-doc-border (face-foreground 'default)
-         lsp-ui-peek-enable t
-         lsp-ui-peek-show-directory t
-         lsp-ui-sideline-update-mode 'line
-         lsp-ui-sideline-enable t
-         lsp-ui-sideline-show-code-actions t
-         lsp-ui-sideline-show-hover nil
-         lsp-ui-sideline-ignore-duplicate t)
+  :custom
+  (lsp-ui-doc-alignment 'at-point)
+  (lsp-ui-doc-border (face-foreground 'default))
+  (lsp-ui-doc-delay 0.5)
+  (lsp-ui-doc-enable t)
+  (lsp-ui-doc-header nil)
+  (lsp-ui-doc-include-signature t)
+  (lsp-ui-doc-position 'top)
+  (lsp-ui-doc-use-childframe nil)
+  (lsp-ui-doc-use-webkit nil)
+  (lsp-ui-peek-enable t)
+  (lsp-ui-peek-fontify 'always)
+  (lsp-ui-peek-show-directory t)
+  (lsp-ui-sideline-delay 0.5)
+  (lsp-ui-sideline-enable t)
+  (lsp-ui-sideline-ignore-duplicate t)
+  (lsp-ui-sideline-show-code-actions t)
+  (lsp-ui-sideline-show-hover nil)
+  (lsp-ui-sideline-update-mode 'line)
   :config
   (add-to-list 'lsp-ui-doc-frame-parameters '(right-fringe . 8))
 

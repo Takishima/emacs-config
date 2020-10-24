@@ -163,6 +163,24 @@
 	(kill-buffer buf)
 	))))
 
+;; -------------------------------------------------------------------------- ;;
+
+(defun fk/async-process (command &optional name filter)
+  "Start an async process by running the COMMAND string with bash. Return the
+process object for it.
+
+NAME is name for the process. Default is \"async-process\".
+
+FILTER is function that runs after the process is finished, its args should be
+\"(process output)\". Default is just messages the output."
+  (make-process
+   :command `("bash" "-c" ,command)
+   :name (if name name
+           "async-process")
+   :filter (if filter filter
+             (lambda (process output) (message (s-trim output)))))
+  )
+
 ;; ========================================================================== ;;
 
 (provide 'init-emacs)
