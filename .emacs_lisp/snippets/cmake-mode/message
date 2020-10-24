@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: message
+# key: msg
+# --
+message(${2:$$(yas-choose-value '("STATUS" "SEND_ERROR" "FATAL_ERROR" "WARNING" "AUTHOR_WARNING" "DEPRECATION"))} "$0")
