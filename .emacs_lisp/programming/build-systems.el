@@ -74,7 +74,7 @@
 
 ;; -------------------------------------------------------------------------- ;;
 
-(use-package makefile-mode
+(use-package make-mode
   :ensure nil
   :mode ("Makefile\\'" "makefile\\'" "Make.obj\\'")
   )

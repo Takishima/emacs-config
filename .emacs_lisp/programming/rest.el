@@ -37,8 +37,9 @@
 
 ;; ========================================================================== ;;
 
-(use-package rst-mode
+(use-package rst
   :ensure nil
+  :defines rst-mode-map
   :bind
   (:map rst-mode-map
 	(("C-c i" . compile-in-iterm)
