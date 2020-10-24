@@ -124,7 +124,7 @@
 
 (use-package lsp-mode
   :hook ((prog-mode . (lambda ()
-                        (unless (derived-mode-p 'emacs-lisp-mode 'lisp-mode)
+                        (unless (derived-mode-p 'emacs-lisp-mode 'lisp-mode 'python-mode)
                           (lsp-deferred))))
          (lsp-mode . lsp-enable-which-key-integration))
   :config
@@ -139,8 +139,10 @@
         lsp-enable-on-type-formatting nil
         lsp-enable-indentation nil
 	;; be more ide-ish
-	lsp-headerline-breadcrumb-enable t)
-  (lsp-register-custom-settings '(("pyls.plugins.flake8.enabled" t t)))
+	lsp-headerline-breadcrumb-enable t
+        ;; python-related settings
+        lsp-pyls-plugins-autopep8-enabled nil
+        lsp-pyls-plugins-yapf-enabled t)
   )
 
 ;; Taken from https://tychoish.com/post/emacs-and-lsp-mode/
