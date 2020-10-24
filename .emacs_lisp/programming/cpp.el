@@ -144,18 +144,6 @@
  
 ;; ========================================================================== ;;
 
-(defun my-intelligent-aggressive-indent-mode-hook ()
-  (progn
-    (if (< (count-lines (point-min) (point-max)) 500)
-        (aggressive-indent-mode))
-    )
-  )
-(add-hook 'c-mode-hook  'my-intelligent-aggressive-indent-mode-hook)
-(add-hook 'c++-mode-hook  'my-intelligent-aggressive-indent-mode-hook)
-
-
-;; ========================================================================== ;;
-
 (provide 'init-prog-cpp)
 
 ;;; cpp.el ends here
