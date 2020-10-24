@@ -75,6 +75,7 @@
 	("C-x C-g" . counsel-git)
 	("C-c j" . counsel-git-grep)
 	("C-x l" . counsel-locate)
+	("C-x b" . counsel-switch-buffer)
 	("C-x C-f" . counsel-find-file)
 	("C-'" . ivy-avy))
   :config
