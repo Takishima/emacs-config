@@ -60,6 +60,13 @@
 
 ;; ========================================================================== ;;
 
+(use-package browse-kill-ring
+  :ensure t
+  :bind (("s-y" . browse-kill-ring))
+  )
+
+;; ========================================================================== ;;
+
 ;; Disable auto backup files
 (custom-set-variables '(make-backup-files nil))
 
