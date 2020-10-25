@@ -42,10 +42,13 @@
 ;; ========================================================================== ;;
 
 (use-package magit
+  :commands magit
+  :hook
+  (git-commit-setup . git-commit-turn-on-flyspell)
   :config
   (make-local-variable 'split-height-threshold)
   (setq split-height-threshold 200)
-  
+
   (defun magit-push-to-all-remotes ()
     "Push a branch to all the remotes."
     (interactive)
@@ -76,10 +79,10 @@
        )
       )
     )
-  
+
   ;; ------------------------------------------------------------------------ ;;
   ;; Register new transients
-  
+
   (transient-append-suffix 'magit-push "e"
     '("A" "All" magit-push-to-all-remotes))
 
