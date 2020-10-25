@@ -138,9 +138,13 @@
   :custom
   (gc-cons-threshold (* 100 1024 1024))
   (read-process-output-max (* 1024 1024))
+
   (treemacs-space-between-root-nodes nil)
-  (company-idle-delay 0.1)
-  (company-minimum-prefix-length 3)
+
+  (lsp-auto-guess-root t)
+  (lsp-modeline-diagnostics-enable nil)
+  (lsp-auto-execute-action nil)
+  (lsp-before-save-edits nil)
   (lsp-idle-delay 0.1)
   (lsp-completion-provider :capf)
   ;; Prevent constant auto-formatting...)
@@ -150,7 +154,7 @@
   (lsp-headerline-breadcrumb-enable t)
   ;; python-related settings)
   (lsp-pyls-plugins-autopep8-enabled nil)
-  (lsp-pyls-plugins-yapf-enabled t  )
+  (lsp-pyls-plugins-yapf-enabled t)
   )
 
 ;; Taken from https://tychoish.com/post/emacs-and-lsp-mode/
@@ -181,6 +185,8 @@
   (lsp-ui-sideline-show-code-actions t)
   (lsp-ui-sideline-show-hover nil)
   (lsp-ui-sideline-update-mode 'line)
+  :custom-face
+  (lsp-ui-peek-highlight ((t (:inherit nil :background nil :foreground nil :weight semi-bold :box (:line-width -1)))))
   :config
   (add-to-list 'lsp-ui-doc-frame-parameters '(right-fringe . 8))
 
