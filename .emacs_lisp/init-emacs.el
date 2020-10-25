@@ -89,6 +89,65 @@
 	       )
   )
 
+(save-place-mode)
+
+(global-so-long-mode)
+
+(global-hl-line-mode)
+
+(global-subword-mode)  ; navigationInCamelCase
+
+(delete-selection-mode)
+
+;; Remove redundant UI
+(tool-bar-mode -1)
+
+;; ========================================================================== ;;
+
+(use-package dashboard
+  :ensure t
+  :custom
+  (dashboard-startup-banner 'logo)
+  (dashboard-set-heading-icons t)
+  (dashboard-set-file-icons t)
+  (dashboard-center-content t)
+  (dashboard-items '((recents  . 10)
+                     (projects . 5)
+                     (bookmarks . 5)))
+  :custom-face
+  (dashboard-heading-face ((t (:weight bold))))
+  :config
+  (dashboard-setup-startup-hook)
+  (defun dn-home ()
+    "Switch to home (dashboard) buffer."
+    (interactive)
+    (switch-to-buffer "*dashboard*"))
+  :hook
+  (dashboard-mode . (lambda () (setq cursor-type nil)))
+  (dashboard-mode . (lambda () (face-remap-add-relative 'hl-line :weight 'bold)))
+  )
+
+;; ========================================================================== ;;
+
+(use-package helpful
+  :ensure t
+  :bind
+  (([remap describe-function] . helpful-callable)
+   ([remap describe-variable] . helpful-variable)
+   ([remap describe-key] . helpful-key)
+   :map emacs-lisp-mode-map
+   ("C-c C-d" . helpful-at-point))
+  )
+
+;; -------------------------------------------------------------------------- ;;
+
+(use-package whitespace-cleanup-mode
+  :ensure t
+  :custom
+  (show-trailing-whitespace t)  ; not from whitespace-cleanup-mode.el
+  :config
+  (global-whitespace-cleanup-mode))
+
 ;; ========================================================================== ;;
 ;; Some emacs function definitions
 
@@ -100,7 +159,6 @@
 	(window-system nil)
 	)
     (save-buffers-kill-emacs t)))
-
 
 ;; -------------------------------------------------------------------------- ;;
 
@@ -180,6 +238,31 @@ FILTER is function that runs after the process is finished, its args should be
            "async-process")
    :filter (if filter filter
              (lambda (process output) (message (s-trim output)))))
+  )
+
+;; -------------------------------------------------------------------------- ;;
+(defconst dn-default-font-size 120)
+(defconst dn-default-icon-size 15)
+
+;; From https://github.com/KaratasFurkan/.emacs.d
+(defun dn-adjust-font-size (height)
+  "Adjust font size by given height. If height is '0', reset font
+size. This function also handles icons and modeline font sizes."
+  (interactive "nHeight ('0' to reset): ")
+  (let ((new-height (if (zerop height)
+                        dn-default-font-size
+                      (+ height (face-attribute 'default :height)))))
+    (set-face-attribute 'default nil :height new-height)
+    (set-face-attribute 'mode-line nil :height new-height)
+    (set-face-attribute 'mode-line-inactive nil :height new-height)
+    (message "Font size: %s" new-height))
+  (let ((new-size (if (zerop height)
+                      dn-default-icon-size
+                    (+ (/ height 5) treemacs--icon-size))))
+    ;; (when (fboundp 'treemacs-resize-icons)
+    ;;   (treemacs-resize-icons new-size))
+    (when (fboundp 'company-box-icons-resize)
+      (company-box-icons-resize new-size)))
   )
 
 ;; ========================================================================== ;;
