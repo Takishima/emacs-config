@@ -151,9 +151,9 @@
   :after (lsp-mode)
   :commands lsp-ui-doc-hide
   :bind (:map lsp-ui-mode-map
-         ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
-         ([remap xref-find-references] . lsp-ui-peek-find-references)
-         ("C-c u" . lsp-ui-imenu))
+              ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+              ([remap xref-find-references] . lsp-ui-peek-find-references)
+              ("C-c u" . lsp-ui-imenu))
   :custom
   (lsp-ui-doc-alignment 'at-point)
   (lsp-ui-doc-border (face-foreground 'default))
@@ -181,10 +181,10 @@
 
   ;; Reset `lsp-ui-doc-background' after loading theme
   (add-hook 'after-load-theme-hook
-       (lambda ()
-         (setq lsp-ui-doc-border (face-foreground 'default))
-         (set-face-background 'lsp-ui-doc-background
-                              (face-background 'tooltip))))
+            (lambda ()
+              (setq lsp-ui-doc-border (face-foreground 'default))
+              (set-face-background 'lsp-ui-doc-background
+                                   (face-background 'tooltip))))
 
   ;; WORKAROUND Hide mode-line of the lsp-ui-imenu buffer
   ;; @see https://github.com/emacs-lsp/lsp-ui/issues/243
@@ -192,10 +192,10 @@
     (setq mode-line-format nil))
 
   (defun lsp-update-server ()
-       "Update LSP server."
-       (interactive)
-       ;; Equals to `C-u M-x lsp-install-server'
-       (lsp-install-server t))
+    "Update LSP server."
+    (interactive)
+    ;; Equals to `C-u M-x lsp-install-server'
+    (lsp-install-server t))
   )
 
 ;; Debug
@@ -250,25 +250,28 @@
        )
   (if (file-exists-p skip-file)
       (progn
-	(setq skip-names (with-temp-buffer (insert-file-contents (concat dir-path "skip.txt"))
-					 (split-string (buffer-string) "[\n\r]" t "[ \t]+")))
+	(setq skip-names (seq-remove (lambda (el) (or (string-prefix-p "#" el) (string-prefix-p ";" el)))
+                                     (with-temp-buffer (insert-file-contents (concat dir-path "skip.txt"))
+					               (split-string (buffer-string) "[\n\r]" t "[ \t]+"))
+                                     )
+              )
 	(message "INFO: will be skipping the following: %S" skip-names)
 	)
     )
   (dolist (fname dir-list)
     (setq require-name (intern-soft (concat "init-prog-"
-					    (file-name-sans-extension (file-name-nondirectory fname)))))
+        				    (file-name-sans-extension (file-name-nondirectory fname)))))
     (unless (member (file-name-nondirectory fname) skip-names)
       (if require-name
-	  (progn
-	    (message "INFO: requiring %s from %s" require-name fname)
-	    (require require-name fname)
-	    )
-	(progn
-	  (setq fname (file-name-sans-extension fname))
-	  (load fname)
-	  )
-	)
+          (progn
+            (message "INFO: requiring %s from %s" require-name fname)
+            (require require-name fname)
+            )
+        (progn
+          (setq fname (file-name-sans-extension fname))
+          (load fname)
+          )
+        )
       )
     )
   )
