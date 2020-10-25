@@ -224,27 +224,19 @@
   :ensure t
   :commands lsp-ivy-workspace-symbol)
 
-(use-package lsp-treemacs
-  :after (lsp-mode treemacs)
-  :ensure t
-  :commands lsp-treemacs-errors-list
-  :init (lsp-treemacs-sync-mode 1)
-  ;; :bind (:map lsp-mode-map
-  ;;        ("M-9" . lsp-treemacs-errors-list))
-  )
-
-(use-package treemacs
-  :ensure t
-  :commands (treemacs)
-  :after (lsp-mode))
-
-;; Taken from https://github.com/seagle0128/.emacs.d/blob/master/lisp/init-lsp.el
-;; Python: pyright
-;; (use-package lsp-pyright
+;; (use-package lsp-treemacs
+;;   :after (lsp-mode treemacs)
 ;;   :ensure t
-;;   :hook (python-mode . (lambda () (require 'lsp-pyright)))
-;;   :init (when (executable-find "python3")
-;;           (setq lsp-pyright-python-executable-cmd "python3")))
+;;   :commands lsp-treemacs-errors-list
+;;   :init (lsp-treemacs-sync-mode 1)
+;;   ;; :bind (:map lsp-mode-map
+;;   ;;        ("M-9" . lsp-treemacs-errors-list))
+;;   )
+
+;; (use-package treemacs
+;;   :ensure t
+;;   :commands (treemacs)
+;;   :after (lsp-mode))
 
 ;; ========================================================================== ;;
 
