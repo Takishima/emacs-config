@@ -39,14 +39,31 @@
 
 (use-package web-mode
   :ensure t
-  :mode
-  ("\\.php$" . web-mode)
-  ("\\.htm$" . web-mode)
-  ("\\.html$" . web-mode)
   :custom
   (web-mode-disable-auto-indentation t)
   (web-mode-disable-auto-opening t)
   (web-mode-disable-auto-pairing t)
+  :mode
+  ("\\.php$" . web-mode)
+  ("\\.htm$" . web-mode)
+  ("\\.html$" . web-mode)
+  )
+
+;; -------------------------------------------------------------------------- ;;
+
+(use-package company-web
+  :ensure t
+  :after web-mode
+  :config
+  (add-to-list 'company-backends '(company-web-html :with company-yasnippet))
+  )
+
+;; -------------------------------------------------------------------------- ;;
+
+(use-package auto-rename-tag
+  :ensure t
+  :hook
+  (web-mode . auto-rename-tag-mode)
   )
 
 ;; ========================================================================== ;;
