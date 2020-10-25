@@ -53,6 +53,10 @@
   :ensure t
   :init
   ;; (elpy-enable)
+  :custom
+  (elpy-eldoc-show-current-function nil)
+  (elpy-rpc-timeout 5)
+  (elpy-rpc-virtualenv-path 'default)
   :bind (:map elpy-mode-map
 	      ("<M-left>" . nil)
 	      ("<M-right>" . nil)

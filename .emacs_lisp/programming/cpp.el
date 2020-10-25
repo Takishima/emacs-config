@@ -41,8 +41,16 @@
 
 ;; ========================================================================== ;;
 
-(use-package cpp
+(use-package cc-mode
   :ensure nil
+  :custom
+  (c-basic-indent 5)
+  (c-basic-offset 5)
+  (c-default-style '((c-mode . "stroustrup")
+                     (c++-mode . "stroustrup")
+                     (java-mode . "java")
+                     (awk-mode . "awk")
+                     (other . "gnu")))
   :mode
   (
    ("\\.h$" . c++-mode)

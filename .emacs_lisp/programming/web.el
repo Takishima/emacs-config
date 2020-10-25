@@ -43,6 +43,10 @@
   ("\\.php$" . web-mode)
   ("\\.htm$" . web-mode)
   ("\\.html$" . web-mode)
+  :custom
+  (web-mode-disable-auto-indentation t)
+  (web-mode-disable-auto-opening t)
+  (web-mode-disable-auto-pairing t)
   )
 
 ;; ========================================================================== ;;

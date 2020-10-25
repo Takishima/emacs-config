@@ -56,9 +56,12 @@
   ;; :functions (TeX-run-Biber)
   :mode ("\\.tex\\'" . TeX-latex-mode)
   :custom
+  (TeX-auto-local "tex-tmp")
   (TeX-parse-self t) ; Enable parse on load.
   (TeX-auto-save t) ; Enable parse on save.
   (TeX-PDF-mode t) ; Default to PDFTeX
+
+  (LaTeX-clean-intermediate-suffixes '("\\.aux" "\\.bbl" "\\.blg" "\\.brf" "\\.fot" "\\.glo" "\\.gls" "\\.idx" "\\.ilg" "\\.ind" "\\.lof" "\\.log" "\\.lot" "\\.nav" "\\.out" "\\.snm" "\\.toc" "\\.url" "\\.synctex\\.gz" "\\.bcf" "\\.run\\.xml" "\\.fls" "-blx\\.bib" "\\.acn" "\\.acr" "\\.alg" "\\.glg" "\\.xdv" "\\.fdb_latexmk" "\\.ist"))
 
   (TeX-view-program-selection (append '(output-pdf "PDF Viewer")
 				      (remove-if (lambda(el) (eq (car el) 'output-pdf))
