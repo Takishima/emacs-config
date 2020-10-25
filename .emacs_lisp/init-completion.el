@@ -67,6 +67,20 @@
 (use-package ivy
   :ensure t
   :diminish (ivy-mode counsel-mode)
+  :custom
+  ;; add ‘recentf-mode’ and bookmarks to ‘ivy-switch-buffer’.
+  (ivy-use-virtual-buffers t)
+  ;; number of result lines to display
+  (ivy-height 10)
+  ;; does not count candidates
+  (ivy-count-format "")
+  ;; no regexp by default
+  (ivy-initial-inputs-alist nil)
+  ;; configure regexp engine.
+  (ivy-re-builders-alist
+   ;; allow input not in order
+   '((t   . ivy--regex-ignore-order)))
+
   :bind
   (:map ivy-mode-map
 	("C-x C-r" . counsel-recentf)
@@ -83,18 +97,7 @@
   (ido-mode nil)
   ;; Enable ivy mode
   (ivy-mode 1)
-  ;; add ‘recentf-mode’ and bookmarks to ‘ivy-switch-buffer’.
-  (setq ivy-use-virtual-buffers t)
-  ;; number of result lines to display
-  (setq ivy-height 10)
-  ;; does not count candidates
-  (setq ivy-count-format "")
-  ;; no regexp by default
-  (setq ivy-initial-inputs-alist nil)
-  ;; configure regexp engine.
-  (setq ivy-re-builders-alist
-	;; allow input not in order
-	'((t   . ivy--regex-ignore-order)))
+
   (defun swiper-symbol-at-point ()
     "Call swiper with symbol at point."
     (interactive)
