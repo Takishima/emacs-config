@@ -90,15 +90,15 @@
 
   :bind
   (:map ivy-mode-map
-	("C-x C-r" . counsel-recentf)
-	("C-s" . swiper)
-	("M-s ." . swiper-symbol-at-point)
-	("C-x C-g" . counsel-git)
-	("C-c j" . counsel-git-grep)
-	("C-x l" . counsel-locate)
-	("C-x b" . counsel-switch-buffer)
-	("C-x C-f" . counsel-find-file)
-	("C-'" . ivy-avy))
+        ("C-x C-r" . counsel-recentf)
+        ("C-s" . swiper)
+        ("M-s ." . swiper-symbol-at-point)
+        ("C-x C-g" . counsel-git)
+        ("C-c j" . counsel-git-grep)
+        ("C-x l" . counsel-locate)
+        ("C-x b" . counsel-switch-buffer)
+        ("C-x C-f" . counsel-find-file)
+        ("C-'" . ivy-avy))
   :config
   ;; Disable ido mode
   (ido-mode nil)
@@ -111,11 +111,11 @@
     (let ((bounds (find-tag-default-bounds)))
       (cond
        (bounds
-	(when (< (car bounds) (point))
-	  (goto-char (car bounds)))
-	(swiper (buffer-substring-no-properties (car bounds) (cdr bounds))
-		)
-	))))
+        (when (< (car bounds) (point))
+          (goto-char (car bounds)))
+        (swiper (buffer-substring-no-properties (car bounds) (cdr bounds))
+                )
+        ))))
   (setq magit-completing-read-function 'ivy-completing-read)
   )
 (ivy-mode 1)
@@ -136,6 +136,11 @@
 
 (use-package yasnippet
   :ensure t
+  :custom
+  (yas-indent-line nil)
+  (yas-inhibit-overlay-modification-protection t)
+  :custom-face
+  (yas-field-highlight-face ((t (:inherit region))))
   :config
   (yas-global-mode t)
   )
