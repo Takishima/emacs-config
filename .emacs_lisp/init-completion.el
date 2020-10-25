@@ -61,6 +61,13 @@
 
 ;; ========================================================================== ;;
 
+(use-package prescient
+  :ensure t
+  :defer t
+  :config (prescient-persist-mode))
+
+;; ========================================================================== ;;
+
 (use-package diminish
   :ensure t)
 
@@ -113,6 +120,14 @@
   )
 (ivy-mode 1)
 
+;; -------------------------------------------------------------------------- ;;
+
+(use-package ivy-prescient
+  :ensure t
+  :after ivy
+  :config (ivy-prescient-mode)
+  )
+
 ;; ========================================================================== ;;
 ;; Load Yasnippet
 
@@ -130,7 +145,36 @@
 
 (use-package company
   :ensure t
-  :hook (after-init . global-company-mode)
+  :custom
+  (company-idle-delay 0)
+  (company-minimum-prefix-length 3)
+  (company-tooltip-align-annotations t)
+  (company-dabbrev-downcase nil)
+  ;; Disable `single-candidate' and `echo-area' frontends
+  (company-frontends '(company-box-frontend))
+  :config
+  (global-company-mode)
+  )
+
+;; -------------------------------------------------------------------------- ;;
+
+(use-package company-box
+  :ensure t
+  :custom
+  (company-box-show-single-candidate t)
+  ;;(company-box-frame-behavior 'point)
+  (company-box-icon-right-margin 0.5)
+  (company-box-backends-colors '((company-yasnippet . (:annotation default))))
+  :hook
+  (company-mode . company-box-mode)
+  )
+
+;; -------------------------------------------------------------------------- ;;
+
+(use-package company-prescient
+  :ensure t
+  :after company
+  :config (company-prescient-mode)
   )
 
 ;; ========================================================================== ;;
