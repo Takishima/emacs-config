@@ -54,6 +54,14 @@
   :load-path config-dotemacs-lisp)
 
 ;; ========================================================================== ;;
+
+(use-package flycheck
+  :ensure t
+  :custom
+  (flycheck-clang-args '("-std=c++17"))
+  )
+
+;; ========================================================================== ;;
 ;; Compilation
 
 (defun bury-compile-buffer-if-successful (buffer string)
@@ -275,19 +283,6 @@
       )
     )
   )
-
-;; ========================================================================== ;;
-
-(use-package flycheck-clang-analyzer
-  :ensure t
-  :after flycheck
-  :config (flycheck-clang-analyzer-setup))
-
-(use-package flycheck-clang-tidy
-  :ensure t
-  :after flycheck
-  :config (flycheck-clang-tidy-setup))
-
 
 ;; ========================================================================== ;;
 

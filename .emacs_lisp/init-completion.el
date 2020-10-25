@@ -130,9 +130,6 @@
   :hook (after-init . global-company-mode)
   )
 
-(use-package flycheck
-  :ensure t)
-
 ;; ========================================================================== ;;
 
 (provide 'init-completion)
