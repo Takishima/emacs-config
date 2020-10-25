@@ -58,10 +58,13 @@
   :ensure t)
 
 (use-package auto-package-update
+  :ensure t
+  :custom
+  (auto-package-update-delete-old-versions t)
+  (auto-package-update-hide-results t)
   :config
-  (setq auto-package-update-delete-old-versions t)
-  (setq auto-package-update-hide-results t)
-  (auto-package-update-maybe))
+  (auto-package-update-maybe)
+  )
 
 ;; ========================================================================== ;;
 
