@@ -131,7 +131,7 @@ This requires the pytest package to be installed."
   (lsp-pyright-typechecking-mode "off")
   (lsp-pyright-python-executable-cmd "python3")
   :config
-  (fk/async-process
+  (dn-async-process
    "npm outdated -g | grep pyright | wc -l" nil
    (lambda (process output)
      (pcase output
@@ -145,7 +145,7 @@ This requires the pytest package to be installed."
   :ensure t
   :after python
   :config
-  (defun fk/activate-pyvenv ()
+  (defun dn-activate-pyvenv ()
     "Activate python environment according to the `.venv' file."
     (interactive)
     (pyvenv-mode)

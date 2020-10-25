@@ -165,7 +165,8 @@
 
 ;; -------------------------------------------------------------------------- ;;
 
-(defun fk/async-process (command &optional name filter)
+;; From https://github.com/KaratasFurkan/.emacs.d
+(defun dn-async-process (command &optional name filter)
   "Start an async process by running the COMMAND string with bash. Return the
 process object for it.
 
