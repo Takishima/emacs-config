@@ -39,16 +39,6 @@
 
 ;; ========================================================================== ;;
 
-;; Taken from https://github.com/seagle0128/.emacs.d/blob/master/lisp/init-lsp.el
-;; Python: pyright
-(use-package lsp-pyright
-  :ensure t
-  :hook (python-mode . (lambda () (require 'lsp-pyright)))
-  :init (when (executable-find "python3")
-          (setq lsp-pyright-python-executable-cmd "python3")))
-
-;; -------------------------------------------------------------------------- ;;
-
 (use-package elpy
   :ensure t
   :init
