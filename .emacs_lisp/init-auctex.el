@@ -51,7 +51,7 @@
   )
 
 (use-package tex-site                   ; auctex
-  :ensure nil
+  :ensure auctex
   :defines (latex-help-cmd-alist latex-help-file)
   ;; :functions (TeX-run-Biber)
   :mode ("\\.tex\\'" . TeX-latex-mode)
@@ -64,15 +64,15 @@
   (LaTeX-clean-intermediate-suffixes '("\\.aux" "\\.bbl" "\\.blg" "\\.brf" "\\.fot" "\\.glo" "\\.gls" "\\.idx" "\\.ilg" "\\.ind" "\\.lof" "\\.log" "\\.lot" "\\.nav" "\\.out" "\\.snm" "\\.toc" "\\.url" "\\.synctex\\.gz" "\\.bcf" "\\.run\\.xml" "\\.fls" "-blx\\.bib" "\\.acn" "\\.acr" "\\.alg" "\\.glg" "\\.xdv" "\\.fdb_latexmk" "\\.ist"))
 
   (TeX-view-program-selection (append '(output-pdf "PDF Viewer")
-				      (remove-if (lambda(el) (eq (car el) 'output-pdf))
-						 TeX-view-program-selection)))
-  
+                                      (remove-if (lambda(el) (eq (car el) 'output-pdf))
+                                                 TeX-view-program-selection)))
+
   (TeX-view-program-list (push '("PDF Viewer" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")
-			       TeX-view-program-list))
-  
+                               TeX-view-program-list))
+
   ;; -----------------------------------
   ;; RefTeX related settings
-  
+
   (reftex-plug-into-AUCTeX t) ; Turn on RefTeX interface to AUCTeX
 
     ;; Recognize \addbibresource as bibliography command
@@ -83,27 +83,27 @@
   ;;(setq reftex-save-parse-info t) ;; save parse info into file.rel
   (reftex-use-multiple-selection-buffers t)
   (reftex-plug-into-AUCTeX t)
-  
+
   ;; -----------------------------------
   ;; Additional keywords
-  
+
   (font-latex-match-reference-keywords
-	'(("cite" "[{")
+        '(("cite" "[{")
           ("cites" "[{")
           ("footcite" "[{")
           ("footcites" "[{")
           ("parencite" "[{")
           ("textcite" "[{")
-          ("fullcite" "[{") 
-          ("citetitle" "[{") 
-          ("citetitles" "[{") 
+          ("fullcite" "[{")
+          ("citetitle" "[{")
+          ("citetitles" "[{")
           ("headlessfullcite" "[{")))
 
   (font-latex-user-keyword-classes
-	'(
-	  ("todo-command" (("todo" "{")) (:foreground "black" :background "orange") command)
-	  )
-	)
+        '(
+          ("todo-command" (("todo" "{")) (:foreground "black" :background "orange") command)
+          )
+        )
 
   :config
 
@@ -111,21 +111,21 @@
   ;; TeX compile commands
 
   ;; (setq TeX-view-program-selection
-  ;; 	(remove-if (lambda(el) (eq (car el) 'output-pdf))
-  ;; 		   TeX-view-program-selection))
+  ;;    (remove-if (lambda(el) (eq (car el) 'output-pdf))
+  ;;               TeX-view-program-selection))
   ;; (add-to-list 'TeX-view-program-selection
-  ;; 	       '(output-pdf "PDF Viewer"))
+  ;;           '(output-pdf "PDF Viewer"))
 
   (add-to-list 'TeX-view-program-list
-	       '("PDF Viewer" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b"))
-  (add-to-list 'TeX-command-list 
-	       '("latexmk" "latexmk -xelatex -pv -shell-escape %s" TeX-run-TeX nil t :help "Process file with latexmk"))
+               '("PDF Viewer" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b"))
   (add-to-list 'TeX-command-list
-	       '("xelatexmk" "latexmk -shell-escape -pv -xelatex %s" TeX-run-TeX nil t :help "Process file with xelatexmk"))
+               '("latexmk" "latexmk -xelatex -pv -shell-escape %s" TeX-run-TeX nil t :help "Process file with latexmk"))
   (add-to-list 'TeX-command-list
-	       '("make" "make %s" TeX-run-TeX nil t :help "Process file with GNU make (and makefile)"))
+               '("xelatexmk" "latexmk -shell-escape -pv -xelatex %s" TeX-run-TeX nil t :help "Process file with xelatexmk"))
   (add-to-list 'TeX-command-list
-	       '("Biber" "biber %s" TeX-run-Biber nil t :help "Run Biber"))
+               '("make" "make %s" TeX-run-TeX nil t :help "Process file with GNU make (and makefile)"))
+  (add-to-list 'TeX-command-list
+               '("Biber" "biber %s" TeX-run-Biber nil t :help "Run Biber"))
 
   ;; -----------------------------------
   ;; Setup PATH
@@ -134,7 +134,7 @@
     (setenv "PATH" (concat (getenv "PATH") ":/Library/TeX/texbin"))
     (add-to-list 'exec-path "/Library/TeX/texbin" t)
     )
-  
+
   (defun latex-help-get-cmd-alist ()    ;corrected version:
     "Scoop up the commands in the index of the latex info manual.
    The values are saved in `latex-help-cmd-alist' for speed."
@@ -158,12 +158,12 @@
 
 
   (defun TeX-run-Biber (name command file)
-    "Create a process for NAME using COMMAND to format FILE with Biber." 
+    "Create a process for NAME using COMMAND to format FILE with Biber."
     (let ((process (TeX-run-command name command file)))
       (setq TeX-sentinel-function 'TeX-Biber-sentinel)
       (if TeX-process-asynchronous
-	  process
-	(TeX-synchronous-sentinel name file process))))
+          process
+        (TeX-synchronous-sentinel name file process))))
 
   (defun TeX-Biber-sentinel (process name)
     "Cleanup TeX output buffer after running Biber."
@@ -171,20 +171,20 @@
     (cond
      ;; Check whether Biber reports any warnings or errors.
      ((re-search-backward (concat
-			   "^(There \\(?:was\\|were\\) \\([0-9]+\\) "
-			   "\\(warnings?\\|error messages?\\))") nil t)
+                           "^(There \\(?:was\\|were\\) \\([0-9]+\\) "
+                           "\\(warnings?\\|error messages?\\))") nil t)
       ;; Tell the user their number so that she sees whether the
       ;; situation is getting better or worse.
       (message (concat "Biber finished with %s %s. "
-		       "Type `%s' to display output.")
-	       (match-string 1) (match-string 2)
-	       (substitute-command-keys
-		"\\\\[TeX-recenter-output-buffer]")))
+                       "Type `%s' to display output.")
+               (match-string 1) (match-string 2)
+               (substitute-command-keys
+                "\\\\[TeX-recenter-output-buffer]")))
      (t
       (message (concat "Biber finished successfully. "
-		       "Run LaTeX again to get citations right."))))
+                       "Run LaTeX again to get citations right."))))
     (setq TeX-command-next TeX-command-default))
-  
+
 
   )
 
