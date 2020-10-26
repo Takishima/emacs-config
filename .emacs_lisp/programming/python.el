@@ -179,6 +179,7 @@ This requires the pytest package to be installed."
      "-p no:warnings"   ;; ignore warnings
      "--maxfail=5"))    ;; exit in 5 continuous failures in a run
   :config
+  (require 'magit-popup)
   (which-key-add-major-mode-key-based-replacements 'python-mode "t" "Testing")
   (defun python-pytest-cov--choose-report-type (prompt _value)
     "Helper to choose a pytest coverage report type using PROMPT."
