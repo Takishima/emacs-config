@@ -254,7 +254,6 @@
 
 ;; ========================================================================== ;;
 
-(byte-recompile-directory (concat config-dotemacs-lisp "programming") 0)
 (let* (
        (dir-path (file-name-as-directory (concat config-dotemacs-lisp "programming")))
        (skip-file (concat dir-path "skip.txt"))
@@ -276,6 +275,7 @@
     (setq require-name (intern-soft (concat "init-prog-"
         				    (file-name-sans-extension (file-name-nondirectory fname)))))
     (unless (member (file-name-nondirectory fname) skip-names)
+      (byte-recompile-file fname nil 0)
       (if require-name
           (progn
             (message "INFO: requiring %s from %s" require-name fname)
