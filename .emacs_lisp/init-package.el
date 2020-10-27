@@ -36,7 +36,9 @@
 ;; ========================================================================== ;;
 
 (require 'package)
-(package-initialize)
+
+(when (< emacs-major-version 27)
+  (package-initialize))
 
 (let* (
        (no-ssl (and (memq system-type '(windows-nt ms-dos))
