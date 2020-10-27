@@ -55,6 +55,40 @@
 
 ;; ========================================================================== ;;
 
+(use-package direnv
+  :if (executable-find "direnv")
+  :ensure t
+  :config
+  (direnv-mode)
+  (defcustom dn-direnv-enabled-hosts nil
+    "List of remote hosrs to use direnv on.
+
+     Each host must have the `direnv` executable accessible in the default environment"
+    :type '(repeat string)
+    :group 'dn)
+
+  (defun tramp-sh-handle-start-file-process@dn-direnv (args)
+    "Enable Direnv for hosts in `dn-direnv-enabled-hosts'."
+    (message "tramp-sh-handle-start-file-process@dn-direnv")
+    (with-parsed-tramp-file-name (expand-file-name default-directory) nil
+      (if (member host my-direnv-enabled-hosts)
+          (pcase-let ((`(,name ,buffer ,program . ,args) args))
+            `(,name
+              ,buffer
+              "direnv"
+              "exec"
+              ,localname
+              ,program
+              ,@args))
+        args)))
+
+  (with-eval-after-load "tramp-sh"
+    (advice-add 'tramp-sh-handle-start-file-process
+                :filter-args #'tramp-sh-handle-start-file-process@dn-direnv))
+  )
+
+;; ========================================================================== ;;
+
 (use-package flycheck
   :ensure t
   :custom
