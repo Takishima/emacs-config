@@ -50,6 +50,22 @@
 
 (use-package emojify
   :ensure t
+  :custom
+  (emojify-inhibit-major-modes '(dired-mode
+                                 doc-view-mode
+                                 debugger-mode
+                                 pdf-view-mode
+                                 image-mode
+                                 help-mode
+                                 ibuffer-mode
+                                 magit-popup-mode
+                                 magit-diff-mode
+                                 ert-results-mode
+                                 compilation-mode
+                                 proced-mode
+                                 mu4e-headers-mode
+                                 deft-mode
+                                 prog-mode))
   :hook (after-init . global-emojify-mode))
 
 ;; -------------------------------------------------------------------------- ;;
