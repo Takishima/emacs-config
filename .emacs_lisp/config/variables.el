@@ -43,7 +43,7 @@
        (here (file-name-directory (or load-file-name buffer-file-name)))
        (config-root (expand-file-name (file-name-as-directory (concat here "../.."))))
        )
-  
+
   (defconst config-dotemacs (file-name-as-directory (concat config-root ".emacs"))
     "Path to .emacs file.")
 
@@ -53,22 +53,22 @@
     :group 'config
     :type 'directory
     )
-  
+
   (defcustom config-dotemacs-lisp
     (file-name-as-directory (concat config-root ".emacs_lisp"))
     "Path to .emacs_lisp dir."
     :group 'config
     :type '(file :must-match t)
     )
-  
+
   (defcustom config-dir
     (file-name-as-directory (concat (file-name-as-directory config-dotemacs-lisp) "config"))
     "Path to main configuration directory."
+    :set-after '(config-dotemacs-lisp)
     :group 'config
     :type 'directory
     )
   )
-
 
 (provide 'config-variables)
 
