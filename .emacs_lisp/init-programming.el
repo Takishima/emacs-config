@@ -126,21 +126,19 @@
 
 ;; -------------------------------------------------------------------------- ;;
 
-(config-with-system darwin
+(config-with-system 'darwin
   (defvar compile-in-iterms-command "make")
-  (config-with-system darwin
-    (defun compile-in-iterm (command)
-      (interactive
-       (list (read-string (format "Say word [%s]: " compile-in-iterms-command) nil nil compile-in-iterms-command)))
-      (progn
-	(setq compile-in-iterms-command command)
-	(do-applescript
-	 (concat "tell application \"iTerm\"\ntell current session of current window\nwrite text \""
-		 command
-		 "\"\nend tell\nend tell")
-	 )
-	))
-    )
+  (defun compile-in-iterm (command)
+    (interactive
+     (list (read-string (format "Say word [%s]: " compile-in-iterms-command) nil nil compile-in-iterms-command)))
+    (progn
+      (setq compile-in-iterms-command command)
+      (do-applescript
+       (concat "tell application \"iTerm\"\ntell current session of current window\nwrite text \""
+	       command
+	       "\"\nend tell\nend tell")
+       )
+      ))
   )
 
 ;; ========================================================================== ;;

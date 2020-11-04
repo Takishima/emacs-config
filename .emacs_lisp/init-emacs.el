@@ -84,7 +84,7 @@
 		      '(line-number-mode t)
 		      '(column-number-mode t))
 
-(config-with-system darwin
+(config-with-system 'darwin
   (add-to-list 'default-frame-alist '(font . "Monaco" )
 	       )
   )

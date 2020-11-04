@@ -130,7 +130,7 @@
   ;; -----------------------------------
   ;; Setup PATH
 
-  (config-with-system darwin
+  (config-with-system 'darwin
     (setenv "PATH" (concat (getenv "PATH") ":/Library/TeX/texbin"))
     (add-to-list 'exec-path "/Library/TeX/texbin" t)
     )
