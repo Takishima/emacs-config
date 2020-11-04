@@ -90,7 +90,7 @@ This requires the pytest package to be installed."
   :init
   (progn
     (add-hook 'python-mode-hook 'highlight-indentation-mode)
-    (add-hook 'python-mode-hook 'eldoc-mode)
+    ;; (add-hook 'python-mode-hook 'eldoc-mode)
     (add-hook 'python-mode-hook 'sphinx-doc-mode))
   :config
 
@@ -154,6 +154,15 @@ This requires the pytest package to be installed."
          ("\\.spyx\\'" . cython-mode)
          ("\\.pxd\\'"  . cython-mode)
          ("\\.pxi\\'"  . cython-mode)))
+
+;; ========================================================================== ;;
+
+(use-package yapfify
+  :ensure t
+  :bind
+  (:map python-mode-map
+        ("C-c C-y" . yapfify-region-or-buffer))
+  )
 
 ;; ========================================================================== ;;
 
