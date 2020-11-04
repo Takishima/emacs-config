@@ -116,20 +116,22 @@
   :config
   ;; (eval-after-load 'company
   ;;   '(add-to-list 'company-backends 'company-irony))
-  (config-with-system darwin
-    (add-to-list 'irony-additional-clang-options
-		 (concat "-I"(file-name-as-directory
-			      (car (directory-files
-				    "/usr/local/Cellar/llvm/"
-				    t
-				    "[0-9]\\.[0-9]\\.[0-9]")))
-			 "include/c++/v1/")
-		 t))
-  (config-with-system darwin
-    (add-to-list 'irony-additional-clang-options
-		 "-I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/"
-		 t))
-  
+  (if (eq system-type 'darwin)
+      (progn
+        (add-to-list 'irony-additional-clang-options
+		     (concat "-I"(file-name-as-directory
+			          (car (directory-files
+				        "/usr/local/Cellar/llvm/"
+				        t
+				        "[0-9]\\.[0-9]\\.[0-9]")))
+			     "include/c++/v1/")
+		     t)
+        (add-to-list 'irony-additional-clang-options
+		     "-I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/"
+		     t)
+        )
+    )
+
   (defun my-irony-mode-hook ()
     (define-key irony-mode-map
       [remap completion-at-point] 'counsel-irony)
