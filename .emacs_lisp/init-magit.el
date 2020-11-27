@@ -42,6 +42,7 @@
 ;; ========================================================================== ;;
 
 (use-package magit
+  :ensure t
   :commands magit
   :hook
   (git-commit-setup . git-commit-turn-on-flyspell)
@@ -97,7 +98,12 @@
 ;; Git flow support
 
 (use-package magit-gitflow
+  :ensure t
   :hook (magit-mode . turn-on-magit-gitflow)
+  )
+
+(use-package magit-popup
+  :ensure t
   )
 
 ;; ========================================================================== ;;
