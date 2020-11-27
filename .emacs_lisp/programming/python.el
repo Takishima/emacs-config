@@ -72,7 +72,7 @@
 (use-package elpy
   :ensure t
   :init
-  ;; (elpy-enable)
+  (elpy-enable)
   :custom
   (elpy-eldoc-show-current-function nil)
   (elpy-rpc-timeout 5)
@@ -80,6 +80,7 @@
   :bind (:map elpy-mode-map
 	      ("<M-left>" . nil)
 	      ("<M-right>" . nil)
+              ("C-c C-r f" . elpy-format-code)
 	      ("C-c C-k" . elpy-custom-close-all)
 	      ("C-c k" . python-pytest-close-buffer)
 	      ("C-b C-d" . c-hungry-delete-forward))
@@ -97,7 +98,7 @@ This requires the pytest package to be installed."
       (python-pytest-file file python-pytest-arguments))
      (t
       (python-pytest top python-pytest-arguments))))
-  
+
   (defun elpy-custom-close-all ()
     "Close all active python shells and python-pytest buffers"
     (interactive)
@@ -113,9 +114,9 @@ This requires the pytest package to be installed."
 (use-package lsp-pyright
   :ensure t
   :after lsp-mode
-  :hook (python-mode . (lambda ()
-                         (require 'lsp-pyright)
-                         (lsp-deferred)))  ; or lsp-deferred
+  ;; :hook (python-mode . (lambda ()
+  ;;                        (require 'lsp-pyright)
+  ;;                        (lsp-deferred)))  ; or lsp-deferred
   :custom
   (lsp-pyright-auto-import-completions nil)
   (lsp-pyright-typechecking-mode "off")

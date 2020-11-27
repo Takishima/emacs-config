@@ -103,19 +103,20 @@
   )
 
 ;; ========================================================================== ;;
-
+   
 (use-package irony
   :ensure t
   :after company
-  ;; :hook (
-  ;;        (irony-mode . company-irony-setup-begin-commands)
-  ;;        (c++-mode-hook . irony-mode)
-  ;;        (c-mode-hook . irony-mode)
-  ;;        (objc-mode-hook . irony-mode)
-  ;;        )
+  :hook (
+         (irony-mode . company-irony-setup-begin-commands)
+	 (irony-mode . irony-cdb-autosetup-compile-options)
+         (c++-mode-hook . irony-mode)
+         (c-mode-hook . irony-mode)
+         (objc-mode-hook . irony-mode)
+         )
   :config
-  ;; (eval-after-load 'company
-  ;;   '(add-to-list 'company-backends 'company-irony))
+  (eval-after-load 'company
+    '(add-to-list 'company-backends 'company-irony))
   (if (eq system-type 'darwin)
       (progn
         (add-to-list 'irony-additional-clang-options
@@ -159,7 +160,7 @@
   (:map c++-mode-map
 	(("C-c C-f" . clang-format-buffer)
 	 ("C-c C-r" . clang-format-region)
-	 ))  
+	 ))
   )
 
 ;; ========================================================================== ;;
@@ -167,7 +168,7 @@
 (use-package demangle-mode
   :ensure t
   :hook asm-mode)
- 
+
 ;; ========================================================================== ;;
 
 (provide 'init-prog-cpp)
