@@ -71,6 +71,10 @@
 (use-package diminish
   :ensure t)
 
+(use-package counsel
+  :ensure t
+  )
+
 (use-package ivy
   :ensure t
   :diminish (ivy-mode counsel-mode)

@@ -55,6 +55,7 @@
 
 ;; which-key
 (use-package which-key
+  :ensure t
   :config
   (which-key-mode +1))
 
@@ -64,6 +65,24 @@
   :ensure t
   :bind (("s-y" . browse-kill-ring))
   )
+
+;; ========================================================================== ;;
+
+(use-package projectile
+  :ensure t
+  :bind-keymap ("s-p" . projectile-command-map)
+  :init
+  (setq projectile-completion-system 'ivy
+        projectile-mode-line-function '(lambda () (format " [%s]" (projectile-project-name))))
+  :config
+  (projectile-mode +1))
+
+;; ========================================================================== ;;
+
+(use-package explain-pause-mode
+  :ensure nil
+  :load-path (config-dotemacs-lisp)
+)
 
 ;; ========================================================================== ;;
 
@@ -91,9 +110,19 @@
 
 (save-place-mode)
 
+(unless (and (version< emacs-version "27")
+             (require 'so-long nil :noerror))
+    (package-install 'so-long))
 (global-so-long-mode)
 
-(global-hl-line-mode)
+
+(use-package hl-line+
+  :load-path (config-dotemacs-lisp)
+  :config
+  (hl-line-when-idle-interval 0.2)
+  (toggle-hl-line-when-idle 1))
+
+(global-hl-line-mode 0)
 
 (global-subword-mode)  ; navigationInCamelCase
 
