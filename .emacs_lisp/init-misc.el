@@ -68,6 +68,12 @@
                                  prog-mode))
   :hook (after-init . global-emojify-mode))
 
+(use-package all-the-icons
+  :ensure t)
+
+(use-package all-the-icons-ivy
+  :ensure t)
+
 ;; -------------------------------------------------------------------------- ;;
 
 ;; (use-package linum
