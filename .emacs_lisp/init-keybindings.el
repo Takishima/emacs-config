@@ -45,7 +45,7 @@
 (global-set-key (kbd "s-r") 'revert-buffer)
 (global-set-key (kbd "s-R") 'revert-all-buffers)
 
-(config-with-system 'darwin
+(config-when-system 'darwin
   (setq mac-command-modifier 'meta
 	mac-option-modifier 'super
 	default-input-method "MacOSX")

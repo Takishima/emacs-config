@@ -126,7 +126,7 @@
 
 ;; -------------------------------------------------------------------------- ;;
 
-(config-with-system 'darwin
+(config-when-system 'darwin
   (defvar compile-in-iterms-command "make")
   (defun compile-in-iterm (command)
     (interactive

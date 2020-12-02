@@ -95,10 +95,16 @@
 
 ;; ========================================================================== ;;
 
-(defmacro config-with-system (type &rest body)
+(defmacro config-when-system (type &rest body)
   "Evaluate BODY if `system-type' equals TYPE."
   (declare (indent defun))
   `(when (eq system-type (intern-soft ,type))
+     ,@body))
+
+(defmacro config-unless-system (type &rest body)
+  "Evaluate BODY if `system-type' does not equals TYPE."
+  (declare (indent defun))
+  `(unless (eq system-type (intern-soft ,type))
      ,@body))
 
 ;; ========================================================================== ;;

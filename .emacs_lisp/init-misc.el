@@ -84,7 +84,7 @@
 
 ;; -------------------------------------------------------------------------- ;;
 
-(config-with-system 'darwin
+(config-when-system 'darwin
   ;; Allow editing of binary .plist files.
   (add-to-list 'jka-compr-compression-info-list
                ["\\.plist$"
