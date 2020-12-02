@@ -43,7 +43,6 @@
 
 ;; ========================================================================== ;;
 
-(require 'cl)
 (require 'cl-lib)
 
 (use-package tex
@@ -64,7 +63,7 @@
   (LaTeX-clean-intermediate-suffixes '("\\.aux" "\\.bbl" "\\.blg" "\\.brf" "\\.fot" "\\.glo" "\\.gls" "\\.idx" "\\.ilg" "\\.ind" "\\.lof" "\\.log" "\\.lot" "\\.nav" "\\.out" "\\.snm" "\\.toc" "\\.url" "\\.synctex\\.gz" "\\.bcf" "\\.run\\.xml" "\\.fls" "-blx\\.bib" "\\.acn" "\\.acr" "\\.alg" "\\.glg" "\\.xdv" "\\.fdb_latexmk" "\\.ist"))
 
   (TeX-view-program-selection (append '(output-pdf "PDF Viewer")
-                                      (remove-if (lambda(el) (eq (car el) 'output-pdf))
+                                      (cl-remove-if (lambda(el) (eq (car el) 'output-pdf))
                                                  TeX-view-program-selection)))
 
   (TeX-view-program-list (push '("PDF Viewer" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")
