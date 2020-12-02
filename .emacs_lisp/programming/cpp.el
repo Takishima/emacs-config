@@ -38,6 +38,7 @@
 ;; ========================================================================== ;;
 
 (require 'use-package)
+(require 'config-functions (concat config-dir "functions.el"))
 
 ;; ========================================================================== ;;
 
@@ -90,6 +91,7 @@
 
 (use-package flycheck-clang-analyzer
   :ensure t
+  :functions flycheck-clang-analyzer-setup
   :after flycheck
   :config (flycheck-clang-analyzer-setup)
   )
@@ -98,6 +100,7 @@
 
 (use-package flycheck-clang-tidy
   :ensure t
+  :functions flycheck-clang-analyzer-setup
   :after flycheck
   :config (flycheck-clang-tidy-setup)
   )

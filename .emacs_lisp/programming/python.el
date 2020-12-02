@@ -36,6 +36,7 @@
 ;; ========================================================================== ;;
 
 (require 'use-package)
+(require 'config-functions (concat config-dir "functions.el"))
 
 ;; ========================================================================== ;;
 
@@ -69,7 +70,7 @@
 
 ;; -------------------------------------------------------------------------- ;;
 
-(config-unless-system 'darwin
+(config-when-system 'darwin
   (use-package elpy
     :ensure t
     :init
@@ -113,24 +114,26 @@ This requires the pytest package to be installed."
 
 ;; -------------------------------------------------------------------------- ;;
 
-(use-package lsp-pyright
-  :ensure t
-  :after lsp-mode
-  :hook (python-mode . (lambda ()
-                         (config-unless-system 'darwin
-                           (require 'lsp-pyright)
-                           (lsp-deferred))))
-  :custom
-  (lsp-pyright-auto-import-completions nil)
-  (lsp-pyright-typechecking-mode "off")
-  (lsp-pyright-python-executable-cmd "python3")
-  :config
-  (dn-async-process
-   "npm outdated -g | grep pyright | wc -l" nil
-   (lambda (process output)
-     (pcase output
-       ("0\n" (message "Pyright is up to date."))
-       ("1\n" (message "A pyright update is available.")))))
+(config-unless-system 'darwin
+  (use-package lsp-pyright
+    :ensure t
+    :after lsp-mode
+    :hook (python-mode . (lambda ()
+                           (config-unless-system 'darwin
+                             (require 'lsp-pyright)
+                             (lsp-deferred))))
+    :custom
+    (lsp-pyright-auto-import-completions nil)
+    (lsp-pyright-typechecking-mode "off")
+    (lsp-pyright-python-executable-cmd "python3")
+    :config
+    (dn-async-process
+     "npm outdated -g | grep pyright | wc -l" nil
+     (lambda (process output)
+       (pcase output
+         ("0\n" (message "Pyright is up to date."))
+         ("1\n" (message "A pyright update is available.")))))
+    )
   )
 
 ;; -------------------------------------------------------------------------- ;;
