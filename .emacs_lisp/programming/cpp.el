@@ -103,53 +103,55 @@
   )
 
 ;; ========================================================================== ;;
-   
-(use-package irony
-  :ensure t
-  :after company
-  :hook (
-         (irony-mode . company-irony-setup-begin-commands)
-	 (irony-mode . irony-cdb-autosetup-compile-options)
-         (c++-mode-hook . irony-mode)
-         (c-mode-hook . irony-mode)
-         (objc-mode-hook . irony-mode)
-         )
-  :config
-  (eval-after-load 'company
-    '(add-to-list 'company-backends 'company-irony))
-  (if (eq system-type 'darwin)
-      (progn
-        (add-to-list 'irony-additional-clang-options
-		     (concat "-I"(file-name-as-directory
-			          (car (directory-files
-				        "/usr/local/Cellar/llvm/"
-				        t
-				        "[0-9]\\.[0-9]\\.[0-9]")))
-			     "include/c++/v1/")
-		     t)
-        (add-to-list 'irony-additional-clang-options
-		     "-I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/"
-		     t)
-        )
+
+(config-when-system 'darwin
+  (use-package irony
+    :ensure t
+    :after company
+    :hook (
+           (irony-mode . company-irony-setup-begin-commands)
+	   (irony-mode . irony-cdb-autosetup-compile-options)
+           (c++-mode-hook . irony-mode)
+           (c-mode-hook . irony-mode)
+           (objc-mode-hook . irony-mode)
+           )
+    :config
+    (eval-after-load 'company
+      '(add-to-list 'company-backends 'company-irony))
+    (if (eq system-type 'darwin)
+        (progn
+          (add-to-list 'irony-additional-clang-options
+		       (concat "-I"(file-name-as-directory
+			            (car (directory-files
+				          "/usr/local/Cellar/llvm/"
+				          t
+				          "[0-9]\\.[0-9]\\.[0-9]")))
+			       "include/c++/v1/")
+		       t)
+          (add-to-list 'irony-additional-clang-options
+		       "-I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/"
+		       t)
+          )
+      )
+
+    (defun my-irony-mode-hook ()
+      (define-key irony-mode-map
+        [remap completion-at-point] 'counsel-irony)
+      (define-key irony-mode-map
+        [remap complete-symbol] 'counsel-irony))
+    (add-hook 'irony-mode-hook 'my-irony-mode-hook)
+    (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
     )
 
-  (defun my-irony-mode-hook ()
-    (define-key irony-mode-map
-      [remap completion-at-point] 'counsel-irony)
-    (define-key irony-mode-map
-      [remap complete-symbol] 'counsel-irony))
-  (add-hook 'irony-mode-hook 'my-irony-mode-hook)
-  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-  )
-
-(use-package flycheck-irony
-  :ensure t
-  :after flycheck
-  :functions flycheck-irony-setup
-  :config
-  (global-flycheck-mode)
-  (eval-after-load 'flycheck
-    '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
+  (use-package flycheck-irony
+    :ensure t
+    :after flycheck
+    :functions flycheck-irony-setup
+    :config
+    (global-flycheck-mode)
+    (eval-after-load 'flycheck
+      '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
+    )
   )
 
 ;; ========================================================================== ;;
