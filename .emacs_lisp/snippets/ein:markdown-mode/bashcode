@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: bash
-# key: bashcode
-# --
-\`\`\`bash
-$1
-\`\`\`
-$0
