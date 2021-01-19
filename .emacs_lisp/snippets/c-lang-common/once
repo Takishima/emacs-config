@@ -4,7 +4,5 @@
 # --
 #ifndef ${1:`(upcase (file-name-nondirectory (file-name-sans-extension (or (buffer-file-name) ""))))`_`(upcase (file-name-nondirectory (file-name-extension (or (buffer-file-name) ""))))`}
 #define $1
-
 $0
-
 #endif /* $1 */
