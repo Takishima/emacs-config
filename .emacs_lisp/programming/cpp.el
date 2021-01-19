@@ -114,9 +114,9 @@
     :hook (
            (irony-mode . company-irony-setup-begin-commands)
 	   (irony-mode . irony-cdb-autosetup-compile-options)
-           (c++-mode-hook . irony-mode)
-           (c-mode-hook . irony-mode)
-           (objc-mode-hook . irony-mode)
+           (c++-mode . irony-mode)
+           (c-mode . irony-mode)
+           (objc-mode . irony-mode)
            )
     :config
     (eval-after-load 'company
