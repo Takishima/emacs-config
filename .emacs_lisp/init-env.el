@@ -43,7 +43,9 @@
   :ensure t
   :defines (exec-path-from-shell-variables)
   :custom
-  (exec-path-from-shell-variables '("PATH"
+  (exec-path-from-shell-variables '("LC_ALL"
+                                    "LANG"
+                                    "PATH"
 				    "MANPATH"
 				    "WORKON_HOME"
 				    "CPLUS_INCLUDE_PATH"
