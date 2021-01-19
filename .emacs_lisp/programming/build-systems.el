@@ -52,19 +52,28 @@
   :load-path config-dotemacs-lisp
   :bind
   (:map cmake-mode-map
-	(("C-c i" . compile-in-iterm)
-	 ))
+        (("C-c i" . compile-in-iterm)
+         ("C-c C-f" . cmake-format-buffer)
+         ))
   :hook
   (cmake-mode . cmake-format-mode)
   )
 
 ;; -------------------------------------------------------------------------- ;;
 
-;; (require 'rtags)
+(use-package rtags
+  :ensure t
+  )
+
 (use-package cmake-ide
   :ensure t
+  :custom
+  ((cmake-ide-header-search-other-file nil)
+   (cmake-ide-header-search-first-including nil)
+   )
   :config
   (cmake-ide-setup)
+  (setq cmake-ide-flags-c++ (append '("-std=c++17")))
   )
 
 ;; -------------------------------------------------------------------------- ;;
@@ -85,10 +94,11 @@
 (use-package pkgbuild-mode
   :ensure t
   :mode "/PKGBUILD$"
+  :functions pkgbuild-update-srcinfo
   :config
   (autoload 'pkgbuild-mode "pkgbuild-mode.el" "PKGBUILD mode." t)
-  
-  (defun pkgbuild-gen-srcinfo-before-save-hook ()  
+
+  (defun pkgbuild-gen-srcinfo-before-save-hook ()
     (when (eq major-mode 'pkgbuild-mode)
       (pkgbuild-update-srcinfo)
       )
