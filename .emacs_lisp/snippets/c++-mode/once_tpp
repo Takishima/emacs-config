@@ -1,0 +1,16 @@
+# -*- mode: snippet -*-
+# name: once_tpp
+# key: oncetpp
+# --
+#ifndef ${1:`(upcase (file-name-nondirectory (file-name-sans-extension (or (buffer-file-name) ""))))`_`(upcase (file-name-nondirectory (file-name-extension (or (buffer-file-name) ""))))`}
+#define $1
+
+#ifndef ${1:$(concat (substring yas-text 0 -4) "_HPP")}
+#     error This file must only be included by $2!
+#endif // ${1:$(concat (substring yas-text 0 -4) "_HPP")}
+
+// NB: This is mainly for syntax checkers and completion helpers as this file
+//     is only intended to be included directly by $2
+#include "${2:`(or (concat (file-name-nondirectory (file-name-sans-extension (buffer-file-name))) ".hpp") "")`}"
+$0
+#endif /* $1 */
