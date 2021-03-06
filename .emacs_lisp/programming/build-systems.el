@@ -61,9 +61,9 @@
 
 ;; -------------------------------------------------------------------------- ;;
 
-(use-package rtags
-  :ensure t
-  )
+;; (use-package rtags
+;;   :ensure t
+;;   )
 
 (use-package cmake-ide
   :ensure t
