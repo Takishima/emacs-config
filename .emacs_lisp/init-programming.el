@@ -162,6 +162,15 @@
 
 ;; ========================================================================== ;;
 
+(use-package tree-sitter
+  :ensure t
+  :config
+  (global-tree-sitter-mode)
+  )
+(use-package tree-sitter-langs)
+
+;; ========================================================================== ;;
+
 (use-package lsp-mode
   :hook ((prog-mode . (lambda ()
                         (unless (derived-mode-p 'emacs-lisp-mode 'lisp-mode 'makefile-mode 'python-mode)
