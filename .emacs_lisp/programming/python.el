@@ -62,7 +62,7 @@
      python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
      python-shell-completion-setup-code
      "from IPython.core.completerlib import module_completion"
-     python-shell-completion-module-string-code
+     python-shell-completion-string-code
      "';'.join(module_completion('''%s'''))\n"
      python-shell-completion-string-code
      "';'.join(get_ipython().Completer.all_completions('''%s'''))\n"))
@@ -178,7 +178,7 @@ This requires the pytest package to be installed."
   :after python
   :bind (:map python-mode-map
 	      (("C-c i" . compile-in-iterm)
-	       ("C-x tp" . python-pytest-popup)
+	       ("C-x tp" . python-pytest-dispatch)
 	       ("C-x tt" . python-pytest)
 	       ("C-x tf" . python-pytest-file)
 	       ("C-x tF" . python-pytest-file-dwim)
@@ -194,6 +194,7 @@ This requires the pytest package to be installed."
      "--failed-first"   ;; run the previous failed tests first
      "-p no:warnings"   ;; ignore warnings
      "--maxfail=5"))    ;; exit in 5 continuous failures in a run
+  :functions python-pytest--project-name
   :config
   (require 'magit-popup)
   (which-key-add-major-mode-key-based-replacements 'python-mode "t" "Testing")
@@ -201,9 +202,9 @@ This requires the pytest package to be installed."
     "Helper to choose a pytest coverage report type using PROMPT."
     (completing-read
      prompt '("term" "term-missing" "annotate" "html") nil t))
-  (magit-define-popup-option 'python-pytest-popup ?c "Coverage" "--cov=")
+  (magit-define-popup-option 'python-pytest-dispatch ?c "Coverage" "--cov=")
   (magit-define-popup-option
-    'python-pytest-popup
+    'python-pytest-dispatch
     ?r
     "Coverage report" "--cov-report="
     'python-pytest-cov--choose-report-type)
