@@ -179,7 +179,9 @@
   :config
   (global-tree-sitter-mode)
   )
-(use-package tree-sitter-langs)
+(use-package tree-sitter-langs
+  :ensure t
+  )
 
 ;; ========================================================================== ;;
 
