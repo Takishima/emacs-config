@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: message(CHECK_PASS)
+# key: checkp
+# --
+message(CHECK_PASS "$0")

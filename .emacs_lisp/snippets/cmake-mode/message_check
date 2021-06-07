@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: message(CHECK_XXX)
+# key: check
+# --
+message(${2:$$(yas-choose-value '("CHECK_START" "CHECK_PASS" "CHECK_FAIL"))} "$0")

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: message(CHECK_FAIL)
+# key: checkf
+# --
+message(CHECK_FAIL "$0")

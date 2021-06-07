@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: print_var
+# key: print
+# --
+message(STATUS "$1 = \${$1}")$0
