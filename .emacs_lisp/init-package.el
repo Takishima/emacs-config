@@ -38,7 +38,8 @@
 (require 'package)
 
 (when (< emacs-major-version 27)
-  (package-initialize))
+  (package-initialize)
+  (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 
 (let* (
        (no-ssl (and (memq system-type '(windows-nt ms-dos))
