@@ -37,8 +37,9 @@
 
 ;; ========================================================================== ;;
 
-(require 'use-package)
 (require 'diminish)
+(require 'cl-lib)
+(require 'use-package)
 (require 'config-functions (concat config-dir "functions.el"))
 
 ;; ========================================================================== ;;
@@ -188,12 +189,18 @@
 
 ;; ========================================================================== ;;
 
+(defvar dn-lsp-mode-disabled '(emacs-lisp-mode lisp-mode makefile-mode python-mode direnv-envrc-mode))
+(progn
+  (unless (member system-type '(windows-nt ms-dos))
+    (add-to-list 'dn-lsp-mode-disabled 'powershell-mode t)
+    )
+  )
+
 (use-package lsp-mode
   :hook ((prog-mode . (lambda ()
-                        (unless (derived-mode-p 'emacs-lisp-mode 'lisp-mode 'makefile-mode 'python-mode)
+                        (unless (cl-some 'derived-mode-p dn-lsp-mode-disabled)
                           (lsp-deferred))
-                        )
-                    )
+                        ))
          (lsp-mode . lsp-enable-which-key-integration))
   :custom
   (gc-cons-threshold (* 100 1024 1024))
