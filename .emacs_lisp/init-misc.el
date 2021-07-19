@@ -76,10 +76,12 @@
 
 ;; -------------------------------------------------------------------------- ;;
 
-;; (use-package linum
-;;   :ensure t
-;;   :config
-;;   (global-linum-mode 1))
+(config-unless-system 'darwin
+  (use-package linum
+    :ensure t
+    :config
+    (global-linum-mode 1))
+  )
 
 ;; -------------------------------------------------------------------------- ;;
 
