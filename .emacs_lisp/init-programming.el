@@ -189,10 +189,13 @@
 
 ;; ========================================================================== ;;
 
-(defvar dn-lsp-mode-disabled '(emacs-lisp-mode lisp-mode makefile-mode python-mode direnv-envrc-mode))
+(defvar dn-lsp-mode-disabled '(emacs-lisp-mode lisp-mode makefile-mode direnv-envrc-mode))
 (progn
   (unless (member system-type '(windows-nt ms-dos))
     (add-to-list 'dn-lsp-mode-disabled 'powershell-mode t)
+    )
+  (unless (member system-type '(gnu gnu/linux gnu/kfreebsd))
+    (add-to-list 'dn-lsp-mode-disabled 'python-mode t)
     )
   )
 
