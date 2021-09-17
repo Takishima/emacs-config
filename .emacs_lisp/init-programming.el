@@ -205,6 +205,17 @@
                           (lsp-deferred))
                         ))
          (lsp-mode . lsp-enable-which-key-integration))
+  :init
+  (add-to-list 'lsp-language-id-configuration
+               '(cuda-mode . "cuda"))
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-stdio-connection
+                                     'lsp-clients--clangd-command)
+                    :activation-fn (lsp-activate-on "cuda")
+                    :priority -1
+                    :server-id 'clangd
+                    :download-server-fn (lambda (_client callback error-callback _update?)
+                                          (lsp-package-ensure 'clangd callback error-callback))))
   :custom
   (gc-cons-threshold (* 100 1024 1024))
   (read-process-output-max (* 1024 1024))
@@ -376,7 +387,7 @@
     (setq require-name (intern-soft (concat "init-prog-"
         				    (file-name-sans-extension (file-name-nondirectory fname)))))
     (unless (member (file-name-nondirectory fname) skip-names)
-      (byte-recompile-file fname nil 0)
+      ;; (byte-recompile-file fname nil 0)
       (if require-name
           (progn
             (message "INFO: requiring %s from %s" require-name fname)
