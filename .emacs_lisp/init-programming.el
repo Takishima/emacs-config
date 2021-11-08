@@ -174,6 +174,7 @@
   :ensure t)
 
 ;; ========================================================================== ;;
+
 (when module-file-suffix
   (use-package tree-sitter
     :ensure t
@@ -200,6 +201,8 @@
   )
 
 (use-package lsp-mode
+  :ensure t
+  :defines lsp-language-id-configuration
   :hook ((prog-mode . (lambda ()
                         (unless (cl-some 'derived-mode-p dn-lsp-mode-disabled)
                           (lsp-deferred))
