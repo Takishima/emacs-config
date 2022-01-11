@@ -65,16 +65,17 @@
 ;;   :ensure t
 ;;   )
 
-;; (use-package cmake-ide
-;;   :ensure t
-;;   :custom
-;;   ((cmake-ide-header-search-other-file nil)
-;;    (cmake-ide-header-search-first-including nil)
-;;    )
-;;   :config
-;;   (cmake-ide-setup)
-;;   (setq cmake-ide-flags-c++ (append '("-std=c++17")))
-;;   )
+(use-package cmake-ide
+  :if (member system-type '(gnu gnu/linux gnu/kfreebsd))
+  :ensure t
+  :custom
+  ((cmake-ide-header-search-other-file nil)
+   (cmake-ide-header-search-first-including nil)
+   )
+  :config
+  (cmake-ide-setup)
+  (setq cmake-ide-flags-c++ (append '("-std=c++17")))
+  )
 
 ;; -------------------------------------------------------------------------- ;;
 
