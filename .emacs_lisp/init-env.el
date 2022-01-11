@@ -50,7 +50,22 @@
 				    "WORKON_HOME"
 				    "CPLUS_INCLUDE_PATH"
 				    "LD_LIBRARY_PATH"
-				    "DYLD_LIBRARY_PATH"))
+				    "DYLD_LIBRARY_PATH"
+                                    "LSP_USE_PLISTS"))
+  :config
+  (exec-path-from-shell-initialize)
+  )
+
+(use-package exec-path-from-shell
+  :if (member system-type '(gnu gnu/linux gnu/kfreebsd))
+  :ensure t
+  :defines (exec-path-from-shell-variables)
+  :custom
+  (exec-path-from-shell-variables '("PATH"
+				    "MANPATH"
+				    "WORKON_HOME"
+				    "CPLUS_INCLUDE_PATH"
+				    "LSP_USE_PLISTS"))
   :config
   (exec-path-from-shell-initialize)
   )

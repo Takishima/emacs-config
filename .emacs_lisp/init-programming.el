@@ -220,6 +220,7 @@
                     :download-server-fn (lambda (_client callback error-callback _update?)
                                           (lsp-package-ensure 'clangd callback error-callback))))
   :custom
+  (lsp-use-plists t)
   (gc-cons-threshold (* 100 1024 1024))
   (read-process-output-max (* 1024 1024))
 
