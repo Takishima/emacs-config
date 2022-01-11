@@ -230,7 +230,7 @@
   (lsp-modeline-diagnostics-enable nil)
   (lsp-auto-execute-action nil)
   (lsp-before-save-edits nil)
-  (lsp-idle-delay 0.5)
+  (lsp-idle-delay 0.3)
   (lsp-completion-provider :capf)
   ;; Prevent constant auto-formatting...)
   (lsp-enable-on-type-formatting nil)
@@ -268,6 +268,7 @@
   (lsp-ui-sideline-enable t)
   (lsp-ui-sideline-ignore-duplicate t)
   (lsp-ui-sideline-show-code-actions t)
+  (lsp-ui-sideline-show-diagnostics t)
   (lsp-ui-sideline-show-hover nil)
   (lsp-ui-sideline-update-mode 'line)
   :custom-face
