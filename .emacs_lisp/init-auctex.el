@@ -62,13 +62,6 @@
 
   (LaTeX-clean-intermediate-suffixes '("\\.aux" "\\.bbl" "\\.blg" "\\.brf" "\\.fot" "\\.glo" "\\.gls" "\\.idx" "\\.ilg" "\\.ind" "\\.lof" "\\.log" "\\.lot" "\\.nav" "\\.out" "\\.snm" "\\.toc" "\\.url" "\\.synctex\\.gz" "\\.bcf" "\\.run\\.xml" "\\.fls" "-blx\\.bib" "\\.acn" "\\.acr" "\\.alg" "\\.glg" "\\.xdv" "\\.fdb_latexmk" "\\.ist"))
 
-  (TeX-view-program-selection (append '(output-pdf "PDF Viewer")
-                                      (cl-remove-if (lambda(el) (eq (car el) 'output-pdf))
-                                                 TeX-view-program-selection)))
-
-  (TeX-view-program-list (push '("PDF Viewer" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")
-                               TeX-view-program-list))
-
   ;; -----------------------------------
   ;; RefTeX related settings
 
@@ -109,14 +102,6 @@
   ;; -----------------------------------
   ;; TeX compile commands
 
-  ;; (setq TeX-view-program-selection
-  ;;    (remove-if (lambda(el) (eq (car el) 'output-pdf))
-  ;;               TeX-view-program-selection))
-  ;; (add-to-list 'TeX-view-program-selection
-  ;;           '(output-pdf "PDF Viewer"))
-
-  (add-to-list 'TeX-view-program-list
-               '("PDF Viewer" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b"))
   (add-to-list 'TeX-command-list
                '("latexmk" "latexmk -xelatex -pv -shell-escape %s" TeX-run-TeX nil t :help "Process file with latexmk"))
   (add-to-list 'TeX-command-list
@@ -125,6 +110,24 @@
                '("make" "make %s" TeX-run-TeX nil t :help "Process file with GNU make (and makefile)"))
   (add-to-list 'TeX-command-list
                '("Biber" "biber %s" TeX-run-Biber nil t :help "Run Biber"))
+
+  (when (eq system-type 'darwin)
+    (let (
+          (skim-path "/Applications/Skim.app/Contents/SharedSupport/")
+          (skim-exec "displayline")
+          )
+      (push skim-path exec-path)
+      (setq skim-exec (executable-find skim-exec))
+      (pop exec-path)
+      (when skim-exec
+        (setq TeX-view-program-selection (append '((output-pdf "macos-skim"))
+                                                 (cl-remove-if (lambda (el) (eq (car el) 'output-pdf))
+                                                               TeX-view-program-selection)))
+        (setq TeX-view-program-list (push `("macos-skim" ,(concat skim-exec " -b -g %n %o %b"))
+                                          TeX-view-program-list))
+        )
+      )
+    )
 
   ;; -----------------------------------
   ;; Setup PATH
