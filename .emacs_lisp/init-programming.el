@@ -208,7 +208,7 @@
                           (lsp-deferred))
                         ))
          (lsp-mode . lsp-enable-which-key-integration))
-  :init
+  :config
   (add-to-list 'lsp-language-id-configuration
                '(cuda-mode . "cuda"))
   (lsp-register-client
