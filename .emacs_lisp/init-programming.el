@@ -198,6 +198,7 @@
   (unless (member system-type '(gnu gnu/linux gnu/kfreebsd))
     (add-to-list 'dn-lsp-mode-disabled 'python-mode t)
     )
+  (add-to-list 'dn-lsp-mode-disabled 'bat-mode t)
   )
 
 (use-package lsp-mode
@@ -208,17 +209,17 @@
                           (lsp-deferred))
                         ))
          (lsp-mode . lsp-enable-which-key-integration))
-  :config
-  (add-to-list 'lsp-language-id-configuration
-               '(cuda-mode . "cuda"))
-  (lsp-register-client
-   (make-lsp-client :new-connection (lsp-stdio-connection
-                                     'lsp-clients--clangd-command)
-                    :activation-fn (lsp-activate-on "cuda")
-                    :priority -1
-                    :server-id 'clangd
-                    :download-server-fn (lambda (_client callback error-callback _update?)
-                                          (lsp-package-ensure 'clangd callback error-callback))))
+  ;; :config
+  ;; (add-to-list 'lsp-language-id-configuration
+  ;;              '(cuda-mode . "cuda"))
+  ;; (lsp-register-client
+  ;;  (make-lsp-client :new-connection (lsp-stdio-connection
+  ;;                                    'lsp-clients--clangd-command)
+  ;;                   :activation-fn (lsp-activate-on "cuda")
+  ;;                   :priority -1
+  ;;                   :server-id 'clangd
+  ;;                   :download-server-fn (lambda (_client callback error-callback _update?)
+  ;;                                         (lsp-package-ensure 'clangd callback error-callback))))
   :custom
   (lsp-use-plists t)
   (gc-cons-threshold (* 100 1024 1024))
@@ -306,6 +307,12 @@
   :diminish
   :after (lsp-mode)
   :functions dap-hydra/nil
+  :custom
+  (dap-auto-configure-mode t)
+  (dap-tooltip-mode 1)
+  (dap-ui-controls-mode 1)
+  (dap-auto-configure-features
+   '(sessions locals breakpoints expressions controls tooltip))
   :hook ((dap-mode . dap-ui-mode)
          (dap-session-created . (lambda (&_rest) (dap-hydra)))
          (dap-stopped . (lambda (_args) (dap-hydra)))
@@ -314,7 +321,6 @@
          ((c-mode c++-mode objc-mode swift-mode) . (lambda () (require 'dap-lldb)))
          (powershell-mode . (lambda () (require 'dap-pwsh))))
   :init
-  (setq dap-auto-configure-features '(sessions locals breakpoints expressions controls))
   (when (executable-find "python3")
     (setq dap-python-executable "python3"))
   )
