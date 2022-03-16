@@ -68,6 +68,12 @@
 
 ;; ========================================================================== ;;
 
+(use-package smart-shift
+  :ensure t
+  )
+
+;; ========================================================================== ;;
+
 (use-package projectile
   :ensure t
   :bind-keymap ("s-p" . projectile-command-map)
