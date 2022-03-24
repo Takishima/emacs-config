@@ -90,6 +90,14 @@
 
 ;; ========================================================================== ;;
 
+(use-package diff-mode
+  :ensure t
+  :mode
+  "\\.patch[0-9]*\\'"
+  )
+
+;; ========================================================================== ;;
+
 (use-package flycheck
   :ensure t
   :custom
@@ -230,7 +238,7 @@
   (lsp-auto-guess-root t)
   (lsp-modeline-diagnostics-enable nil)
   (lsp-auto-execute-action nil)
-  (lsp-before-save-edits nil)
+s  (lsp-before-save-edits nil)
   (lsp-idle-delay 0.3)
   (lsp-completion-provider :capf)
   ;; Prevent constant auto-formatting...)
