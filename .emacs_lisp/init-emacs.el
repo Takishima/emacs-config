@@ -180,6 +180,8 @@
   :ensure t
   :custom
   (show-trailing-whitespace t)  ; not from whitespace-cleanup-mode.el
+  :hook
+  (diff-mode . (lambda () (whitespace-cleanup-mode -1)))
   :config
   (global-whitespace-cleanup-mode))
 
