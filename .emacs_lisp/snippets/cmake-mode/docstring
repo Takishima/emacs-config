@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# CMake function/macro docstring generator snippet
+# name: docstring
+# key: doc
+# --
+
+# ~~~
+# $1
+#
+`(yas-lib-cmake-function-docstring)`
+#
+# $0
+# ~~~

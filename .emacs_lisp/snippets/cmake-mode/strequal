@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: str=
+# key: str=
+# --
+"\${${1:var}}" STREQUAL "$2"$0
