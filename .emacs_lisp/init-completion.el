@@ -149,6 +149,28 @@
   (yas-global-mode t)
   )
 
+(let* (
+       (dir-path (file-name-as-directory (concat config-dotemacs-lisp "yas-lib")))
+       (dir-list (directory-files dir-path t "^[^#\\.].*\\.el$"))
+       (require-name)
+       )
+  (dolist (fname dir-list)
+    (setq require-name (intern-soft (concat "yas-lib-"
+                                            (file-name-sans-extension (file-name-nondirectory fname)))))
+    (if require-name
+        (progn
+          (message "INFO: requiring %s from %s" require-name fname)
+          (require require-name fname)
+          )
+      (progn
+        (setq fname (file-name-sans-extension fname))
+        (message "INFO: loading %s" fname)
+        (load fname)
+        )
+      )
+    )
+  )
+
 ;; ========================================================================== ;;
 ;; Load Company mode
 
