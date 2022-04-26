@@ -1,3 +1,6 @@
+;;; .emacs --- Summary
+;; My emacs config file
+;;
 ;; MIT License
 
 ;; Copyright (c) 2020 Damien Nguyen
@@ -19,6 +22,8 @@
 ;; LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 ;; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ;; SOFTWARE.
+
+;;; Commentary:
 
 ;;; Code:
 
@@ -77,3 +82,7 @@
 ;; Bring the window into focus
 (when (memq window-system '(mac ns x))
     (x-focus-frame nil))
+
+;; (provide '.emacs)
+;;; .emacs ends here
+
