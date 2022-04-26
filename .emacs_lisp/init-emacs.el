@@ -70,7 +70,8 @@
 
 (use-package smart-shift
   :ensure t
-  )
+  :config
+  (global-smart-shift-mode +1))
 
 ;; ========================================================================== ;;
 
