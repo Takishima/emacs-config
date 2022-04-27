@@ -70,6 +70,16 @@
   (exec-path-from-shell-initialize)
   )
 
+;; ========================================================================== ;;
+
+(use-package keychain-environment
+  :if (member system-type '(gnu gnu/linux gnu/kfreebsd))
+  :ensure t
+  :config
+  (keychain-refresh-environment))
+
+;; ========================================================================== ;;
+
 (provide 'init-env)
 
 ;;; init-env.el ends here
