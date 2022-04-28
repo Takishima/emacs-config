@@ -38,6 +38,7 @@
 ;; ========================================================================== ;;
 
 (require 'use-package)
+(require 'org)
 
 ;; ========================================================================== ;;
 
@@ -81,8 +82,31 @@
       )
     )
 
+  (defun magit-org-read-date (&rest _ignored)
+    (org-read-date))
+
+  (transient-define-argument magit-log:--since ()
+    :description "Show commits more recent than a specific date."
+    :class 'transient-option
+    :key "?S"
+    :argument "--since="
+    :reader #'magit-org-read-date)
+
+  (transient-define-argument magit-log:--until ()
+    :description "Show commits older than a specific date."
+    :class 'transient-option
+    :key "?U"
+    :argument "--until="
+    :reader #'magit-org-read-date)
+
   ;; ------------------------------------------------------------------------ ;;
   ;; Register new transients
+
+  (transient-append-suffix 'magit-log "-L"
+    '(magit-log:--since))
+
+  (transient-append-suffix 'magit-log "?S"
+    '(magit-log:--until))
 
   (transient-append-suffix 'magit-push "e"
     '("A" "All" magit-push-to-all-remotes))
