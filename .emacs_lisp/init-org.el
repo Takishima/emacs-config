@@ -52,9 +52,9 @@
   (org-log-done t)
   (org-log-done '(done))
   (org-agenda-include-diary t)
+  (org-read-date-popup-calendar nil)
 
   :config
-
   (custom-set-variables
     '(org-default-notes-file (expand-file-name "notes.org" org-directory))
     '(org-capture-templates
@@ -64,7 +64,7 @@
 	   "* %? :NOTE:\n%U")
 	  ))
     )
-  
+
   (add-hook 'org-mode-hook
 	    '(lambda () (smiley-buffer (current-buffer))))
 
@@ -85,7 +85,7 @@
   ;; Add the org file link format to the iimage mode regex
   (add-to-list 'iimage-mode-image-regex-alist
 	       (cons (concat "\\[\\[file:\\(~?" iimage-mode-image-filename-regex "\\)\\]") 1))
-  
+
   ;; Add a hook so we can display images on load
   (add-hook 'org-mode-hook '(lambda () (org-turn-on-iimage-in-org)))
 
@@ -95,7 +95,7 @@
     (interactive)
     (turn-on-iimage-mode)
     (set-face-underline-p 'org-link nil))
-  
+
   ;; Function to toggle images in a org buffer
   (defun org-toggle-iimage-in-org ()
     "display images in your org file"
