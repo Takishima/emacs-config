@@ -78,10 +78,10 @@
 
 ;; -------------------------------------------------------------------------- ;;
 
-(use-package linum
+(use-package display-line-numbers
   :ensure t
   :config
-  (global-linum-mode 1))
+  (global-display-line-numbers-mode 1))
 
 ;; -------------------------------------------------------------------------- ;;
 
