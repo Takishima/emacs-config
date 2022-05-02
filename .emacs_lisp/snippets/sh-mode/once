@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: once
+# key: once
+# --
+[ "\${${1:_sourced_`(downcase (file-name-nondirectory (file-name-sans-extension (buffer-file-name))))`}}" != "" ] && return || $1=.$0
