@@ -94,6 +94,12 @@
 
 ;; ========================================================================== ;;
 
+(use-package google-c-style
+  :ensure t
+  )
+
+;; ========================================================================== ;;
+
 (use-package flycheck-clang-analyzer
   :ensure t
   :functions flycheck-clang-analyzer-setup
