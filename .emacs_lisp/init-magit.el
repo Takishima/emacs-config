@@ -132,6 +132,13 @@
 
 ;; ========================================================================== ;;
 
+(use-package magit-delta
+  :ensure t
+  :ensure-system-package (delta . git-delta)
+  :hook (magit-mode . magit-delta-mode))
+
+;; ========================================================================== ;;
+
 (provide 'init-magit)
 
 ;;; init-magit.el ends here
