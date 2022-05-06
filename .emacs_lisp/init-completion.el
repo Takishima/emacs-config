@@ -146,8 +146,12 @@
   :custom-face
   (yas-field-highlight-face ((t (:inherit region))))
   :config
+  (yas-reload-all)
   (yas-global-mode t)
   )
+
+(use-package yasnippet-snippets
+    :ensure t)
 
 (let* (
        (dir-path (file-name-as-directory (concat config-dotemacs-lisp "yas-lib")))
