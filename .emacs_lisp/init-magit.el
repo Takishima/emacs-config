@@ -135,7 +135,10 @@
 (use-package magit-delta
   :ensure t
   :ensure-system-package (delta . git-delta)
-  :hook (magit-mode . magit-delta-mode))
+  :hook (magit-mode . magit-delta-mode)
+  :custom
+  (magit-delta-delta-args '("--max-line-distance" "0.6" "--true-color" "always" "--color-only" "--features" "magit-delta"))
+  )
 
 ;; ========================================================================== ;;
 
