@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: once
+# key: once
+# --
+if NOT "!${1:_sourced_`(downcase (file-name-nondirectory (file-name-sans-extension (buffer-file-name))))`}!" == "" ( goto :EOF ) else ( set $1=1 )$0
