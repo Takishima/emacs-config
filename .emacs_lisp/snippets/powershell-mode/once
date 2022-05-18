@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: once
+# key: once
+# --
+if (\$${1:_sourced_`(downcase (file-name-nondirectory (file-name-sans-extension (buffer-file-name))))`} -eq $null) { \$$1=1 } else { return }$0
