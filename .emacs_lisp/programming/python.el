@@ -80,70 +80,66 @@
 
 ;; -------------------------------------------------------------------------- ;;
 
-(config-when-system 'darwin
-  (use-package elpy
-    :ensure t
-    :init
-    (elpy-enable)
-    :custom
-    (elpy-eldoc-show-current-function nil)
-    (elpy-rpc-timeout 5)
-    (elpy-rpc-virtualenv-path 'default)
-    :bind (:map elpy-mode-map
-	        ("<M-left>" . nil)
-	        ("<M-right>" . nil)
-                ("C-c C-r f" . elpy-format-code)
-	        ("C-c C-k" . elpy-custom-close-all)
-	        ("C-c k" . python-pytest-close-buffer)
-	        ("C-b C-d" . c-hungry-delete-forward))
-    :config
-    (defun elpy-test-pytest-runner (top file module test)
-      "Test the project using the py.test test runner.
+;; (use-package elpy
+;;   :ensure t
+;;   :init
+;;   (elpy-enable)
+;;   :custom
+;;   (elpy-eldoc-show-current-function nil)
+;;   (elpy-rpc-timeout 5)
+;;   (elpy-rpc-virtualenv-path 'default)
+;;   :bind (:map elpy-mode-map
+;; 	      ("<M-left>" . nil)
+;; 	      ("<M-right>" . nil)
+;;               ("C-c C-r f" . elpy-format-code)
+;; 	      ("C-c C-k" . elpy-custom-close-all)
+;; 	      ("C-c k" . python-pytest-close-buffer)
+;; 	      ("C-b C-d" . c-hungry-delete-forward))
+;;   :config
+;;   (defun elpy-test-pytest-runner (top file module test)
+;;     "Test the project using the py.test test runner.
 
-This requires the pytest package to be installed."
-      (interactive (elpy-test-at-point))
-      (cond
-       (test
-        (let ((test-list (split-string test "\\.")))
-	  (python-pytest-function file test python-pytest-arguments)))
-       (module
-        (python-pytest-file file python-pytest-arguments))
-       (t
-        (python-pytest top python-pytest-arguments))))
+;; This requires the pytest package to be installed."
+;;     (interactive (elpy-test-at-point))
+;;     (cond
+;;      (test
+;;       (let ((test-list (split-string test "\\.")))
+;; 	(python-pytest-function file test python-pytest-arguments)))
+;;      (module
+;;       (python-pytest-file file python-pytest-arguments))
+;;      (t
+;;       (python-pytest top python-pytest-arguments))))
 
-    (defun elpy-custom-close-all ()
-      "Close all active python shells and python-pytest buffers"
-      (interactive)
-      (progn
-        (python-pytest-close-buffer)
-        (elpy-shell-kill-all)
-        )
-      )
-    )
-  )
+;;   (defun elpy-custom-close-all ()
+;;     "Close all active python shells and python-pytest buffers"
+;;     (interactive)
+;;     (progn
+;;       (python-pytest-close-buffer)
+;;       (elpy-shell-kill-all)
+;;       )
+;;     )
+;;   )
 
 ;; -------------------------------------------------------------------------- ;;
 
-(config-unless-system 'darwin
-  (use-package lsp-pyright
-    :ensure t
-    :after lsp-mode
-    :hook (python-mode . (lambda ()
-                           (config-unless-system 'darwin
-                             (require 'lsp-pyright)
-                             (lsp-deferred))))
-    :custom
-    (lsp-pyright-auto-import-completions nil)
-    (lsp-pyright-typechecking-mode "off")
-    (lsp-pyright-python-executable-cmd "python3")
-    :config
-    (dn-async-process
-     "npm outdated -g | grep pyright | wc -l" nil
-     (lambda (process output)
-       (pcase output
-         ("0\n" (message "Pyright is up to date."))
-         ("1\n" (message "A pyright update is available.")))))
-    )
+(use-package lsp-pyright
+  :ensure t
+  :after lsp-mode
+  :hook (python-mode . (lambda ()
+                         (config-unless-system 'darwin
+                           (require 'lsp-pyright)
+                           (lsp-deferred))))
+  :custom
+  (lsp-pyright-auto-import-completions nil)
+  (lsp-pyright-typechecking-mode "off")
+  (lsp-pyright-python-executable-cmd "python3")
+  :config
+  (dn-async-process
+   "npm outdated -g | grep pyright | wc -l" nil
+   (lambda (process output)
+     (pcase output
+       ("0\n" (message "Pyright is up to date."))
+       ("1\n" (message "A pyright update is available.")))))
   )
 
 ;; -------------------------------------------------------------------------- ;;

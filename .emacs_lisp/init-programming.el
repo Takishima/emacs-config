@@ -203,9 +203,6 @@
   (unless (member system-type '(windows-nt ms-dos))
     (add-to-list 'dn-lsp-mode-disabled 'powershell-mode t)
     )
-  (unless (member system-type '(gnu gnu/linux gnu/kfreebsd))
-    (add-to-list 'dn-lsp-mode-disabled 'python-mode t)
-    )
   (add-to-list 'dn-lsp-mode-disabled 'bat-mode t)
   )
 
