@@ -151,7 +151,9 @@
   )
 
 (use-package yasnippet-snippets
-    :ensure t)
+  :ensure t
+  :config
+  (add-to-list 'yas-snippet-dirs yasnippet-snippets-dir))
 
 (let* (
        (dir-path (file-name-as-directory (concat config-dotemacs-lisp "yas-lib")))
