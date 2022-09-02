@@ -51,6 +51,9 @@
 			    'config-init-pre
 			    nil)
 
+(custom-set-variables '(custom-file (concat config-dotemacs-lisp "custom.el")))
+(load custom-file)
+
 ;; ========================================================================== ;;
 
 (config-require 'init-package)
@@ -75,9 +78,6 @@
 			    nil)
 
 ;; ========================================================================== ;;
-
-(custom-set-variables '(custom-file (concat config-dotemacs-lisp "custom.el")))
-(load custom-file)
 
 ;; Bring the window into focus
 (when (memq window-system '(mac ns x))
