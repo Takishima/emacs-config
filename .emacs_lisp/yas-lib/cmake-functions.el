@@ -65,7 +65,9 @@
                                   (* (or whitespace control))
                                   (opt (seq "PARSE_ARGV" (+ (or whitespace control)) (+ digit)))
                                   (* (or whitespace control))
-                                  (+ (any "a-zA-Z0-9_")) ; prefix
+                                  (or (+ (any "a-zA-Z0-9_"))        ; prefix
+                                      (seq "${" (* (not "}")) "}")
+                                      (seq "\"${" (* (not "}")) "}\""))
                                   (+ (or whitespace control))
                                   (seq "\"" (group (* (not "\""))) "\"") ; options
                                   (+ (or whitespace control))
