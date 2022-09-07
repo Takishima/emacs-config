@@ -51,6 +51,7 @@
 			    'config-init-pre
 			    nil)
 
+(config-require 'init-custom)
 (custom-set-variables '(custom-file (concat config-dotemacs-lisp "custom.el")))
 (load custom-file)
 

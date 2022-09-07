@@ -198,14 +198,6 @@
 
 ;; ========================================================================== ;;
 
-(defvar dn-lsp-mode-disabled '(emacs-lisp-mode lisp-mode makefile-mode direnv-envrc-mode))
-(progn
-  (unless (member system-type '(windows-nt ms-dos))
-    (add-to-list 'dn-lsp-mode-disabled 'powershell-mode t)
-    )
-  (add-to-list 'dn-lsp-mode-disabled 'bat-mode t)
-  )
-
 (use-package lsp-mode
   :ensure t
   :defines lsp-language-id-configuration
