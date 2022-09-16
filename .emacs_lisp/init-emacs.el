@@ -115,7 +115,7 @@
 	       )
   )
 
-(save-place-mode)
+(save-place-mode t)
 
 (unless (and (version< emacs-version "27")
              (require 'so-long nil :noerror))
@@ -279,6 +279,7 @@ FILTER is function that runs after the process is finished, its args should be
   )
 
 ;; -------------------------------------------------------------------------- ;;
+
 (defconst dn-default-font-size 120)
 (defconst dn-default-icon-size 15)
 
@@ -302,6 +303,26 @@ size. This function also handles icons and modeline font sizes."
     (when (fboundp 'company-box-icons-resize)
       (company-box-icons-resize new-size)))
   )
+
+;; ========================================================================== ;;
+
+(defvar dn-script-on-save
+  '(
+    ;; ("/home/someone/file.txt" . "cat ~/file.txt")
+    )
+  "File association list with their respective command.")
+
+(defun dn-cmd-after-saved-file ()
+  "Maybe execute a shell command after a file is saved."
+  (when dn-script-on-save
+    (let*
+        ((match (assoc (buffer-file-name) dn-script-on-save)))
+      (when match
+        (shell-command (cdr match))))
+    )
+  )
+
+(add-hook 'after-save-hook 'dn-cmd-after-saved-file)
 
 ;; ========================================================================== ;;
 
