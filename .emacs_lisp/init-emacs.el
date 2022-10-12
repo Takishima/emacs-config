@@ -315,10 +315,21 @@ size. This function also handles icons and modeline font sizes."
 (defun dn-cmd-after-saved-file ()
   "Maybe execute a shell command after a file is saved."
   (when dn-script-on-save
-    (let*
-        ((match (assoc (buffer-file-name) dn-script-on-save)))
+    (let
+        ((command nil)
+         (match (assoc (buffer-file-name) dn-script-on-save)))
       (when match
-        (shell-command (cdr match))))
+        (if (file-exists-p (cdr match))
+            (setq command (cdr match))
+          (setq command (list (executable-find (cdr match) nil)))
+          (when command
+            (add-to-list 'command (buffer-file-name) t))
+          )
+        (if command
+            (shell-command (cdr match))
+          (warn "Cannot find command to execute: '%s'" command))
+        )
+      )
     )
   )
 
