@@ -193,6 +193,7 @@
     )
   (use-package tree-sitter-langs
     :ensure t
+    :after (tree-sitter)
     )
   )
 
