@@ -186,6 +186,7 @@
 (when module-file-suffix
   (use-package tree-sitter
     :ensure t
+    :ensure-system-package tree-sitter
     :init
     (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
     :config
