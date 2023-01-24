@@ -57,6 +57,8 @@
   (package-install 'use-package))
 
 (require 'use-package)
+(use-package system-packages
+  :ensure t)
 (use-package use-package-ensure-system-package
   :ensure t)
 
