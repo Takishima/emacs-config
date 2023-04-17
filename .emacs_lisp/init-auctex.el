@@ -198,6 +198,18 @@
   :mode ("\\.ris\\'")
   )
 
+;; -------------------------------------------------------------------------- ;;
+
+(use-package lsp-ltex
+  :ensure t
+  :after (lsp-mode)
+  :hook (text-mode . (lambda ()
+                       (require 'lsp-ltex)
+                       (lsp-deferred)))  ; or lsp-deferred
+  :custom
+  (lsp-ltex-version "15.2.0")
+  )
+
 ;; ========================================================================== ;;
 
 (provide 'init-auctex)
