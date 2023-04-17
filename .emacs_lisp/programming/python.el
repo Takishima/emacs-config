@@ -73,6 +73,9 @@
 (use-package blacken
   :ensure t)
 
+(use-package python-black
+  :ensure t)
+
 ;; -------------------------------------------------------------------------- ;;
 
 (use-package python-isort
