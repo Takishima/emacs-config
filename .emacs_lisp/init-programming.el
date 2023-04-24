@@ -326,6 +326,9 @@
   :init
   (when (executable-find "python3")
     (setq dap-python-executable "python3"))
+  (require 'dap-cpptools)
+  (require 'dap-lldb)
+  (require 'dap-gdb-lldb)
   )
 
 (use-package lsp-ivy
