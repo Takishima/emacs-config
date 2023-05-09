@@ -280,8 +280,18 @@ FILTER is function that runs after the process is finished, its args should be
 
 ;; -------------------------------------------------------------------------- ;;
 
-(defconst dn-default-font-size 120)
-(defconst dn-default-icon-size 15)
+(defcustom dn-default-font-size
+  98
+  "Default font size."
+  :group 'dn
+  :type 'integer
+  )
+(defcustom dn-default-icon-size
+  22
+  "Default icon size."
+  :group 'dn
+  :type 'integer
+  )
 
 ;; From https://github.com/KaratasFurkan/.emacs.d
 (defun dn-adjust-font-size (height)
@@ -294,7 +304,7 @@ size. This function also handles icons and modeline font sizes."
     (set-face-attribute 'default nil :height new-height)
     (set-face-attribute 'mode-line nil :height new-height)
     (set-face-attribute 'mode-line-inactive nil :height new-height)
-    (message "Font size: %s" new-height))
+    (message "Font size: %s (default %s)" new-height (face-attribute 'default :height)))
   (let ((new-size (if (zerop height)
                       dn-default-icon-size
                     (+ (/ height 5) treemacs--icon-size))))
