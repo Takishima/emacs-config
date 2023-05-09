@@ -145,8 +145,9 @@
   (yas-inhibit-overlay-modification-protection t)
   :custom-face
   (yas-field-highlight-face ((t (:inherit region))))
-  :config
+  :init
   (setq yasnippet-snippets-dir "")
+  :config
   (yas-reload-all)
   (yas-global-mode t)
   )
