@@ -349,6 +349,12 @@
   :commands (treemacs)
   :after (lsp-mode))
 
+
+;; (use-package ruff-lsp
+;;   :ensure t
+;;   :commands (treemacs)
+;;   :after (lsp-mode))
+
 ;; ========================================================================== ;;
 
 ;; (defvar eglot-clangd-exe (executable-find "clangd")

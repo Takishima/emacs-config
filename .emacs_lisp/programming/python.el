@@ -182,6 +182,12 @@
 
 ;; ========================================================================== ;;
 
+(use-package python-coverage
+  :ensure t
+  :after python)
+
+;; ========================================================================== ;;
+
 (use-package python-pytest
   :ensure t
   :after python
