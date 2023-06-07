@@ -68,6 +68,13 @@
     :group 'config
     :type 'directory
     )
+  (defcustom config-packages-dir
+    (file-name-as-directory (concat (file-name-as-directory config-dotemacs-lisp) "packages"))
+    "Path to custom packages directory."
+    :set-after '(config-dotemacs-lisp)
+    :group 'config
+    :type 'directory
+    )
   )
 
 (provide 'config-variables)
