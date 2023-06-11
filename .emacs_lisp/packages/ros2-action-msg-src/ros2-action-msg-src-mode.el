@@ -37,15 +37,28 @@
 
 ;; ========================================================================== ;;
 
-(defvar ros2-action-msg-src-mode-hook nil)
-(defvar ros2-action-msg-src-mode-map
-  (let ((map (make-sparse-keymap)))
-    map)
-  "Keymap for ROS2 files major mode")
+(require 'yaml-mode)
+
+(defcustom ros2-action-msg-src-mode-hook nil
+  "Hook run when entering ROS2 action/msg/srv mode."
+  :type 'hook
+  :group 'dn)
+
+(defvar-keymap ros2-action-msg-src-mode-map
+  :doc "Keymap for ROS2 action/msg/srv mode."
+  :parent yaml-mode-map
+)
+
+(define-derived-mode ros2-action-msg-src-mode
+  yaml-mode "ROS2 action mode"
+  "Major mode for editing ROS2 action/msg/srv files."
+)
+
+(require 'lsp)
 
 (add-to-list 'lsp-language-id-configuration '("\\.action\\'" . "yaml"))
 (add-to-list 'lsp-language-id-configuration '("\\.msg\\'" . "yaml"))
-(add-to-list 'lsp-language-id-configuration '("\\.src\\'" . "yaml"))
+(add-to-list 'lsp-language-id-configuration '("\\.srv\\'" . "yaml"))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.action\\'" . ros2-action-msg-src-mode))
