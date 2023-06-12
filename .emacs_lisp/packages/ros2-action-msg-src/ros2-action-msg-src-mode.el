@@ -44,10 +44,18 @@
   :type 'hook
   :group 'dn)
 
-(defvar-keymap ros2-action-msg-src-mode-map
-  :doc "Keymap for ROS2 action/msg/srv mode."
-  :parent yaml-mode-map
-)
+(if (fboundp 'defvar-keymap)
+    ;; defvar-keymap is an Emacs 29.x addition
+    (defvar-keymap ros2-action-msg-src-mode-map
+      :doc "Keymap for ROS2 action/msg/srv mode."
+      :parent yaml-mode-map
+      )
+  (defvar ros2-action-msg-src-mode-map
+    (let ((map (make-sparse-keymap)))
+      (set-keymap-parent map yaml-mode-map)
+      map)
+    "Keymap for ROS2 action/msg/srv mode.")
+  )
 
 (define-derived-mode ros2-action-msg-src-mode
   yaml-mode "ROS2 action mode"
