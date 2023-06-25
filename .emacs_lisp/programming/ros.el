@@ -40,8 +40,6 @@
 (require 'use-package)
 (require 'config-functions (concat config-dir "variables.el"))
 
-
-
 ;; ========================================================================== ;;
 
 (use-package ros2-action-msg-src-mode

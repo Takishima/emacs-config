@@ -44,6 +44,18 @@
   :type 'hook
   :group 'dn)
 
+(defvar ros2-action-msg-src--keywords
+  '("bool" "byte" "char" "float32" "float64" "int8" "uint8" "int16" "uint16" "int32" "uint32" "int64" "uint64")
+  "List of keywords for ROS2 action/msg/srv.")
+
+(defvar ros2-action-msg-src--keywords-regexp
+  (format "%s" (regexp-opt ros2-action-msg-src--keywords 'symbols))
+  "Regex to match keywords")
+
+(defvar ros2-action-msg-src--variable-decl-regexp
+  (format "\\(%s\\)[[:space:]]+\\([a-zA-Z0-9_]+\\)" (regexp-opt ros2-action-msg-src--keywords))
+  "Regex to match keywords")
+
 (if (fboundp 'defvar-keymap)
     ;; defvar-keymap is an Emacs 29.x addition
     (defvar-keymap ros2-action-msg-src-mode-map
@@ -57,22 +69,29 @@
     "Keymap for ROS2 action/msg/srv mode.")
   )
 
-(define-derived-mode ros2-action-msg-src-mode
-  yaml-mode "ROS2 action mode"
+(defvar ros2-action-msg-src--font-lock-defaults
+  `((
+     ("\"\\.\\*\\?" . font-lock-string-face)
+     ("#.*" . font-lock-comment-face)
+     (,ros2-action-msg-src--variable-decl-regexp
+      (1 font-lock-builtin-face)
+      (2 font-lock-variable-name-face))
+     (,ros2-action-msg-src--keywords-regexp . font-lock-builtin-face)
+     ("[0-9]+" . font-lock-constant-face)
+     ("\\_<\\(string\\|wstring\\)\\_>" . font-lock-builtin-face)
+     ("\\(string\\|wstring\\)\\(<=\\)"
+      (1 font-lock-builtin-face)
+      (2 font-lock-operator-face))
+     ("\\(<=\\|=\\)" . font-lock-operator-face)
+     ("\\-\\-\\-" . font-lock-type-face)
+     )))
+
+(define-derived-mode ros2-action-msg-src-mode prog-mode "ROS2 action mode"
   "Major mode for editing ROS2 action/msg/srv files."
-)
-
-(require 'lsp)
-
-(add-to-list 'lsp-language-id-configuration '("\\.action\\'" . "yaml"))
-(add-to-list 'lsp-language-id-configuration '("\\.msg\\'" . "yaml"))
-(add-to-list 'lsp-language-id-configuration '("\\.srv\\'" . "yaml"))
-
-;;;###autoload
-(add-to-list 'auto-mode-alist '("\\.action\\'" . ros2-action-msg-src-mode))
-(add-to-list 'auto-mode-alist '("\\.msg\\'" . ros2-action-msg-src-mode))
-(add-to-list 'auto-mode-alist '("\\.srv\\'" . ros2-action-msg-src-mode))
-
+  (setq font-lock-defaults ros2-action-msg-src--font-lock-defaults)
+  (setq comment-start "#")
+  (setq comment-end "")
+  )
 
 ;; ========================================================================== ;;
 
