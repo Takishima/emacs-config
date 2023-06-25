@@ -71,6 +71,7 @@
 (config-require 'init-misc)
 
 (config-require 'init-keybindings)
+(config-require 'init-custom-functions)
 
 ;; ========================================================================== ;;
 
