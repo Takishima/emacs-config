@@ -52,6 +52,10 @@
     (add-hook 'python-mode-hook 'highlight-indentation-mode)
     ;; (add-hook 'python-mode-hook 'eldoc-mode)
     (add-hook 'python-mode-hook 'sphinx-doc-mode))
+  :bind (:map python-mode-map
+	      (
+               ("C-c i" . python-insert-docstring-with-google-style-at-point)
+               ))
   :config
 
   (when (executable-find "ipython")
@@ -67,6 +71,11 @@
      python-shell-completion-string-code
      "';'.join(get_ipython().Completer.all_completions('''%s'''))\n"))
   )
+
+;; -------------------------------------------------------------------------- ;;
+
+(use-package python-insert-docstring
+  :ensure t)
 
 ;; -------------------------------------------------------------------------- ;;
 
@@ -192,8 +201,7 @@
   :ensure t
   :after python
   :bind (:map python-mode-map
-	      (("C-c i" . compile-in-iterm)
-	       ("C-x tp" . python-pytest-dispatch)
+	      (("C-x tp" . python-pytest-dispatch)
 	       ("C-x tt" . python-pytest)
 	       ("C-x tf" . python-pytest-file)
 	       ("C-x tF" . python-pytest-file-dwim)
@@ -243,9 +251,9 @@
 (use-package sphinx-mode
   :ensure t
   :bind
-  (:map sphinx-mode-map
-	(("C-c i" . compile-in-iterm)
-	 ))
+  ;; (:map sphinx-mode-map
+  ;;       (("C-c i" . compile-in-iterm)
+  ;;        ))
   )
 
 ;; -------------------------------------------------------------------------- ;;

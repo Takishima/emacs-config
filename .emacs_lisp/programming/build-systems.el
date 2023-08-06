@@ -52,7 +52,7 @@
   :load-path config-dotemacs-lisp
   :bind
   (:map cmake-mode-map
-        (("C-c i" . compile-in-iterm)
+        (;; ("C-c i" . compile-in-iterm)
          ("C-c C-f" . cmake-format-buffer)
          ))
   :hook

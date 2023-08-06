@@ -141,7 +141,7 @@
 (use-package yasnippet
   :ensure t
   :custom
-  (yas-indent-line nil)
+  (yas-indent-line 'auto)
   (yas-inhibit-overlay-modification-protection t)
   :custom-face
   (yas-field-highlight-face ((t (:inherit region))))

@@ -183,6 +183,12 @@
 
 ;; ========================================================================== ;;
 
+(use-package gitlab-ci-mode
+  :ensure t
+  )
+
+;; ========================================================================== ;;
+
 (when module-file-suffix
   (use-package tree-sitter
     :ensure t
@@ -228,7 +234,6 @@
 
   (lsp-auto-guess-root t)
   (lsp-modeline-diagnostics-enable nil)
-  (lsp-auto-execute-action nil)
   (lsp-before-save-edits nil)
   (lsp-idle-delay 0.3)
   (lsp-completion-provider :capf)
@@ -254,15 +259,14 @@
   :custom
   (lsp-ui-doc-alignment 'at-point)
   (lsp-ui-doc-border (face-foreground 'default))
-  (lsp-ui-doc-delay 0.5)
+  (lsp-ui-doc-delay 0.3)
   (lsp-ui-doc-enable t)
-  (lsp-ui-doc-header nil)
+  (lsp-ui-doc-header t)
   (lsp-ui-doc-include-signature t)
   (lsp-ui-doc-position 'top)
-  (lsp-ui-doc-use-childframe nil)
-  (lsp-ui-doc-use-webkit nil)
+  (lsp-ui-doc-use-childframe t)
+  ;; (lsp-ui-doc-use-webkit nil)
   (lsp-ui-peek-enable t)
-  (lsp-ui-peek-fontify 'always)
   (lsp-ui-peek-show-directory t)
   (lsp-ui-sideline-delay 0.5)
   (lsp-ui-sideline-enable t)
@@ -271,10 +275,10 @@
   (lsp-ui-sideline-show-diagnostics t)
   (lsp-ui-sideline-show-hover nil)
   (lsp-ui-sideline-update-mode 'line)
-  :custom-face
-  (lsp-ui-peek-highlight ((t (:inherit nil :background nil :foreground nil :weight semi-bold :box (:line-width -1)))))
+  ;; :custom-face
+  ;; (lsp-ui-peek-highlight ((t (:inherit nil :background nil :foreground nil :weight semi-bold :box (:line-width -1)))))
   :config
-  (add-to-list 'lsp-ui-doc-frame-parameters '(right-fringe . 8))
+  ;; (add-to-list 'lsp-ui-doc-frame-parameters '(right-fringe . 8))
 
   ;; `C-g'to close doc
   (advice-add #'keyboard-quit :before #'lsp-ui-doc-hide)
@@ -285,11 +289,6 @@
               (setq lsp-ui-doc-border (face-foreground 'default))
               (set-face-background 'lsp-ui-doc-background
                                    (face-background 'tooltip))))
-
-  ;; WORKAROUND Hide mode-line of the lsp-ui-imenu buffer
-  ;; @see https://github.com/emacs-lsp/lsp-ui/issues/243
-  (defadvice lsp-ui-imenu (after hide-lsp-ui-imenu-mode-line activate)
-    (setq mode-line-format nil))
 
   (defun lsp-update-server ()
     "Update LSP server."
