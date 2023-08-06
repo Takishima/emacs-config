@@ -1,4 +1,4 @@
-;;; init-ros2.el --- ROS2 support -*- lexical-binding: t -*-
+;;; ros2-keybindings-mode.el --- ROS2 keybindings -*- lexical-binding: t -*-
 
 ;; Author: Damien Nguyen
 ;; Maintainer: Damien Nguyen
@@ -37,31 +37,23 @@
 
 ;; ========================================================================== ;;
 
-(require 'use-package)
-(require 'config-functions (concat config-dir "variables.el"))
+(defvar ros2-keybindings-mode--keymap (make-keymap) "num-mode keymap.")
+(define-key ros2-keybindings-mode--keymap (kbd "C-c C-r") 'hydra-ros-main/body)
 
-;; ========================================================================== ;;
 
-(use-package ros2-action-msg-src-mode
-  :ensure nil
-  :demand t
-  :load-path (lambda () (concat config-packages-dir "ros2-action-msg-src"))
-  :bind-keymap ("C-c c" . recompile)
-  )
-
-(use-package ros2-keybindings-mode
-  :ensure nil
-  :demand t
-  :load-path (lambda () (concat config-packages-dir "ros2-keybindings"))
+(define-minor-mode ros2-keybindings-mode
+  "Minor mode to set some keybindings with the ROS package"
+  ;; The initial value.
+  :init-value nil
+  ;; The indicator for the mode line.
+  :lighter " ROS2KBD"
+  ;; The minor mode bindings.
+  :keymap
+  ros2-keybindings-mode--keymap
   )
 
 ;; ========================================================================== ;;
 
-(provide 'init-ros2)
+(provide 'ros2-keybindings-mode)
 
-;;; init-ros2.el ends here
-
-;; Local Variables:
-;; eval: (setq config-dotemacs-lisp (file-name-directory (or load-file-name buffer-file-name)))
-;; eval: (setq config-dir (file-name-as-directory (concat (file-name-as-directory config-dotemacs-lisp) "config")))
-;; End:
+;;; ros2-keybindings-mode.el ends here
