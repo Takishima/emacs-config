@@ -147,20 +147,25 @@
   (dashboard-set-heading-icons t)
   (dashboard-set-file-icons t)
   (dashboard-center-content t)
+  (dashboard-icon-type 'nerd-icons)
   (dashboard-items '((recents  . 10)
                      (projects . 5)
                      (bookmarks . 5)))
+  (initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
+  (dashboard-modify-heading-icons '((recents . "nf-oct-file")
+                                    (bookmarks . "nf-oct-bookmark")
+                                    (agenda . "nf-oct-calendar")
+                                    (projects . "nf-oct-project")
+                                    (registers . "nf-oct-database")))
   :custom-face
   (dashboard-heading-face ((t (:weight bold))))
   :config
   (dashboard-setup-startup-hook)
+  :init
   (defun dn-home ()
     "Switch to home (dashboard) buffer."
     (interactive)
     (switch-to-buffer "*dashboard*"))
-  :hook
-  (dashboard-mode . (lambda () (setq cursor-type nil)))
-  (dashboard-mode . (lambda () (face-remap-add-relative 'hl-line :weight 'bold)))
   )
 
 ;; ========================================================================== ;;

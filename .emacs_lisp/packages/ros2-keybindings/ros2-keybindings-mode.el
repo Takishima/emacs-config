@@ -37,6 +37,8 @@
 
 ;; ========================================================================== ;;
 
+(require 'ros)
+
 (defvar ros2-keybindings-mode--keymap (make-keymap) "num-mode keymap.")
 (define-key ros2-keybindings-mode--keymap (kbd "C-c C-r") 'hydra-ros-main/body)
 

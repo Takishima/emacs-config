@@ -42,6 +42,10 @@
 
 ;; ========================================================================== ;;
 
+(use-package ros
+  :ensure t
+  )
+
 (use-package ros2-action-msg-src-mode
   :ensure nil
   :demand t
