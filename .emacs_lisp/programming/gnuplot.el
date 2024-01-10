@@ -40,7 +40,7 @@
 ;; ========================================================================== ;;
 
 (use-package gnuplot
-  :ensure t
+  :straight t
   :mode
   ("\\.gp$" . gnuplot-mode)
   )

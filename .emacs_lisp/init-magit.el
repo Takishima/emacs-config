@@ -43,7 +43,7 @@
 ;; ========================================================================== ;;
 
 (use-package magit
-  :ensure t
+  :straight t
   :commands magit
   :hook
   (git-commit-setup . git-commit-turn-on-flyspell)
@@ -122,18 +122,18 @@
 ;; Git flow support
 
 (use-package magit-gitflow
-  :ensure t
+  :straight t
   :hook (magit-mode . turn-on-magit-gitflow)
   )
 
 (use-package magit-popup
-  :ensure t
+  :straight t
   )
 
 ;; ========================================================================== ;;
 
 (use-package magit-delta
-  :ensure t
+  :straight t
   :ensure-system-package (delta . git-delta)
   :hook (magit-mode . magit-delta-mode)
   :custom

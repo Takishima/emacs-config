@@ -35,35 +35,45 @@
 
 ;; ========================================================================== ;;
 
-(require 'package)
+;; (require 'package)
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name
+        "straight/repos/straight.el/bootstrap.el"
+        (or (bound-and-true-p straight-base-dir)
+            user-emacs-directory)))
+      (bootstrap-version 7))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
-(when (< emacs-major-version 27)
-  (package-initialize)
-  (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
-
-(let* (
-       (no-ssl (and (memq system-type '(windows-nt ms-dos))
-                    (not (gnutls-available-p))))
-       (url (concat (if no-ssl "http" "https") "://melpa.org/packages/"))
-       )
-  (add-to-list 'package-archives (cons "melpa" url) t))
+;; (let* (
+;;        (no-ssl (and (memq system-type '(windows-nt ms-dos))
+;;                     (not (gnutls-available-p))))
+;;        (url (concat (if no-ssl "http" "https") "://melpa.org/packages/"))
+;;        )
+;;   (add-to-list 'package-archives (cons "melpa" url) t))
 
 ;; ========================================================================== ;;
 
 ;; use-package
 ;; https://github.com/jwiegley/use-package
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
+;; (unless (package-installed-p 'use-package)
+;;   (package-refresh-contents)
+;;   (package-install 'use-package))
 
-(require 'use-package)
 (use-package system-packages
-  :ensure t)
+  :straight t)
 (use-package use-package-ensure-system-package
-  :ensure t)
+  :straight t)
 
 (use-package auto-package-update
-  :ensure t
+  :straight t
   :custom
   (auto-package-update-delete-old-versions t)
   (auto-package-update-hide-results t)

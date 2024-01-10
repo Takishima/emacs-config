@@ -44,7 +44,7 @@
 ;; ========================================================================== ;;
 
 (use-package org
-  :ensure t
+  :straight t
   :defines org-directory
   :custom
   (org-hide-leading-stars t)
@@ -107,7 +107,7 @@
   )
 
 (use-package ox-gfm
-  :ensure t
+  :straight t
   :after org)
 
 ;; ========================================================================== ;;

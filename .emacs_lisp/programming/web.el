@@ -38,7 +38,7 @@
 ;; ========================================================================== ;;
 
 (use-package web-mode
-  :ensure t
+  :straight t
   :custom
   (web-mode-disable-auto-indentation t)
   (web-mode-disable-auto-opening t)
@@ -52,7 +52,7 @@
 ;; -------------------------------------------------------------------------- ;;
 
 (use-package company-web
-  :ensure t
+  :straight t
   :after web-mode
   :config
   (add-to-list 'company-backends '(company-web-html :with company-yasnippet))
@@ -61,13 +61,13 @@
 ;; -------------------------------------------------------------------------- ;;
 
 (use-package json
-  :ensure t
+  :straight t
   )
 
 ;; -------------------------------------------------------------------------- ;;
 
 (use-package auto-rename-tag
-  :ensure t
+  :straight t
   :hook
   (web-mode . auto-rename-tag-mode)
   )

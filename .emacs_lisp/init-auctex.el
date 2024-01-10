@@ -46,11 +46,11 @@
 (require 'cl-lib)
 
 (use-package tex
-  :ensure nil
+  :straight nil
   )
 
 (use-package tex-site                   ; auctex
-  :ensure auctex
+  :straight auctex
   :defines (latex-help-cmd-alist latex-help-file)
   ;; :functions (TeX-run-Biber)
   :mode ("\\.tex\\'" . TeX-latex-mode)
@@ -193,7 +193,7 @@
 ;; -------------------------------------------------------------------------- ;;
 
 (use-package ris
-  :ensure nil
+  :straight nil
   :load-path config-dotemacs-lisp
   :mode ("\\.ris\\'")
   )
@@ -201,7 +201,7 @@
 ;; -------------------------------------------------------------------------- ;;
 
 (use-package lsp-ltex
-  :ensure t
+  :straight t
   :after (lsp-mode)
   :hook (text-mode . (lambda ()
                        (require 'lsp-ltex)

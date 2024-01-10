@@ -41,12 +41,12 @@
 ;; ========================================================================== ;;
 
 (use-package highlight-indentation
-  :ensure t)
+  :straight t)
 
 ;; ========================================================================== ;;
 
 (use-package python
-  :ensure nil
+  :straight nil
   :init
   (progn
     (add-hook 'python-mode-hook 'highlight-indentation-mode)
@@ -75,25 +75,25 @@
 ;; -------------------------------------------------------------------------- ;;
 
 (use-package python-insert-docstring
-  :ensure t)
+  :straight t)
 
 ;; -------------------------------------------------------------------------- ;;
 
 (use-package blacken
-  :ensure t)
+  :straight t)
 
 (use-package python-black
-  :ensure t)
+  :straight t)
 
 ;; -------------------------------------------------------------------------- ;;
 
 (use-package python-isort
-  :ensure t)
+  :straight t)
 
 ;; -------------------------------------------------------------------------- ;;
 
 ;; (use-package elpy
-;;   :ensure t
+;;   :straight t
 ;;   :init
 ;;   (elpy-enable)
 ;;   :custom
@@ -135,7 +135,7 @@
 ;; -------------------------------------------------------------------------- ;;
 
 (use-package lsp-pyright
-  :ensure t
+  :straight t
   :after lsp-mode
   :hook (python-mode . (lambda ()
                          (config-unless-system 'darwin
@@ -157,7 +157,7 @@
 ;; -------------------------------------------------------------------------- ;;
 
 (use-package pyvenv
-  :ensure t
+  :straight t
   :after python
   :config
   (defun dn-activate-pyvenv ()
@@ -174,7 +174,7 @@
 ;; -------------------------------------------------------------------------- ;;
 
 (use-package cython-mode
-  :ensure t
+  :straight t
   :mode (("\\.pyx\\'"  . cython-mode)
          ("\\.spyx\\'" . cython-mode)
          ("\\.pxd\\'"  . cython-mode)
@@ -183,7 +183,7 @@
 ;; ========================================================================== ;;
 
 (use-package yapfify
-  :ensure t
+  :straight t
   :bind
   (:map python-mode-map
         ("C-c C-y" . yapfify-region-or-buffer))
@@ -192,13 +192,13 @@
 ;; ========================================================================== ;;
 
 (use-package python-coverage
-  :ensure t
+  :straight t
   :after python)
 
 ;; ========================================================================== ;;
 
 (use-package python-pytest
-  :ensure t
+  :straight t
   :after python
   :bind (:map python-mode-map
 	      (("C-x tp" . python-pytest-dispatch)
@@ -249,7 +249,7 @@
 ;; ========================================================================== ;;
 
 (use-package sphinx-mode
-  :ensure t
+  :straight t
   :bind
   ;; (:map sphinx-mode-map
   ;;       (("C-c i" . compile-in-iterm)
@@ -259,7 +259,7 @@
 ;; -------------------------------------------------------------------------- ;;
 
 (use-package sphinx-doc
-  :ensure t)
+  :straight t)
 
 ;; ========================================================================== ;;
 

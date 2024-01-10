@@ -44,7 +44,7 @@
 ;; Load leuven theme
 
 (use-package leuven-theme
-  :ensure t
+  :straight t
   :load-path "themes"
   ;; :init
   ;; (setq molokai-theme-kit t)
@@ -55,28 +55,28 @@
 
 ;; which-key
 (use-package which-key
-  :ensure t
+  :straight t
   :config
   (which-key-mode +1))
 
 ;; ========================================================================== ;;
 
 (use-package browse-kill-ring
-  :ensure t
+  :straight t
   :bind (("s-y" . browse-kill-ring))
   )
 
 ;; ========================================================================== ;;
 
 (use-package smart-shift
-  :ensure t
+  :straight t
   :config
   (global-smart-shift-mode +1))
 
 ;; ========================================================================== ;;
 
 (use-package projectile
-  :ensure t
+  :straight t
   :bind-keymap ("s-p" . projectile-command-map)
   :init
   (setq projectile-completion-system 'ivy
@@ -87,7 +87,7 @@
 ;; ========================================================================== ;;
 
 (use-package explain-pause-mode
-  :ensure nil
+  :straight nil
   :load-path (config-dotemacs-lisp)
 )
 
@@ -141,7 +141,7 @@
 ;; ========================================================================== ;;
 
 (use-package dashboard
-  :ensure t
+  :straight t
   :custom
   (dashboard-startup-banner 'logo)
   (dashboard-set-heading-icons t)
@@ -171,7 +171,7 @@
 ;; ========================================================================== ;;
 
 (use-package helpful
-  :ensure t
+  :straight t
   :bind
   (([remap describe-function] . helpful-callable)
    ([remap describe-variable] . helpful-variable)
@@ -183,7 +183,7 @@
 ;; -------------------------------------------------------------------------- ;;
 
 (use-package whitespace-cleanup-mode
-  :ensure t
+  :straight t
   :custom
   (show-trailing-whitespace t)  ; not from whitespace-cleanup-mode.el
   :hook

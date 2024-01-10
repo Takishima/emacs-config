@@ -62,21 +62,28 @@
 ;; ========================================================================== ;;
 
 (use-package prescient
-  :ensure t
+  :straight t
   :defer t
   :config (prescient-persist-mode))
 
 ;; ========================================================================== ;;
 
+(use-package copilot
+  :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
+  :straight t)
+
+;; ========================================================================== ;;
+
 (use-package diminish
-  :ensure t)
+  :straight (:host github :repo "emacsmirror/diminish" :files ("*.el"))
+  :straight t)
 
 (use-package counsel
-  :ensure t
+  :straight t
   )
 
 (use-package ivy
-  :ensure t
+  :straight t
   :diminish (ivy-mode counsel-mode)
   :custom
   ;; add ‘recentf-mode’ and bookmarks to ‘ivy-switch-buffer’.
@@ -127,7 +134,7 @@
 ;; -------------------------------------------------------------------------- ;;
 
 (use-package ivy-prescient
-  :ensure t
+  :straight t
   :after ivy
   :config (ivy-prescient-mode)
   )
@@ -139,7 +146,7 @@
   (defconst config-yasnippet-dir (concat config-dotemacs-lisp "snippets/")))
 
 (use-package yasnippet
-  :ensure t
+  :straight t
   :custom
   (yas-indent-line 'auto)
   (yas-inhibit-overlay-modification-protection t)
@@ -153,7 +160,7 @@
   )
 
 (use-package yasnippet-snippets
-  :ensure t
+  :straight t
   :config
   (add-to-list 'yas-snippet-dirs yasnippet-snippets-dir t)
   )
@@ -184,7 +191,7 @@
 ;; Load Company mode
 
 (use-package company
-  :ensure t
+  :straight t
   :custom
   (company-idle-delay 0)
   (company-minimum-prefix-length 3)
@@ -199,7 +206,7 @@
 ;; -------------------------------------------------------------------------- ;;
 
 (use-package company-box
-  :ensure t
+  :straight t
   :custom
   (company-box-show-single-candidate t)
   ;;(company-box-frame-behavior 'point)
@@ -212,7 +219,7 @@
 ;; -------------------------------------------------------------------------- ;;
 
 (use-package company-prescient
-  :ensure t
+  :straight t
   :after company
   :config (company-prescient-mode)
   )

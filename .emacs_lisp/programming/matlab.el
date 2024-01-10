@@ -40,7 +40,7 @@
 ;; ========================================================================== ;;
 
 (use-package matlab
-  :ensure t
+  :straight t
   :init
   (autoload 'matlab-mode "matlab" "Enter MATLAB mode." t)
   (autoload 'matlab-shell "matlab" "Interactive MATLAB mode." t)

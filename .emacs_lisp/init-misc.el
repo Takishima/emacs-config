@@ -44,14 +44,14 @@
 ;; ========================================================================== ;;
 
 (use-package epg
-  :ensure t
+  :straight t
   :custom
   (epg-pinentry-mode 'loopback))
 
 ;; -------------------------------------------------------------------------- ;;
 
 (use-package emojify
-  :ensure t
+  :straight t
   :custom
   (emojify-inhibit-major-modes '(dired-mode
                                  doc-view-mode
@@ -71,22 +71,22 @@
   :hook (after-init . global-emojify-mode))
 
 (use-package all-the-icons
-  :ensure t)
+  :straight t)
 
 (use-package all-the-icons-ivy
-  :ensure t)
+  :straight t)
 
 ;; -------------------------------------------------------------------------- ;;
 
 (use-package display-line-numbers
-  :ensure t
+  :straight t
   :config
   (global-display-line-numbers-mode 1))
 
 ;; -------------------------------------------------------------------------- ;;
 
 (use-package printing
-  :ensure t
+  :straight t
   :config
   (pr-update-menus))
 

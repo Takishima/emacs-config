@@ -43,7 +43,7 @@
 ;; ========================================================================== ;;
 
 (use-package cc-mode
-  :ensure nil
+  :straight nil
   :custom
   (c-basic-indent 5)
   (c-basic-offset 5)
@@ -67,12 +67,12 @@
 ;; ========================================================================== ;;
 
 (use-package cuda-mode
-  :ensure t)
+  :straight t)
 
 ;; ========================================================================== ;;
 
 (use-package modern-cpp-font-lock
-  :ensure t
+  :straight t
   :hook c++-mode-hook
   )
 
@@ -95,13 +95,13 @@
 ;; ========================================================================== ;;
 
 (use-package google-c-style
-  :ensure t
+  :straight t
   )
 
 ;; ========================================================================== ;;
 
 (use-package flycheck-clang-analyzer
-  :ensure t
+  :straight t
   :functions flycheck-clang-analyzer-setup
   :after flycheck
   :config (flycheck-clang-analyzer-setup)
@@ -110,7 +110,7 @@
 ;; -------------------------------------------------------------------------- ;;
 
 (use-package flycheck-clang-tidy
-  :ensure t
+  :straight t
   :functions flycheck-clang-analyzer-setup
   :after flycheck
   :config (flycheck-clang-tidy-setup)
@@ -120,7 +120,7 @@
 
 ;; (config-when-system 'darwin
 ;;   (use-package irony
-;;     :ensure t
+;;     :straight t
 ;;     :after company
 ;;     :hook (
 ;;            (irony-mode . company-irony-setup-begin-commands)
@@ -158,7 +158,7 @@
 ;;     )
 
 ;;   (use-package flycheck-irony
-;;     :ensure t
+;;     :straight t
 ;;     :after flycheck
 ;;     :functions flycheck-irony-setup
 ;;     :config
@@ -171,7 +171,7 @@
 ;; ========================================================================== ;;
 
 (use-package clang-format
-  :ensure t
+  :straight t
   :bind
   (:map c++-mode-map
 	(("C-c C-f" . clang-format-buffer)
@@ -182,7 +182,7 @@
 ;; ========================================================================== ;;
 
 (use-package demangle-mode
-  :ensure t
+  :straight t
   :hook asm-mode)
 
 ;; ========================================================================== ;;

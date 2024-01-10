@@ -42,7 +42,7 @@
 ;; ========================================================================== ;;
 
 (use-package multiple-cursors
-  :ensure t
+  :straight t
   :bind
   (("C-c m e" . mc/edit-lines)
    ("C-c m s" . mc/mark-next-like-this-symbol)

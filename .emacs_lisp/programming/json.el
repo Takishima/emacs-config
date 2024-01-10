@@ -43,7 +43,7 @@
 ;; ========================================================================== ;;
 
 (use-package json-ts-mode
-  :ensure t
+  :straight t
   :mode "\\.json\\'"
   :after (tree-sitter)
   )

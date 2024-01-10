@@ -37,28 +37,32 @@
 
 ;; ========================================================================== ;;
 
-(require 'diminish)
+
 (require 'cl-lib)
 (require 'use-package)
 (require 'config-functions (concat config-dir "functions.el"))
+
+(use-package diminish
+  :straight (:host github :repo "emacsmirror/diminish" :files ("*.el"))
+  :straight t)
 
 ;; ========================================================================== ;;
 ;; Automatically guess indent offsets, tab, spaces settings, etc.
 
 (use-package dtrt-indent
-  :ensure t)
+  :straight t)
 
 ;; -------------------------------------------------------------------------- ;;
 
 (use-package project-directory
-  :ensure nil
+  :straight nil
   :load-path config-dotemacs-lisp)
 
 ;; ========================================================================== ;;
 
 (use-package direnv
   :if (executable-find "direnv")
-  :ensure t
+  :straight t
   :config
   (direnv-mode)
   (defcustom dn-direnv-enabled-hosts nil
@@ -91,7 +95,7 @@
 ;; ========================================================================== ;;
 
 (use-package diff-mode
-  :ensure t
+  :straight t
   :mode
   "\\.patch[0-9]*\\'"
   )
@@ -99,7 +103,7 @@
 ;; ========================================================================== ;;
 
 (use-package flycheck
-  :ensure t
+  :straight t
   :custom
   (flycheck-clang-args '("-std=c++17"))
   )
@@ -165,39 +169,55 @@
 ;; ========================================================================== ;;
 
 (use-package editorconfig
-  :ensure t
+  :straight t
   :config
   (editorconfig-mode 1)
   )
 
 (use-package editorconfig-generate
-  :ensure t
+  :straight t
   )
 
 (use-package editorconfig-domain-specific
-  :ensure t
+  :straight t
   )
 
 (use-package editorconfig-custom-majormode
-  :ensure t)
+  :straight t)
 
 ;; ========================================================================== ;;
 
 ;; (use-package code-review
-;;   :ensure t
+;;   :straight t
 ;;   )
 
 ;; ========================================================================== ;;
 
 (use-package gitlab-ci-mode
-  :ensure t
+  :straight t
+  )
+
+;; ========================================================================== ;;
+
+(use-package ansible
+  :straight t
+  )
+
+(use-package ansible-doc
+  :straight t
+  )
+
+;; ========================================================================== ;;
+
+(use-package hcl-mode
+  :straight t
   )
 
 ;; ========================================================================== ;;
 
 (when module-file-suffix
   (use-package tree-sitter
-    :ensure t
+    :straight t
     :ensure-system-package tree-sitter
     :init
     (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
@@ -205,7 +225,7 @@
     (global-tree-sitter-mode)
     )
   (use-package tree-sitter-langs
-    :ensure t
+    :straight t
     :after (tree-sitter)
     )
   )
@@ -213,7 +233,7 @@
 ;; ========================================================================== ;;
 
 (use-package lsp-mode
-  :ensure t
+  :straight t
   :defines lsp-language-id-configuration
   :hook ((prog-mode . (lambda ()
                         (unless (cl-some 'derived-mode-p dn-lsp-mode-disabled)
@@ -255,7 +275,7 @@
 
 ;; Taken from https://tychoish.com/post/emacs-and-lsp-mode/
 (use-package lsp-ui
-  :ensure t
+  :straight t
   :after (lsp-mode)
   :commands lsp-ui-doc-hide
   :bind (:map lsp-ui-mode-map
@@ -305,7 +325,7 @@
 
 ;; Debug
 (use-package dap-mode
-  :ensure t
+  :straight t
   :defines dap-python-executable
   :functions dap-hydra/nil
   :diminish
@@ -337,12 +357,12 @@
   )
 
 (use-package lsp-ivy
-  :ensure t
+  :straight t
   :commands lsp-ivy-workspace-symbol)
 
 (use-package lsp-treemacs
   :after (lsp-mode treemacs)
-  :ensure t
+  :straight t
   :commands lsp-treemacs-errors-list
   :init (lsp-treemacs-sync-mode 1)
   ;; :bind (:map lsp-mode-map
@@ -350,13 +370,13 @@
   )
 
 (use-package treemacs
-  :ensure t
+  :straight t
   :commands (treemacs)
   :after (lsp-mode))
 
 
 ;; (use-package ruff-lsp
-;;   :ensure t
+;;   :straight t
 ;;   :commands (treemacs)
 ;;   :after (lsp-mode))
 
@@ -366,7 +386,7 @@
 ;;   "clangd executable path")
 
 ;; (use-package eglot
-;;   :ensure t
+;;   :straight t
 ;;   :preface
 ;;   :hook ((c-mode-common . eglot-ensure)
 ;;          (python-mode   . eglot-ensure)

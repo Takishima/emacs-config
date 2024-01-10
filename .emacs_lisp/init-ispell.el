@@ -43,7 +43,7 @@
 ;; ========================================================================== ;;
 
 (use-package flycheck-aspell
-  :ensure t
+  :straight t
   :ensure-system-package aspell
   :config
   (add-to-list 'flycheck-checkers 'tex-aspell-dynamic)

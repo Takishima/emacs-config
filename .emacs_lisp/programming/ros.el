@@ -43,18 +43,18 @@
 ;; ========================================================================== ;;
 
 (use-package ros
-  :ensure t
+  :straight t
   )
 
 (use-package ros2-action-msg-src-mode
-  :ensure nil
+  :straight nil
   :demand t
   :load-path (lambda () (concat config-packages-dir "ros2-action-msg-src"))
   :bind-keymap ("C-c c" . recompile)
   )
 
 (use-package ros2-keybindings-mode
-  :ensure nil
+  :straight nil
   :demand t
   :load-path (lambda () (concat config-packages-dir "ros2-keybindings"))
   )

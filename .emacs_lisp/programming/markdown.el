@@ -43,7 +43,7 @@
 ;; ========================================================================== ;;
 
 (use-package markdown-toc
-  :ensure t
+  :straight t
   :after markdown-mode
 )
 

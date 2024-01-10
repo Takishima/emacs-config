@@ -40,7 +40,7 @@
 
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns x))
-  :ensure t
+  :straight t
   :defines (exec-path-from-shell-variables)
   :custom
   (exec-path-from-shell-variables '("LC_ALL"
@@ -58,7 +58,7 @@
 
 (use-package exec-path-from-shell
   :if (member system-type '(gnu gnu/linux gnu/kfreebsd))
-  :ensure t
+  :straight t
   :defines (exec-path-from-shell-variables)
   :custom
   (exec-path-from-shell-variables '("PATH"
@@ -74,7 +74,7 @@
 
 (use-package keychain-environment
   :if (member system-type '(gnu gnu/linux gnu/kfreebsd))
-  :ensure t
+  :straight t
   :config
   (keychain-refresh-environment))
 

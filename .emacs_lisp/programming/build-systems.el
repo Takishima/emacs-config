@@ -40,7 +40,7 @@
 ;; ========================================================================== ;;
 
 (use-package cmake-mode
-  :ensure t
+  :straight t
   :mode
   ("CMakeLists\\.txt\\'" "\\.cmake\\'")
   )
@@ -48,7 +48,7 @@
 ;; -------------------------------------------------------------------------- ;;
 
 (use-package cmake-format
-  :ensure nil
+  :straight nil
   :load-path config-dotemacs-lisp
   :bind
   (:map cmake-mode-map
@@ -62,12 +62,12 @@
 ;; -------------------------------------------------------------------------- ;;
 
 ;; (use-package rtags
-;;   :ensure t
+;;   :straight t
 ;;   )
 
 ;; (use-package cmake-ide
 ;;   :if (member system-type '(gnu gnu/linux gnu/kfreebsd))
-;;   :ensure t
+;;   :straight t
 ;;   :custom
 ;;   ((cmake-ide-header-search-other-file nil)
 ;;    (cmake-ide-header-search-first-including nil)
@@ -85,7 +85,7 @@
 ;; -------------------------------------------------------------------------- ;;
 
 (use-package make-mode
-  :ensure nil
+  :straight nil
   :mode ("Makefile\\'" "makefile\\'" "Make.obj\\'")
   )
 
@@ -93,7 +93,7 @@
 
 
 (use-package pkgbuild-mode
-  :ensure t
+  :straight t
   :mode "/PKGBUILD$"
   :functions pkgbuild-update-srcinfo
   :config
