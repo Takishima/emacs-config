@@ -1,7 +1,7 @@
 # -*- mode: snippet -*-
 # CMake function/macro docstring generator snippet
 # name: docstring
-# key: doc
+# key: dox
 # --
 
 # ~~~
