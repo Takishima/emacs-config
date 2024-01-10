@@ -15,6 +15,7 @@ SuccessExitStatus=15
 # Environment=SSH_AUTH_SOCK=%t/keyring/ssh
 Restart=always
 Environment=LSP_USE_PLISTS=true
+Environment=LD_LIBRARY_PATH=/usr/local/lib
 
 [Install]
 WantedBy=default.target
