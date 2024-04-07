@@ -4,7 +4,9 @@ Documentation=info:emacs man:emacs(1) https://gnu.org/software/emacs/
 
 [Service]
 Type=notify
-ExecStart=/usr/bin/emacs --fg-daemon
+# ExecStart=/usr/bin/emacs --fg-daemon
+# ExecStart=/usr/local/bin/emacs --fg-daemon
+ExecStart=/snap/bin/emacs --fg-daemon
 
 # Emacs will exit with status 15 after having received SIGTERM, which
 # is the default "KillSignal" value systemd uses to stop services.

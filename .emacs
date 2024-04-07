@@ -67,7 +67,7 @@
 (config-require 'init-auctex)
 (config-require 'init-ispell)
 
-(config-require 'init-org)
+;; (config-require 'init-org)
 (config-require 'init-misc)
 
 (config-require 'init-keybindings)

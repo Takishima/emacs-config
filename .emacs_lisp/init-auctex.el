@@ -45,12 +45,13 @@
 
 (require 'cl-lib)
 
-(use-package tex
-  :straight nil
-  )
+;; (use-package tex
+;;   :straight nil
+;;   )
 
 (use-package tex-site                   ; auctex
   :straight auctex
+  :after (tex)
   :defines (latex-help-cmd-alist latex-help-file)
   ;; :functions (TeX-run-Biber)
   :mode ("\\.tex\\'" . TeX-latex-mode)
