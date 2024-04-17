@@ -77,12 +77,15 @@
 
 (use-package projectile
   :straight t
-  :bind-keymap ("s-p" . projectile-command-map)
+  :bind-keymap ("C-c p" . projectile-command-map)
   :init
   (setq projectile-completion-system 'ivy
         projectile-mode-line-function '(lambda () (format " [%s]" (projectile-project-name))))
   :config
   (projectile-mode +1))
+
+(use-package projectile-ripgrep
+  :straight t)
 
 ;; ========================================================================== ;;
 
