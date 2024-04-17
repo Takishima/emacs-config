@@ -189,6 +189,32 @@
    ("C-c C-d" . helpful-at-point))
   )
 
+;; Minibuffer completion is essential to your Emacs workflow and
+;; Vertico is currently one of the best out there. There's a lot to
+;; dive in here so I recommend checking out the documentation for more
+;; details: https://elpa.gnu.org/packages/vertico.html. The short and
+;; sweet of it is that you search for commands with "M-x do-thing" and
+;; the minibuffer will show you a filterable list of matches.
+(use-package vertico
+  :straight t
+  :custom
+  (vertico-cycle t)
+  (read-buffer-completion-ignore-case t)
+  (read-file-name-completion-ignore-case t)
+  (completion-styles '(basic substring partial-completion flex))
+  :init
+  (vertico-mode))
+
+
+;; Improve the accessibility of Emacs documentation by placing
+;; descriptions directly in your minibuffer. Give it a try:
+;; "M-x find-file".
+(use-package marginalia
+  :after vertico
+  :straight t
+  :init
+  (marginalia-mode))
+
 ;; -------------------------------------------------------------------------- ;;
 
 (use-package whitespace-cleanup-mode
