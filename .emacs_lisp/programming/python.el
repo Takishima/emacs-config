@@ -90,6 +90,9 @@
 (use-package python-isort
   :straight t)
 
+(use-package ruff-format
+  :straight t)
+
 ;; -------------------------------------------------------------------------- ;;
 
 ;; (use-package elpy
