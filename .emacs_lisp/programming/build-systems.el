@@ -39,6 +39,11 @@
 
 ;; ========================================================================== ;;
 
+
+(use-package cmake-font-lock
+  :straight t
+  )
+
 (use-package cmake-mode
   :straight t
   :mode
