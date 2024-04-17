@@ -209,7 +209,19 @@
 
 ;; ========================================================================== ;;
 
+(use-package format-all
+  :straight t
+  )
+
+;; ========================================================================== ;;
+
 (use-package hcl-mode
+  :straight t
+  )
+
+;; ========================================================================== ;;
+
+(use-package nix-mode
   :straight t
   )
 
@@ -373,7 +385,6 @@
   :straight t
   :commands (treemacs)
   :after (lsp-mode))
-
 
 ;; (use-package ruff-lsp
 ;;   :straight t
