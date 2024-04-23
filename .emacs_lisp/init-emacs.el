@@ -126,9 +126,9 @@
 
 (save-place-mode t)
 
-(unless (and (version< emacs-version "27")
-             (require 'so-long nil :noerror))
-    (package-install 'so-long))
+;; (unless (and (version< emacs-version "27")
+;;              (require 'so-long nil :noerror))
+;;     (package-install 'so-long))
 (global-so-long-mode)
 
 
@@ -302,21 +302,21 @@
 ;; -------------------------------------------------------------------------- ;;
 
 ;; From https://github.com/KaratasFurkan/.emacs.d
-(defun dn-async-process (command &optional name filter)
-  "Start an async process by running the COMMAND string with bash. Return the
-process object for it.
+;; (defun dn-async-process (command &optional name filter)
+;;   "Start an async process by running the COMMAND string with bash. Return the
+;; process object for it.
 
-NAME is name for the process. Default is \"async-process\".
+;; NAME is name for the process. Default is \"async-process\".
 
-FILTER is function that runs after the process is finished, its args should be
-\"(process output)\". Default is just messages the output."
-  (make-process
-   :command `("bash" "-c" ,command)
-   :name (if name name
-           "async-process")
-   :filter (if filter filter
-             (lambda (process output) (message (s-trim output)))))
-  )
+;; FILTER is function that runs after the process is finished, its args should be
+;; \"(process output)\". Default is just messages the output."
+;;   (make-process
+;;    :command `("bash" "-c" ,command)
+;;    :name (if name name
+;;            "async-process")
+;;    :filter (if filter filter
+;;              (lambda (process output) (message (s-trim output)))))
+;;   )
 
 ;; -------------------------------------------------------------------------- ;;
 
