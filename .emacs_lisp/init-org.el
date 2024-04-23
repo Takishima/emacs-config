@@ -41,6 +41,7 @@
 
 (require 'use-package)
 
+(straight-use-package 'org)
 ;; ========================================================================== ;;
 
 (use-package org

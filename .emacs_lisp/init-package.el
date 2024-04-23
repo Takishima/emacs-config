@@ -51,7 +51,7 @@
       (goto-char (point-max))
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
-
+(straight-use-package 'org)
 ;; (let* (
 ;;        (no-ssl (and (memq system-type '(windows-nt ms-dos))
 ;;                     (not (gnutls-available-p))))
