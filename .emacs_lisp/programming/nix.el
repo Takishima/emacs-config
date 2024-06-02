@@ -14,3 +14,9 @@
   :straight t
   :hook (nix-mode . lsp-deferred)
   :ensure t)
+
+(use-package sops
+  :straight t
+  :ensure t
+  :config
+  (global-sops-mode t))
