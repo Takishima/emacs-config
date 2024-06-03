@@ -247,10 +247,12 @@
 (use-package lsp-mode
   :straight t
   :defines lsp-language-id-configuration
+  :commands (lsp lsp-deferred)
   :hook ((prog-mode . (lambda ()
                         (unless (cl-some 'derived-mode-p dn-lsp-mode-disabled)
                           (lsp-deferred))
                         ))
+         (c++-mode . lsp-deferred)
          (lsp-mode . lsp-enable-which-key-integration))
   ;; :config
   ;; (add-to-list 'lsp-language-id-configuration
