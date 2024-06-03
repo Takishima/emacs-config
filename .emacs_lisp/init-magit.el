@@ -142,6 +142,21 @@
 
 ;; ========================================================================== ;;
 
+(use-package difftastic
+  :straight t
+  :commands magit
+  :after magit
+  :bind (:map magit-blame-read-only-mode-map
+         ("D" . difftastic-magit-show)
+         ("S" . difftastic-magit-show))
+  :init
+  (transient-append-suffix 'magit-diff '(-1 -1)
+      [("D" "Difftastic diff (dwim)" difftastic-magit-diff)
+        ("S" "Difftastic show" difftastic-magit-show)]))
+
+
+;; ========================================================================== ;;
+
 (provide 'init-magit)
 
 ;;; init-magit.el ends here
