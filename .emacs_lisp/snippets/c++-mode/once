@@ -1,8 +1,7 @@
 # -*- mode: snippet -*-
-# key: include_guard
+# key: once
 # name: C++ auto header include guard in project
 # --
-
 #ifndef ${1:`(upcase
               (concat
                (projectile-project-name)

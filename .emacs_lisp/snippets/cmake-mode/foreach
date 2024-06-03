@@ -2,6 +2,6 @@
 # name: foreach
 # key: for
 # --
-foreach(${1:var} \${${2:array}})
-        $3
-endforeach()$0
+foreach(${1:var} IN ${2:$$(yas-choose-value '("LISTS" "ITEMS"))} $3)
+  $0
+endforeach()

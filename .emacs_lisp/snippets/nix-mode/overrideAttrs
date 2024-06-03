@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: overrideAttrs in overlay
+# key: oA
+# --
+$1 = prev.$1.overrideAttrs (finalAttrs: previousAttrs: {
+   $0
+});
