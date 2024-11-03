@@ -93,6 +93,14 @@
 (use-package ruff-format
   :straight t)
 
+(use-package lsp-pylyzer
+  :straight (:host github :repo "emacs-lsp/lsp-pylyzer" :files ("*.el"))
+  :straight t
+  ;; :hook (python-mode . (lambda ()
+  ;;                         (require 'lsp-pylyzer)
+  ;;                         (lsp-deffered)))
+  )
+
 ;; -------------------------------------------------------------------------- ;;
 
 ;; (use-package elpy
