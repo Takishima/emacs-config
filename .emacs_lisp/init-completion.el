@@ -81,8 +81,7 @@
 ;; ========================================================================== ;;
 
 (use-package diminish
-  :straight (:host github :repo "emacsmirror/diminish" :files ("*.el"))
-  :straight t)
+  :straight (:host github :repo "emacsmirror/diminish" :files ("*.el")))
 
 (use-package counsel
   :straight t

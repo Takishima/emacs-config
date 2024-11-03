@@ -2,7 +2,7 @@
   :straight t)
 
 (use-package lsp-nix
-  :straight t
+  :straight nil
   :ensure nil
   :after (lsp-mode)
   :demand t
