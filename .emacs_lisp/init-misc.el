@@ -67,6 +67,7 @@
                                  proced-mode
                                  mu4e-headers-mode
                                  deft-mode
+                                 yaml-mode
                                  prog-mode))
   :hook (after-init . global-emojify-mode))
 
