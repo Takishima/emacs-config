@@ -62,6 +62,7 @@
          ))
   :hook
   (cmake-mode . cmake-format-mode)
+  (cmake-mode . lsp-deferred)
   )
 
 ;; -------------------------------------------------------------------------- ;;
