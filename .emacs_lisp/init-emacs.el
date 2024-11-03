@@ -50,7 +50,7 @@
   ;; (setq molokai-theme-kit t)
   :config
   (load-theme 'leuven t))
-	      
+
 ;; ========================================================================== ;;
 
 ;; which-key

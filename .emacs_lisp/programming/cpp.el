@@ -73,7 +73,7 @@
 
 (use-package modern-cpp-font-lock
   :straight t
-  :hook c++-mode-hook
+  :hook (c++-mode . modern-c++-font-lock-mode)
   )
 
 (add-hook 'c++-mode-hook
