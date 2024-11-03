@@ -3,13 +3,22 @@
 # name: C++ auto header include guard in project
 # --
 #ifndef ${1:`(upcase
-              (concat
-               (projectile-project-name)
-               "_"
-               (subst-char-in-string ?/ ?_
-                                     (file-relative-name
-                                      (file-name-sans-extension buffer-file-name)
-                                      (projectile-project-root)))))`_HPP_}
+               (concat
+                 (subst-char-in-string ?/ ?_
+                   (file-relative-name
+                     (file-name-sans-extension buffer-file-name)
+                       (let* ((subproject-root (projectile-locate-dominating-file (buffer-file-name) "CMakeLists.txt"))
+                              (subproject-include-dir (concat (file-name-as-directory subproject-root) "include")))
+                          (if (string-prefix-p subproject-include-dir (buffer-file-name))
+                            subproject-include-dir
+                            subproject-root)
+                         )
+                       )
+                     )
+                   )
+                 )
+               )
+             )`_HPP_}
 #define $1
 
 $0
