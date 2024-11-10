@@ -44,9 +44,11 @@
 (use-package multiple-cursors
   :straight t
   :bind
-  (("C-c m e" . mc/edit-lines)
-   ("C-c m s" . mc/mark-next-like-this-symbol)
-   ("C-c m w" . mc/mark-next-like-this-word))
+  (("M-m e" . mc/edit-lines)
+   ("M-m s" . mc/mark-next-like-this-symbol)
+   ("M-m w" . mc/mark-next-like-this-word))
+  :init
+  (global-unset-key (kbd "M-m"))
   )
 
 ;; ========================================================================== ;;

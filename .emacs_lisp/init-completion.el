@@ -83,67 +83,6 @@
 (use-package diminish
   :straight (:host github :repo "emacsmirror/diminish" :files ("*.el")))
 
-(use-package counsel
-  :straight t
-  )
-
-(use-package ivy
-  :straight t
-  :diminish (ivy-mode counsel-mode)
-  :custom
-  ;; add ‘recentf-mode’ and bookmarks to ‘ivy-switch-buffer’.
-  (ivy-use-virtual-buffers t)
-  ;; number of result lines to display
-  (ivy-height 10)
-  ;; does not count candidates
-  (ivy-count-format "")
-  ;; no regexp by default
-  (ivy-initial-inputs-alist nil)
-  ;; configure regexp engine.
-  (ivy-re-builders-alist
-   ;; allow input not in order
-   '((t   . ivy--regex-ignore-order)))
-
-  :bind
-  (:map ivy-mode-map
-        ("C-x C-r" . counsel-recentf)
-        ("C-s" . swiper)
-        ("M-s ." . swiper-symbol-at-point)
-        ("C-x C-g" . counsel-git)
-        ("C-c j" . counsel-git-grep)
-        ("C-x l" . counsel-locate)
-        ("C-x b" . counsel-switch-buffer)
-        ("C-x C-f" . counsel-find-file)
-        ("C-'" . ivy-avy))
-  :config
-  ;; Disable ido mode
-  (ido-mode nil)
-  ;; Enable ivy mode
-  (ivy-mode 1)
-
-  (defun swiper-symbol-at-point ()
-    "Call swiper with symbol at point."
-    (interactive)
-    (let ((bounds (find-tag-default-bounds)))
-      (cond
-       (bounds
-        (when (< (car bounds) (point))
-          (goto-char (car bounds)))
-        (swiper (buffer-substring-no-properties (car bounds) (cdr bounds))
-                )
-        ))))
-  (setq magit-completing-read-function 'ivy-completing-read)
-  )
-(ivy-mode 1)
-
-;; -------------------------------------------------------------------------- ;;
-
-(use-package ivy-prescient
-  :straight t
-  :after ivy
-  :config (ivy-prescient-mode)
-  )
-
 ;; ========================================================================== ;;
 ;; Load Yasnippet
 
