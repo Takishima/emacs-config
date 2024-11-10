@@ -1,4 +1,4 @@
-;;; init-prog-cpp.el --- C++ support -*- lexical-binding: t -*-
+;;; init-prog-yaml.el --- C++ support -*- lexical-binding: t -*-
 
 ;; Author: Damien Nguyen
 ;; Maintainer: Damien Nguyen
@@ -50,9 +50,9 @@
 
 ;; ========================================================================== ;;
 
-(provide 'init-programming)
+(provide 'init-prog-yaml)
 
-;;; init-programming.el ends here
+;;; init-prog-yaml.el ends here
 
 ;; Local Variables:
 ;; eval: (setq config-dotemacs-lisp (file-name-directory (or load-file-name buffer-file-name)))

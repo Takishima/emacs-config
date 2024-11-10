@@ -189,4 +189,4 @@
 
 (provide 'init-prog-cpp)
 
-;;; cpp.el ends here
+;;; init-prog-cpp.el ends here
