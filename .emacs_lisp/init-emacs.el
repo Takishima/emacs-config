@@ -326,8 +326,9 @@ active region is added to the search string."
          ("M-g I" . consult-imenu-multi)
          ;; M-s bindings in `search-map'
          ("M-s ." . dn--consult-line-thing-at-point)
-         ("M-s d" . consult-fd)                  ;; Alternative: consult-find
          ("M-s c" . consult-locate)
+         ("M-s d" . consult-fd)
+         ("M-s f" . consult-find)
          ("M-s g" . consult-grep)
          ("M-s G" . consult-git-grep)
          ("M-s r" . consult-ripgrep)
