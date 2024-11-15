@@ -405,6 +405,10 @@ active region is added to the search string."
          )
   )
 
+(use-package consult-flycheck
+  :straight t)
+
+
 (use-package embark
   :straight t
   :bind
