@@ -105,7 +105,7 @@
 (use-package flycheck
   :straight t
   :custom
-  (flycheck-clang-args '("-std=c++17"))
+  (flycheck-clang-args '("-std=c++20"))
   )
 
 (use-package datetime
