@@ -108,6 +108,19 @@
   (flycheck-clang-args '("-std=c++17"))
   )
 
+(use-package datetime
+  :straight  (datetime :type git :host github :repo "doublep/datetime"
+                       :fork (:host github
+                                    :repo "Takishima/datetime")))
+(use-package logview
+  :straight t
+  :custom
+  (logview-completing-read-function 'completing-read)
+  (logview-additional-submodes '(("ROS2" (format . "[LEVEL] [TIMESTAMP] [NAME]:") (levels . "SLF4J")
+                                  (timestamp "ROS2"))))
+  (logview-additional-timestamp-formats '(("ROS2" (java-pattern . "A.SSSSSSSSS"))))
+  )
+
 ;; ========================================================================== ;;
 ;; Compilation
 
