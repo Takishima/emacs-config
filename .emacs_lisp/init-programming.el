@@ -389,6 +389,15 @@
   (require 'dap-gdb-lldb)
   )
 
+
+
+;; (use-package lsp-bridge
+;;   :straight '(lsp-bridge :type git :host github :repo "manateelazycat/lsp-bridge"
+;;             :files (:defaults "*.el" "*.py" "acm" "core" "langserver" "multiserver" "resources")
+;;             :build (:not compile))
+;;   :init
+;;   (global-lsp-bridge-mode))
+
 (when (executable-find "emacs-lsp-booster")
   (defun lsp-booster--advice-json-parse (old-fn &rest args)
     "Try to parse bytecode instead of json."
@@ -422,6 +431,7 @@
   (advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
   )
 
+
 (use-package lsp-treemacs
   :after (lsp-mode treemacs)
   :straight t
@@ -442,7 +452,6 @@
 ;;   :after (lsp-mode))
 
 ;; ========================================================================== ;;
-
 ;; (defvar eglot-clangd-exe (executable-find "clangd")
 ;;   "clangd executable path")
 
