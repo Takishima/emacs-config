@@ -42,6 +42,8 @@
 
 (use-package cmake-font-lock
   :straight t
+  :custom
+  (cmake-font-lock-modes '(cmake-mode cmake-ts-mode))
   )
 
 (use-package cmake-mode
