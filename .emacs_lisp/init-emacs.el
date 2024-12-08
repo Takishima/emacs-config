@@ -409,6 +409,7 @@ active region is added to the search string."
   :straight t
   :bind (
          ("C-c p" . consult-projectile)
+         ("C-c P" . projectile-commander)
          )
   )
 
