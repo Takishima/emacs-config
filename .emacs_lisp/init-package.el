@@ -69,8 +69,6 @@
 
 (use-package system-packages
   :straight t)
-(use-package use-package-ensure-system-package
-  :straight t)
 
 (use-package auto-package-update
   :straight t
