@@ -328,6 +328,7 @@ active region is added to the search string."
          ("M-s ." . dn--consult-line-thing-at-point)
          ("M-s c" . consult-locate)
          ("M-s d" . consult-fd)
+         ("M-s D" . devdocs-lookup)
          ("M-s f" . consult-find)
          ("M-s g" . consult-grep)
          ("M-s G" . consult-git-grep)

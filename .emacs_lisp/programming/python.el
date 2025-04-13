@@ -57,7 +57,8 @@
                ("C-c i" . python-insert-docstring-with-google-style-at-point)
                ))
   :config
-
+  (add-hook 'python-mode-hook
+            (lambda () (setq-local devdocs-current-docs '("python~3.12"))))
   (when (executable-find "ipython")
     (setq
      python-shell-interpreter "ipython"
