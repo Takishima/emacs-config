@@ -52,6 +52,7 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 (straight-use-package 'org)
+
 ;; (let* (
 ;;        (no-ssl (and (memq system-type '(windows-nt ms-dos))
 ;;                     (not (gnutls-available-p))))
@@ -61,11 +62,15 @@
 
 ;; ========================================================================== ;;
 
+
 ;; use-package
 ;; https://github.com/jwiegley/use-package
 ;; (unless (package-installed-p 'use-package)
 ;;   (package-refresh-contents)
 ;;   (package-install 'use-package))
+
+(use-package use-package
+  :straight t)
 
 (use-package system-packages
   :straight t)
