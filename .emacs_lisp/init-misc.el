@@ -62,6 +62,7 @@
                                  ibuffer-mode
                                  magit-popup-mode
                                  magit-diff-mode
+                                 nix-mode
                                  ert-results-mode
                                  compilation-mode
                                  proced-mode
