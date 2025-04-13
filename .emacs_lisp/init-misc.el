@@ -78,6 +78,9 @@
 (use-package all-the-icons-ivy
   :straight t)
 
+(use-package pacfiles-mode
+  :straight t)
+
 ;; -------------------------------------------------------------------------- ;;
 
 (use-package display-line-numbers
