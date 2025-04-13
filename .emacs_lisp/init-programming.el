@@ -270,9 +270,8 @@
   (use-package tree-sitter
     :straight t
     :ensure-system-package tree-sitter
-    :init
-    (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
     :config
+    (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
     (global-tree-sitter-mode)
     )
   (use-package tree-sitter-langs
@@ -401,7 +400,7 @@
          (cmake-mode . (lambda () (dap-mode -1)))
          ((c-mode c++-mode objc-mode swift-mode) . (lambda () (require 'dap-lldb)))
          (powershell-mode . (lambda () (require 'dap-pwsh))))
-  :init
+  :config
   (when (executable-find "python3")
     (setq dap-python-executable "python3"))
   (require 'dap-cpptools)
@@ -456,7 +455,7 @@
   :after (lsp-mode treemacs)
   :straight t
   :commands lsp-treemacs-errors-list
-  :init (lsp-treemacs-sync-mode 1)
+  :config (lsp-treemacs-sync-mode 1)
   ;; :bind (:map lsp-mode-map
   ;;        ("M-9" . lsp-treemacs-errors-list))
   )
@@ -482,7 +481,7 @@
 ;;          (python-mode   . eglot-ensure)
 ;;          (ruby-mode     . eglot-ensure)
 ;;          )
-;;   :init
+;;   :config
 ;;   (add-to-list 'eglot-server-programs
 ;;                `((c++-mode) ,eglot-clangd-exe))
 ;;   :config

@@ -46,8 +46,6 @@
 (use-package leuven-theme
   :straight t
   :load-path "themes"
-  ;; :init
-  ;; (setq molokai-theme-kit t)
   :config
   (load-theme 'leuven t))
 
@@ -196,7 +194,7 @@
   (read-buffer-completion-ignore-case t)
   (read-file-name-completion-ignore-case t)
   (completion-styles '(basic substring partial-completion flex))
-  :init
+  :config
   (vertico-mode))
 
 ;; Persist history over Emacs restarts. Vertico sorts by history position.
@@ -213,7 +211,7 @@
   ;; commands are hidden in normal buffers. This setting is useful beyond
   ;; Vertico.
   (read-extended-command-predicate #'command-completion-default-include-p)
-  :init
+  :config
   ;; Add prompt indicator to `completing-read-multiple'.
   ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
   (defun crm-indicator (args)
@@ -257,7 +255,7 @@
 (use-package marginalia
   :after vertico
   :straight t
-  :init
+  :config
   (marginalia-mode))
 
 

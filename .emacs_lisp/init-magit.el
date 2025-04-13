@@ -149,7 +149,7 @@
   :bind (:map magit-blame-read-only-mode-map
          ("D" . difftastic-magit-show)
          ("S" . difftastic-magit-show))
-  :init
+  :config
   (transient-append-suffix 'magit-diff '(-1 -1)
       [("D" "Difftastic diff (dwim)" difftastic-magit-diff)
         ("S" "Difftastic show" difftastic-magit-show)]))

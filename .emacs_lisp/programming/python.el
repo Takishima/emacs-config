@@ -47,7 +47,7 @@
 
 (use-package python
   :straight nil
-  :init
+  :config
   (progn
     (add-hook 'python-mode-hook 'highlight-indentation-mode)
     ;; (add-hook 'python-mode-hook 'eldoc-mode)
@@ -106,7 +106,7 @@
 
 ;; (use-package elpy
 ;;   :straight t
-;;   :init
+;;   :config
 ;;   (elpy-enable)
 ;;   :custom
 ;;   (elpy-eldoc-show-current-function nil)
