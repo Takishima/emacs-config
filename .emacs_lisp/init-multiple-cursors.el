@@ -47,7 +47,7 @@
   (("M-m e" . mc/edit-lines)
    ("M-m s" . mc/mark-next-like-this-symbol)
    ("M-m w" . mc/mark-next-like-this-word))
-  :config
+  :init
   (global-unset-key (kbd "M-m"))
   )
 
