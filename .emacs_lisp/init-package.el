@@ -75,15 +75,6 @@
 (use-package system-packages
   :straight t)
 
-(use-package auto-package-update
-  :straight t
-  :custom
-  (auto-package-update-delete-old-versions t)
-  (auto-package-update-hide-results t)
-  :config
-  (auto-package-update-maybe)
-  )
-
 ;; ========================================================================== ;;
 
 (provide 'init-package)
