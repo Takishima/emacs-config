@@ -1,4 +1,4 @@
-;;; .emacs --- Summary
+;;; .emacs --- Summary  -*- lexical-binding: t; -*-
 ;; My emacs config file
 ;;
 ;; MIT License

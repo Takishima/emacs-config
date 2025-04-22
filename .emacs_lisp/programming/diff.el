@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (require 'transient)
 (require 'magit)
 (defun dn/magit--with-difftastic (buffer command)

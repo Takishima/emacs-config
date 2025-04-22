@@ -1,4 +1,4 @@
-;;; project-directory.el --- lets you invoke M-x compile from a deep subdirectory of the project directory
+;;; project-directory.el --- lets you invoke M-x compile from a deep subdirectory of the project directory  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2012 Darren Embry
 
