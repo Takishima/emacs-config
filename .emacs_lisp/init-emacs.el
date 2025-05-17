@@ -484,6 +484,15 @@ active region is added to the search string."
   ;; (keymap-set consult-narrow-map (concat consult-narrow-key " ?") #'consult-narrow-help)
   )
 
+
+(use-package consult-dir
+  :straight (:host github :repo "karthink/consult-dir" :files ("*.el"))
+  :straight t
+  :bind (("C-x C-d" . consult-dir)
+         :map vertico-map
+         ("C-x C-d" . consult-dir)
+         ("C-x C-j" . consult-dir-jump-file)))
+
 (use-package consult-lsp
   :straight t
   :bind (
