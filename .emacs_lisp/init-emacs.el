@@ -186,6 +186,9 @@
 ;; Enable vertico
 (use-package vertico
   :straight t
+  ;; :bind (("C-c v r" . vertico-repeat)
+  ;;        ("C-c v s" . vertico-suspend))
+  ;; :hook (minibuffer-setup . vertico-repeat-save)
   :custom
   ;; (vertico-scroll-margin 0) ;; Different scroll margin
   (vertico-count 20) ;; Show more candidates
@@ -193,9 +196,76 @@
   (vertico-cycle t) ;; Enable cycling for `vertico-next/previous'
   (read-buffer-completion-ignore-case t)
   (read-file-name-completion-ignore-case t)
+  ;; (completion-ignore-case t)
   (completion-styles '(basic substring partial-completion flex))
   :config
   (vertico-mode))
+
+;;;; Vertico-directory
+(use-package vertico-directory
+  :after vertico
+  :straight nil
+  :ensure nil
+  ;; More convenient directory navigation commands
+  :bind (:map vertico-map
+              ("RET" . vertico-directory-enter)
+              ("DEL" . vertico-directory-delete-char)
+              ("M-DEL" . vertico-directory-delete-word))
+  ;; Tidy shadowed file names
+  :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
+
+;;;; Vertico-multiform
+(use-package vertico-multiform
+  :requires vertico
+  :ensure nil
+  :custom
+  (vertico-multiform-categories
+   '((file buffer grid)
+     (imenu (:not indexed mouse))
+     (symbol (vertico-sort-function . vertico-sort-alpha))))
+  (vertico-multiform-commands
+   '((consult-line buffer)
+     (consult-git-grep buffer)
+     (consult-ripgrep buffer)
+     (consult-grep buffer)
+     (consult-fd grid)
+     (execute-extended-command 'vertical))
+   )
+  :config
+  (vertico-multiform-mode 1))
+
+;;;; Vertico-buffer
+(use-package vertico-buffer
+  :after vertico
+  :straight nil
+  :ensure nil
+  :custom
+  (vertico-buffer-hide-prompt nil)
+  (vertico-buffer-display-action '(display-buffer-reuse-window)))
+
+;;;; Vertico-prescient
+(use-package vertico-prescient
+  :after vertico prescient
+  :straight nil
+  :ensure nil
+  :custom
+  ;; Sorting
+  (vertico-prescient-enable-sorting t)
+  (vertico-prescient-override-sorting nil) ; Don't override `display-sort-function'
+
+  ;; Filtering. Below only applies when `vertico-prescient-enable-filtering' is
+  ;; non-nil
+  (vertico-prescient-enable-filtering nil) ; We want orderless to do the filtering
+  (vertico-prescient-completion-styles '(prescient flex))
+  ;; Only set if `vertico-prescient-enable-filtering' is non-nil. See also
+  ;; `prescient--completion-recommended-overrides'
+  (vertico-prescient-completion-category-overrides
+   '(;; Include `partial-completion' to enable wildcards and partial paths.
+     (file (styles partial-completion prescient))
+     ;; Eglot forces `flex' by default.
+     (eglot (styles prescient flex))))
+  :config
+  (vertico-prescient-mode 1))
 
 (use-package ido
   :custom
@@ -235,19 +305,6 @@
   (setq minibuffer-prompt-properties
         '(read-only t cursor-intangible t face minibuffer-prompt))
   (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode))
-
-;; Configure directory extension.
-(use-package vertico-directory
-  :after vertico
-  :straight nil
-  :ensure nil
-  ;; More convenient directory navigation commands
-  :bind (:map vertico-map
-              ("RET" . vertico-directory-enter)
-              ("DEL" . vertico-directory-delete-char)
-              ("M-DEL" . vertico-directory-delete-word))
-  ;; Tidy shadowed file names
-  :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
 
 ;; Optionally use the `orderless' completion style.
 (use-package orderless
