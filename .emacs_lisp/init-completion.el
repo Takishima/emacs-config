@@ -132,43 +132,6 @@
   )
 
 ;; ========================================================================== ;;
-;; Load Company mode
-
-;; (use-package company
-;;   :straight t
-;;   :custom
-;;   (company-idle-delay 0)
-;;   (company-minimum-prefix-length 3)
-;;   (company-tooltip-align-annotations t)
-;;   (company-dabbrev-downcase nil)
-;;   ;; Disable `single-candidate' and `echo-area' frontends
-;;   (company-frontends '(company-box-frontend))
-;;   :config
-;;   (global-company-mode)
-;;   )
-
-;; -------------------------------------------------------------------------- ;;
-
-;; (use-package company-box
-;;   :straight t
-;;   :custom
-;;   (company-box-show-single-candidate t)
-;;   ;;(company-box-frame-behavior 'point)
-;;   (company-box-icon-right-margin 0.5)
-;;   (company-box-backends-colors '((company-yasnippet . (:annotation default))))
-;;   :hook
-;;   (company-mode . company-box-mode)
-;;   )
-
-;; -------------------------------------------------------------------------- ;;
-
-;; (use-package company-prescient
-;;   :straight t
-;;   :after company
-;;   :config (company-prescient-mode)
-;;   )
-
-;; ========================================================================== ;;
 
 (provide 'init-completion)
 
