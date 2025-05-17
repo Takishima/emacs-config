@@ -306,22 +306,44 @@
         '(read-only t cursor-intangible t face minibuffer-prompt))
   (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode))
 
-;; Optionally use the `orderless' completion style.
+;;; Orderless
+;; Alternative and powerful completion style (i.e. filters candidates)
 (use-package orderless
   :straight t
   :custom
-  ;; Configure a custom style dispatcher (see the Consult wiki)
-  ;; (orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch))
-  ;; (orderless-component-separator #'orderless-escapable-split-on-space)
-  (completion-styles '(orderless basic))
-  (completion-category-defaults nil)
-  (completion-category-overrides '((file (styles partial-completion)))))
+  (orderless-matching-styles
+   '(orderless-regexp
+     orderless-prefixes
+     orderless-initialism
+     ;; orderless-literal
+     ;; orderless-flex
+     ;; orderless-without-literal          ; Recommended for dispatches instead
+     ))
+  (orderless-component-separator 'orderless-escapable-split-on-space)
+  :config
+  ;; Eglot forces `flex' by default.
+  (add-to-list 'completion-category-overrides '(eglot (styles . (orderless flex)))))
 
+;;; Marginalia
+;; Enable richer annotations in minibuffer (companion package of consult.el)
 (use-package marginalia
   :after vertico
   :straight t
+  :custom
+  (marginalia-max-relative-age 0)
+  (marginalia-align 'right)
+  (marginalia-field-width 80)
+  (marginalia-align-offset -2)          ; Two to the left
   :config
-  (marginalia-mode))
+  (marginalia-mode 1))
+
+
+;;; Hotfuzz
+;; Faster version of the flex completion style.  Hotfuzz is a much faster
+;; version of the built-in flex style.  See
+;; https://github.com/axelf4/emacs-completion-bench#readme
+(use-package hotfuzz
+  :straight t)
 
 
 (defun dn--consult-line-thing-at-point ()
