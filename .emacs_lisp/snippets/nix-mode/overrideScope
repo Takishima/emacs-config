@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: overrideScope
+# key: oS
+# --
+overrideScope(final: prev: {
+  $0
+})
+
