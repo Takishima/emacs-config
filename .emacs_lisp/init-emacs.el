@@ -658,6 +658,11 @@ FILTER is function that runs after the process is finished, its args should be
 
 ;; -------------------------------------------------------------------------- ;;
 
+(use-package aio
+  :straight t)
+
+;; -------------------------------------------------------------------------- ;;
+
 (defcustom dn-default-font-size
   98
   "Default font size."
