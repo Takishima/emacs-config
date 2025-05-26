@@ -19,5 +19,8 @@
 (use-package sops
   :straight t
   :ensure t
+  :bind (("C-c C-c" . sops-save-file)
+         ("C-c C-k" . sops-cancel)
+         ("C-c C-d" . sops-edit-file))
   :config
-  (global-sops-mode t))
+  (global-sops-mode 1))
