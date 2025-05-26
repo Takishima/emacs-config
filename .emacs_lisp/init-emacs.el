@@ -197,7 +197,7 @@
   (read-buffer-completion-ignore-case t)
   (read-file-name-completion-ignore-case t)
   ;; (completion-ignore-case t)
-  (completion-styles '(basic substring partial-completion flex))
+  ;; (completion-styles '(basic substring partial-completion flex))
   :config
   (vertico-mode))
 
@@ -280,6 +280,13 @@
   :init
   (savehist-mode))
 
+(defun dn-completion-styles-setup ()
+  "Set up `completion-styes'."
+  (setopt completion-styles (list (if (featurep 'orderless)
+                                      'orderless 'basic)
+                                  (if (featurep 'hotfuzz)
+                                      'hotfuzz 'flex))))
+
 ;; A few more useful configurations...
 (use-package emacs
   :custom
@@ -304,7 +311,8 @@
   ;; Do not allow the cursor in the minibuffer prompt
   (setq minibuffer-prompt-properties
         '(read-only t cursor-intangible t face minibuffer-prompt))
-  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode))
+  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+  (add-hook 'after-init-hook 'dn-completion-styles-setup))
 
 ;;; Orderless
 ;; Alternative and powerful completion style (i.e. filters candidates)
