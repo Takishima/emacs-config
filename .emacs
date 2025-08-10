@@ -62,6 +62,7 @@
 (config-require 'init-emacs)
 (config-require 'init-multiple-cursors)
 (config-require 'init-magit)
+(config-require 'init-llm)
 (config-require 'init-completion)
 (config-require 'init-programming)
 (config-require 'init-auctex)
