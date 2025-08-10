@@ -651,6 +651,13 @@ FILTER is function that runs after the process is finished, its args should be
 
 ;; -------------------------------------------------------------------------- ;;
 
+(use-package auth-source-1password
+  :straight t
+  :config
+  ;; Customize auth-source-1password-vault to select default vault
+  (auth-source-1password-enable)
+  )
+
 (use-package aio
   :straight t)
 
