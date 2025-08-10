@@ -269,7 +269,7 @@
 (when module-file-suffix
   (use-package tree-sitter
     :straight t
-    :ensure-system-package tree-sitter
+    ;; :ensure-system-package tree-sitter
     :config
     (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
     (global-tree-sitter-mode)
