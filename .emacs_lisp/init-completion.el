@@ -68,6 +68,17 @@
 
 ;; ========================================================================== ;;
 
+;; for eat terminal backend:
+(use-package eat :straight t)
+
+;; (use-package claude-code
+;;   :straight (:type git :host github :repo "stevemolitor/claude-code.el" :branch "main" :depth 1
+;;                    :files ("*.el" (:exclude "images/*")))
+;;   :bind-keymap
+;;   ("C-c c" . claude-code-command-map) ;; or your preferred key
+;;   :config
+;;   (claude-code-mode))
+
 (use-package copilot
   :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
   :straight t
