@@ -42,8 +42,9 @@
 
 ;; ========================================================================== ;;
 
-(global-set-key (kbd "s-r") 'revert-buffer)
+(global-set-key (kbd "M-s M-l") 'sort-lines)
 (global-set-key (kbd "s-R") 'revert-all-buffers)
+(global-set-key (kbd "s-r") 'revert-buffer)
 
 (config-when-system 'darwin
   (setq mac-command-modifier 'meta
