@@ -143,16 +143,21 @@
 ;; ========================================================================== ;;
 
 (use-package difftastic
-  :straight t
+  :defer t
+  :straight (:host github :repo "pkryger/difftastic.el" :files ("*.el"))
   :commands magit
-  :after magit
   :bind (:map magit-blame-read-only-mode-map
-         ("D" . difftastic-magit-show)
-         ("S" . difftastic-magit-show))
-  :config
+              ("D" . difftastic-magit-show)
+              ("S" . difftastic-magit-show))
+  :after magit
+  :init
+  (use-package transient               ; to silence compiler warnings
+    :autoload (transient-get-suffix
+               transient-parse-suffix))
   (transient-append-suffix 'magit-diff '(-1 -1)
-      [("D" "Difftastic diff (dwim)" difftastic-magit-diff)
-        ("S" "Difftastic show" difftastic-magit-show)]))
+    [("D" "Difftastic diff (dwim)" difftastic-magit-diff)
+     ("S" "Difftastic show" difftastic-magit-show)])
+  )
 
 
 ;; ========================================================================== ;;
