@@ -70,7 +70,8 @@
                                  deft-mode
                                  yaml-mode
                                  prog-mode))
-  :hook (after-init . global-emojify-mode))
+  ;; :hook (after-init . global-emojify-mode)
+  )
 
 (use-package all-the-icons
   :straight t)
