@@ -1,4 +1,4 @@
-;;; init-magit.el --- Initialisation for MaGit -*- lexical-binding: t -*-
+;;; init-magit.el --- Initialisation for MaGit -*- lexical-binding: t; coding: utf-8 -*-
 
 ;; Author: Damien Nguyen
 ;; Maintainer: Damien Nguyen
@@ -159,6 +159,131 @@
      ("S" "Difftastic show" difftastic-magit-show)])
   )
 
+;; ========================================================================== ;;
+
+(defvar conv-commit-type-desc nil "Type of conventional commit")
+(setq conv-commit-type-desc
+      '(("build"
+         :desc "Changes that affect the build system or external dependencies."
+         :icon ?🚧
+         :props (:foreground "#00008B" :height 1.2))
+        ("chore"
+         :desc "Updating grunt tasks."
+         :icon ?🧹
+         :props (:foreground "gray" :height 1.2))
+        ("ci"
+         :desc "Changes to CI configuration files and scripts."
+         :icon ?🤖
+         :props (:foreground "gray" :height 1.2))
+        ("docs"
+         :desc "Documentation only changes."
+         :icon ?📄
+         :props (:foreground "dark blue" :height 1.2))
+        ("feat"
+         :desc "A new feature."
+         :icon ?✨
+         :props (:foreground "green" :height 1.2))
+        ("fix"
+         :desc "A bug fix."
+         :icon ?🐛
+         :props (:foreground "dark red" :height 1.2))
+        ("perf"
+         :desc "A code change that improves performance."
+         :icon ?⚡
+         :props (:foreground "dark yellow" :height 1.2))
+        ("refactor"
+         :desc "A code changes that neither fixes a bug nor adds a feature."
+         :icon ?♻
+         :props (:foreground "dark green" :height 1.2))
+        ("revert"
+         :desc "For commits that reverts previous commit(s)."
+         :icon ?🔙
+         :props (:foreground "dark red" :height 1.2))
+        ("style"
+         :desc "Changes that do not affect the meaning of the code."
+         :icon ?💄
+         :props (:foreground "dark green" :height 1.2)
+         )
+        ("test"
+         :desc "Adding missing tests or correcting existing tests."
+         :icon ?🧪
+         :props (:foreground "dark green" :height 1.2)
+         )))
+
+(defun add-conventional-commit-faces (&rest _args)
+  "Add face properties and compose symbols for buffer from conv-commit-type-desc."
+  (interactive)
+  (with-silent-modifications
+    (dolist (elt conv-commit-type-desc nil)
+      (let*
+          (
+           (type-data (cdr elt))
+           (regex (format "\\<\\(%s\\)\\((.*?)\\)*?[[:space:]]*\\(!\\)?[[:space:]]*:" (car elt)))
+           (icon (plist-get type-data :icon))
+           (face-props (plist-get type-data :props))
+           )
+        (save-excursion
+          (goto-char (point-min))
+          (while (search-forward-regexp regex nil t)
+            (compose-region (match-beginning 1) (match-end 1) icon)
+            (when face-props
+              (add-face-text-property (match-beginning 1) (match-end 1) face-props))
+            ;; (when (string-equal (match-string 2) "nix")
+            ;;   (compose-region (match-beginning 2) (match-end 2) ?🚨)
+            ;;   )
+            (when (match-beginning 3)
+              (compose-region (match-beginning 3) (match-end 3) ?🚨)
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+
+(advice-add 'magit-status :after 'add-conventional-commit-faces)
+(advice-add 'magit-refresh-buffer :after 'add-conventional-commit-faces)
+
+
+(defun conv-commit-type-completion-decorate (type)
+  "Decorate the completions candidates with icon prefix and description suffix.
+
+TYPE is the type of conventional commit.
+Return a list (candidate, icon, description)."
+
+  (let ((type-data (cdr (assoc type conv-commit-type-desc))))
+    (list
+     type
+     (concat
+      (propertize (string (plist-get type-data :icon))
+                  'face (plist-get type-data :props))
+      "   ")
+     (concat
+      (string-pad " " (- 10 (length type)))
+      (propertize (plist-get type-data :desc) 'face '(:foreground "gray" ))))))
+
+
+(defun conv-commit-type-prompt ()
+  (interactive)
+  (consult--read conv-commit-type-desc
+                 :prompt "Commit type: "
+                 :annotate #'conv-commit-type-completion-decorate
+                 )
+  )
+(defun conv-commit-prompt ()
+  "Prompt for a conventional commit. and fill the buffer with the result."
+  (interactive)
+  (insert (conv-commit-type-prompt))
+  (let ((scope (completing-read "Scope: " "")))
+    (insert (if (string= scope "") "" (format "(%s)" scope))))
+  (insert (if (y-or-n-p "Breaking change? ") "!" ""))
+  (insert ": ")
+  )
+
+(add-hook 'git-commit-setup-hook
+          #'(lambda ()
+              (run-with-timer 0.5 nil #'(lambda () (when (eq (point-at-eol) (point-at-bol)) (conv-commit-prompt)))))
+          )
 
 ;; ========================================================================== ;;
 
