@@ -102,24 +102,6 @@
 
 ;; ========================================================================== ;;
 
-
-(use-package devdocs
-  :straight t
-  :config
-  (devdocs-update-all)
-  (defun dn-devocs-install()
-    (interactive)
-    (devdocs-install "bash")
-    (devdocs-install "click")
-    (devdocs-install "cpp")
-    (devdocs-install "cmake~3.31")
-    (devdocs-install "gcc~13_cpp")
-    (devdocs-install "git")
-    (devdocs-install "nix")
-    (devdocs-install "python~3.12")
-    )
-  )
-
 ;; ========================================================================== ;;
 
 (use-package flycheck

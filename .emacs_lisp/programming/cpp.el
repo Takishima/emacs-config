@@ -52,6 +52,12 @@
                      (java-mode . "java")
                      (awk-mode . "awk")
                      (other . "gnu")))
+  :config
+  (add-hook 'c-mode-common-hook
+            (lambda () (progn
+                         (setq-local devdocs-current-docs '("cpp")))
+                         (setq-local dash-docs-docsets '("C++" "C")))
+              )
   :mode
   (
    ("\\.h$" . c++-mode)

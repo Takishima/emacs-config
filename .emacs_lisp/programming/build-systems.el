@@ -50,6 +50,12 @@
   :straight t
   :mode
   ("CMakeLists\\.txt\\'" "\\.cmake\\'")
+  :config
+  (add-hook 'cmake-mode-hook
+            (lambda () (progn
+                         (setq-local devdocs-current-docs '("cmake~3.31")))
+                         (setq-local dash-docs-docsets '("CMake")))
+              )
   )
 
 ;; -------------------------------------------------------------------------- ;;

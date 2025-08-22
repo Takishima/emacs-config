@@ -56,9 +56,13 @@
 	      (
                ("C-c i" . python-insert-docstring-with-google-style-at-point)
                ))
+  :dash "Python 3" "NumPy" "SciPy"
   :config
   (add-hook 'python-mode-hook
-            (lambda () (setq-local devdocs-current-docs '("python~3.12"))))
+            (lambda () (progn
+                         (setq-local devdocs-current-docs '("python~3.12")))
+                         (setq-local dash-docs-docsets '("Python 3" "NumPy" "SciPy")))
+              )
   (when (executable-find "ipython")
     (setq
      python-shell-interpreter "ipython"

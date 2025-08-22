@@ -183,6 +183,12 @@
    ("C-c C-d" . helpful-at-point))
   )
 
+(add-hook 'emacs-lisp-mode-hook
+          (lambda () (progn
+                       (setq-local devdocs-current-docs '("elisp")))
+            (setq-local dash-docs-docsets '("Emacs Lisp")))
+          )
+
 ;; Enable vertico
 (use-package vertico
   :straight t
@@ -414,7 +420,8 @@ active region is added to the search string."
          ("M-s ." . dn--consult-line-thing-at-point)
          ("M-s c" . consult-locate)
          ("M-s d" . consult-fd)
-         ("M-s D" . devdocs-lookup)
+         ;; ("M-s D" . devdocs-lookup)
+         ("M-s D" . consult-dash)
          ("M-s f" . consult-find)
          ("M-s g" . consult-grep)
          ("M-s G" . consult-git-grep)

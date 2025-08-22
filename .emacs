@@ -60,6 +60,7 @@
 (config-require 'init-package)
 (config-require 'init-env)
 (config-require 'init-emacs)
+(config-require 'init-docs)
 (config-require 'init-multiple-cursors)
 (config-require 'init-magit)
 (config-require 'init-llm)

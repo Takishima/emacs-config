@@ -14,7 +14,14 @@
 (use-package nix-mode
   :straight t
   :hook (nix-mode . lsp-deferred)
-  :ensure t)
+  :ensure t
+  :config
+  (add-hook 'nix-mode-hook
+            (lambda () (progn
+                         (setq-local devdocs-current-docs '("nix")))
+                         (setq-local dash-docs-docsets '("nix" "nixos" "nixpkgs")))
+              )
+  )
 
 (use-package sops
   :straight t
