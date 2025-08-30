@@ -48,14 +48,12 @@
 
 (use-package ros2-action-msg-src-mode
   :straight nil
-  :demand t
   :load-path (lambda () (concat config-packages-dir "ros2-action-msg-src"))
-  :bind-keymap ("C-c c" . recompile)
+  ;; :bind-keymap ("C-c c" . recompile)
   )
 
 (use-package ros2-keybindings-mode
   :straight nil
-  :demand t
   :load-path (lambda () (concat config-packages-dir "ros2-keybindings"))
   )
 

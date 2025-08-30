@@ -42,7 +42,7 @@
   :straight t
   :config
   (devdocs-update-all)
-  (defun dn-devocs-install()
+  (defun dn-devdocs-install()
     (interactive)
     (devdocs-install "bash")
     (devdocs-install "click")
@@ -71,9 +71,8 @@
     (dash-docs-install-docset "C")
     (dash-docs-install-docset "C++")
     (dash-docs-install-docset "CMake")
-    (dash-docs-install-docset "Emacs Lisp")
+    (dash-docs-install-docset "Emacs_Lisp")
     (dash-docs-install-docset "Haskell")
-    (dash-docs-install-docset "Markdown")
     (dash-docs-install-docset "Markdown")
     (dash-docs-install-docset "NumPy")
     (dash-docs-install-docset "Python_3")

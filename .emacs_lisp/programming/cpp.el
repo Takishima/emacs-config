@@ -1,4 +1,4 @@
-;;; init-prog-cpp.el --- C++ support -*- lexical-binding: t -*-
+;;; cpp.el --- C++ support -*- lexical-binding: t -*-
 
 ;; Author: Damien Nguyen
 ;; Maintainer: Damien Nguyen
@@ -193,6 +193,6 @@
 
 ;; ========================================================================== ;;
 
-(provide 'init-prog-cpp)
+(provide 'cpp)
 
-;;; init-prog-cpp.el ends here
+;;; cpp.el ends here
