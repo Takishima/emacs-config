@@ -63,6 +63,39 @@
   (aidermacs-vterm-multiline-newline-key "S-<return>")
   (aidermacs-default-chat-mode 'architect))
 
+
+;; for eat terminal backend:
+(use-package eat :straight t)
+
+(use-package claude-code
+  :straight (:type git :host github :repo "stevemolitor/claude-code.el" :branch "main" :depth 1
+                   :files ("*.el" (:exclude "images/*")))
+  :bind-keymapc
+  ("C-c c" . claude-code-command-map)
+  :config
+  (claude-code-mode))
+
+(use-package copilot
+  :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
+  :straight t
+  :bind (:map copilot-completion-map
+              ("<tab>" . 'copilot-accept-completion)
+              ("TAB" . 'copilot-accept-completion)
+              ("C-TAB" . 'copilot-accept-completion-by-word)
+              ("C-<tab>" . 'copilot-accept-completion-by-word))
+  )
+
+(use-package copilot-chat
+  :straight (:host github :repo "chep/copilot-chat.el" :files ("*.el"))
+  :after (request org markdown-mode)
+  :bind (:map global-map
+              ("C-c c f" . copilot-chat-fix)
+              ("C-c c o" . copilot-chat-optimize)
+              ("C-c c y" . copilot-chat-yank)
+              ("C-c c M-y" . copilot-chat-yank-pop)
+              ("C-c c C-M-y" . (lambda () (interactive) (copilot-chat-yank-pop -1))))
+)
+
 ;; ============================================================================================== ;;
 
 (provide 'init-llm)
