@@ -69,8 +69,19 @@
 ;;   (package-refresh-contents)
 ;;   (package-install 'use-package))
 
+(straight-use-package 'use-package)
+(straight-use-package 'diminish)
+(require 'diminish)
+
+;; Explicitly load use-package-diminish
+(with-eval-after-load 'use-package
+  (require 'use-package-diminish))
+
 (use-package use-package
-  :straight t)
+  :straight t
+  :custom
+  (use-package-always-ensure t)
+  (use-package-expand-minimally t))
 
 (use-package system-packages
   :straight t)

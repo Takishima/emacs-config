@@ -353,9 +353,6 @@
     (lsp-install-server t))
   )
 
-(use-package diminish
-  :straight (:host github :repo "emacsmirror/diminish" :files ("*.el")))
-
 ;; Debug
 (use-package dap-mode
   :straight t
