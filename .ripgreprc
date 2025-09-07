@@ -1,0 +1,10 @@
+# Search hidden files and directories (needed for .emacs_lisp)
+--hidden
+
+# But exclude other common hidden directories
+--glob=!.git/**
+--glob=!.aider.tags.cache.v4/**
+--glob=!.claude/**
+
+# Follow symbolic links.
+--follow
