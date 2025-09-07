@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: ripgrep-type
+# key: tp
+# --
+-- -t $0
