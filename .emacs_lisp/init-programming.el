@@ -244,19 +244,62 @@
 
 ;; ========================================================================== ;;
 
-(when module-file-suffix
-  (use-package tree-sitter
-    :straight t
-    ;; :ensure-system-package tree-sitter
-    :config
-    (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
-    (global-tree-sitter-mode)
-    )
-  (use-package tree-sitter-langs
-    :straight t
-    :after (tree-sitter)
-    )
-  )
+;; Built-in treesit configuration (Emacs 29+)
+(when (and (fboundp 'treesit-available-p)
+           (treesit-available-p))
+  
+  ;; Auto-install treesit grammars when needed
+  (setq treesit-language-source-alist
+        '((bash "https://github.com/tree-sitter/tree-sitter-bash")
+          (c "https://github.com/tree-sitter/tree-sitter-c")
+          (cpp "https://github.com/tree-sitter/tree-sitter-cpp")
+          (css "https://github.com/tree-sitter/tree-sitter-css")
+          (cmake "https://github.com/uyha/tree-sitter-cmake")
+          (dockerfile "https://github.com/camdencheek/tree-sitter-dockerfile")
+          (go "https://github.com/tree-sitter/tree-sitter-go")
+          (html "https://github.com/tree-sitter/tree-sitter-html")
+          (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+          (json "https://github.com/tree-sitter/tree-sitter-json")
+          (make "https://github.com/alemuller/tree-sitter-make")
+          (markdown "https://github.com/ikatyang/tree-sitter-markdown")
+          (nix "https://github.com/nix-community/tree-sitter-nix")
+          (python "https://github.com/tree-sitter/tree-sitter-python")
+          (rust "https://github.com/tree-sitter/tree-sitter-rust")
+          (toml "https://github.com/tree-sitter/tree-sitter-toml")
+          (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+          (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+          (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
+
+  ;; Function to install missing grammars
+  (defun treesit-install-all-grammars ()
+    "Install all treesit grammars defined in `treesit-language-source-alist'."
+    (interactive)
+    (dolist (grammar treesit-language-source-alist)
+      (let ((lang (car grammar)))
+        (unless (treesit-language-available-p lang)
+          (message "Installing treesit grammar for %s..." lang)
+          (treesit-install-language-grammar lang)))))
+
+  ;; Auto-install grammars on first use
+  (advice-add 'treesit-parser-create :before
+              (lambda (language &rest _)
+                (unless (treesit-language-available-p language)
+                  (message "Auto-installing treesit grammar for %s..." language)
+                  (treesit-install-language-grammar language))))
+
+  ;; Enable treesit modes by default where available
+  (setq major-mode-remap-alist
+        '((c-mode . c-ts-mode)
+          (c++-mode . c++-ts-mode)
+          (cmake-mode . cmake-ts-mode)
+          (conf-toml-mode . toml-ts-mode)
+          (css-mode . css-ts-mode)
+          (js-mode . js-ts-mode)
+          (javascript-mode . js-ts-mode)
+          (json-mode . json-ts-mode)
+          (python-mode . python-ts-mode)
+          (sh-mode . bash-ts-mode)
+          (typescript-mode . typescript-ts-mode))))
 
 ;; ========================================================================== ;;
 

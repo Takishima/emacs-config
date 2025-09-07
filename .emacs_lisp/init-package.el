@@ -80,7 +80,7 @@
 (use-package use-package
   :straight t
   :custom
-  (use-package-always-ensure t)
+  (use-package-always-defer nil)
   (use-package-expand-minimally t))
 
 (use-package system-packages
