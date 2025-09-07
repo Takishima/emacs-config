@@ -211,7 +211,6 @@
 (use-package vertico-directory
   :after vertico
   :straight nil
-  :ensure nil
   ;; More convenient directory navigation commands
   :bind (:map vertico-map
               ("RET" . vertico-directory-enter)
@@ -223,7 +222,7 @@
 ;;;; Vertico-multiform
 (use-package vertico-multiform
   :requires vertico
-  :ensure nil
+  :straight nil
   :custom
   (vertico-multiform-categories
    '((file buffer grid)
@@ -244,7 +243,6 @@
 (use-package vertico-buffer
   :after vertico
   :straight nil
-  :ensure nil
   :custom
   (vertico-buffer-hide-prompt nil)
   (vertico-buffer-display-action '(display-buffer-reuse-window)))
@@ -253,7 +251,6 @@
 (use-package vertico-prescient
   :after vertico prescient
   :straight nil
-  :ensure nil
   :custom
   ;; Sorting
   (vertico-prescient-enable-sorting t)

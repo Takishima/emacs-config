@@ -4,7 +4,6 @@
 
 (use-package lsp-nix
   :straight nil
-  :ensure nil
   :after (lsp-mode)
   :demand t
   :custom
@@ -14,7 +13,6 @@
 (use-package nix-mode
   :straight t
   :hook (nix-mode . lsp-deferred)
-  :ensure t
   :config
   (add-hook 'nix-mode-hook
             (lambda () (progn
@@ -25,7 +23,6 @@
 
 (use-package sops
   :straight t
-  :ensure t
   :bind (("C-c C-c" . sops-save-file)
          ("C-c C-k" . sops-cancel)
          ("C-c C-d" . sops-edit-file))

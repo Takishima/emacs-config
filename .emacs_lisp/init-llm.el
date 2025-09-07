@@ -70,7 +70,7 @@
 (use-package claude-code
   :straight (:type git :host github :repo "stevemolitor/claude-code.el" :branch "main" :depth 1
                    :files ("*.el" (:exclude "images/*")))
-  :bind-keymapc
+  :bind-keymap
   ("C-c c" . claude-code-command-map)
   :config
   (claude-code-mode))

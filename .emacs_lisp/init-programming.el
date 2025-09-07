@@ -42,10 +42,6 @@
 (require 'use-package)
 (require 'config-functions (concat config-dir "functions.el"))
 
-(use-package diminish
-  :straight (:host github :repo "emacsmirror/diminish" :files ("*.el"))
-  :straight t)
-
 ;; ========================================================================== ;;
 ;; Automatically guess indent offsets, tab, spaces settings, etc.
 
@@ -357,6 +353,9 @@
     (lsp-install-server t))
   )
 
+(use-package diminish
+  :straight (:host github :repo "emacsmirror/diminish" :files ("*.el")))
+
 ;; Debug
 (use-package dap-mode
   :straight t
@@ -380,7 +379,7 @@
          (powershell-mode . (lambda () (dap-mode -1)))
          (shell-script-mode . (lambda () (dap-mode -1)))
          (cmake-mode . (lambda () (dap-mode -1)))
-         ((c-mode c++-mode objc-mode swift-mode) . (lambda () (require 'dap-lldb)))
+         ;; ((c-mode c++-mode objc-mode swift-mode) . (lambda () (require 'dap-lldb)))
          (powershell-mode . (lambda () (require 'dap-pwsh))))
   :config
   (when (executable-find "python3")
