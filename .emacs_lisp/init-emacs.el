@@ -319,10 +319,18 @@
    '(orderless-regexp
      orderless-prefixes
      orderless-initialism
-     ;; orderless-literal
-     ;; orderless-flex
-     ;; orderless-without-literal          ; Recommended for dispatches instead
-     ))
+     orderless-literal))
+  (orderless-style-dispatchers
+   '(orderless-affix-dispatch))
+  (orderless-affix-dispatch-alist
+   `((?% . ,#'char-fold-to-regexp)
+     (?! . ,#'orderless-not)
+     (?& . ,#'orderless-annotation)
+     (?, . ,#'orderless-initialism)
+     (?= . ,#'orderless-literal)
+     (?^ . ,#'orderless-literal-prefix)
+     (?~ . ,#'orderless-flex)
+     (?$ . ,#'orderless-regexp)))
   (orderless-component-separator 'orderless-escapable-split-on-space)
   :config
   ;; Eglot forces `flex' by default.
