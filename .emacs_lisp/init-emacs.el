@@ -143,6 +143,14 @@
 
 ;; ========================================================================== ;;
 
+(defcustom dn-dashboard-worktrees-path nil
+  "Path to the main Git repository for displaying worktrees in dashboard.
+If nil, no worktrees will be displayed. Should be the path to the main
+Git repository (not a worktree)."
+  :type '(choice (const :tag "None" nil)
+                 (string :tag "Repository path"))
+  :group 'dn)
+
 (use-package dashboard
   :straight t
   :custom
@@ -151,9 +159,9 @@
   (dashboard-set-file-icons t)
   (dashboard-center-content t)
   (dashboard-icon-type 'nerd-icons)
-  (dashboard-items '((recents  . 10)
+  (dashboard-items '((recents  . 5)
                      (projects . 5)
-                     (bookmarks . 5)))
+                     (worktrees . 10)))
   (initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
   (dashboard-modify-heading-icons '((recents . "nf-oct-file")
                                     (bookmarks . "nf-oct-bookmark")
@@ -164,12 +172,14 @@
   (dashboard-heading-face ((t (:weight bold))))
   :config
   (dashboard-setup-startup-hook)
+  (setq dashboard-worktrees-path dn-dashboard-worktrees-path)
   :init
   (defun dn-home ()
     "Switch to home (dashboard) buffer."
     (interactive)
     (switch-to-buffer "*dashboard*"))
   )
+(load-file (expand-file-name "dashboard-worktrees-patch.el" config-dotemacs-lisp))
 
 ;; ========================================================================== ;;
 
