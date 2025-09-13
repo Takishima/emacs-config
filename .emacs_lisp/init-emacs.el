@@ -567,6 +567,10 @@ active region is added to the search string."
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 
+(use-package wgrep
+  :straight (:host github :repo "mhayashi1120/Emacs-wgrep" :files ("wgrep.el"))
+)
+
 ;; -------------------------------------------------------------------------- ;;
 
 (use-package whitespace-cleanup-mode
