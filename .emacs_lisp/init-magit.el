@@ -116,6 +116,21 @@
 
   (transient-append-suffix 'magit-push "a"
     '("g" "All (except github)" magit-push-to-all-remotes-except-github))
+
+  ;; ------------------------------------------------------------------------ ;;
+  ;; Pre-commit support
+
+  (defun magit-run-precommit-manual ()
+    "Run `pre-commit run --hook-stage manual' in the current repository."
+    (interactive)
+    (let ((default-directory (magit-toplevel)))
+      (magit-start-process shell-file-name nil 
+                           shell-command-switch 
+                           "pre-commit run --hook-stage manual"))
+    (magit-process-buffer))
+
+  (transient-append-suffix 'magit-run "b"
+    '("P" "Pre-commit manual" magit-run-precommit-manual))
   )
 
 ;;----------------------------------------------------------------------------;;
