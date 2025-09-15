@@ -318,6 +318,20 @@ Git repository (not a worktree)."
   (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
   (add-hook 'after-init-hook 'dn-completion-styles-setup))
 
+(use-package bufler
+  :straight (:host github :repo "alphapapa/bufler.el"
+                   :files (:defaults (:exclude "helm-bufler.el")))
+  :bind
+  ("C-x C-b" . bufler-list)                ;; orig. list-buffers
+  ;; :custom
+  ;; (bufler-face-prefix "prism-level-")
+  :config
+  (bufler-mode t)
+  )
+
+;; (use-package prism
+;;   :straight (prism :fetcher github :repo "alphapapa/prism.el"))
+
 ;;; Orderless
 ;; Alternative and powerful completion style (i.e. filters candidates)
 (use-package orderless
