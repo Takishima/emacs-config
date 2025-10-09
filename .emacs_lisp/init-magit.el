@@ -131,6 +131,86 @@
 
   (transient-append-suffix 'magit-run "b"
     '("P" "Pre-commit manual" magit-run-precommit-manual))
+
+  ;; ------------------------------------------------------------------------ ;;
+  ;; Mergiraf support
+
+  (defun magit-run-mergiraf-solve-file ()
+    "Run `mergiraf solve' on the file at point or prompt for a file."
+    (interactive)
+    (let* ((default-directory (magit-toplevel))
+           (file (or (magit-file-at-point)
+                     (magit-read-file "Solve conflicts in file"))))
+      (if file
+          (let ((proc (magit-start-process shell-file-name nil
+                                          shell-command-switch
+                                          (format "mergiraf solve %s" (shell-quote-argument file)))))
+            (message "Running mergiraf solve on %s..." file)
+            (set-process-sentinel
+             proc
+             (lambda (process event)
+               (when (eq (process-status process) 'exit)
+                 (if (= (process-exit-status process) 0)
+                     (progn
+                       (message "Mergiraf solved conflicts in %s, staging file..." file)
+                       (magit-run-git "add" file)
+                       (magit-refresh))
+                   (progn
+                     (message "Mergiraf failed to solve conflicts in %s" file)
+                     (magit-refresh))))))
+            (magit-process-buffer))
+        (user-error "No file selected"))))
+
+  (defun magit-run-mergiraf-solve-all ()
+    "Run `mergiraf solve' on all conflicted files in the repository."
+    (interactive)
+    (let* ((default-directory (magit-toplevel))
+           (conflicted-files (magit-git-lines "diff" "--name-only" "--diff-filter=U")))
+      (if conflicted-files
+          (let ((proc (magit-start-process shell-file-name nil
+                                          shell-command-switch
+                                          (format "for file in %s; do mergiraf solve \"$file\" || exit 1; done"
+                                                  (mapconcat #'shell-quote-argument conflicted-files " ")))))
+            (message "Running mergiraf solve on %d conflicted file(s)..."
+                     (length conflicted-files))
+            (set-process-sentinel
+             proc
+             (lambda (process event)
+               (when (eq (process-status process) 'exit)
+                 (if (= (process-exit-status process) 0)
+                     (progn
+                       (message "Mergiraf solved all conflicts, staging files...")
+                       (apply #'magit-run-git "add" conflicted-files)
+                       (magit-refresh))
+                   (progn
+                     (message "Mergiraf encountered errors solving some conflicts")
+                     (magit-refresh))))))
+            (magit-process-buffer))
+        (message "No conflicted files found"))))
+
+  (defun magit-run-mergiraf-review (merge-id)
+    "Review mergiraf's automatic conflict resolution with `mergiraf review'.
+MERGE-ID is the merge identifier from git output."
+    (interactive "sMerge ID: ")
+    (let ((default-directory (magit-toplevel)))
+      (if (string-empty-p merge-id)
+          (user-error "Merge ID cannot be empty")
+        (progn
+          (message "Running mergiraf review on %s..." merge-id)
+          (magit-start-process shell-file-name nil
+                              shell-command-switch
+                              (format "mergiraf review %s" (shell-quote-argument merge-id)))
+          (magit-process-buffer)))))
+
+  (transient-define-prefix magit-run-mergiraf ()
+    "Mergiraf commands for resolving merge conflicts."
+    ["Mergiraf"
+     ("f" "Solve file at point" magit-run-mergiraf-solve-file)
+     ("a" "Solve all conflicts" magit-run-mergiraf-solve-all)
+     ("r" "Review merge" magit-run-mergiraf-review)])
+
+  (transient-append-suffix 'magit-run "P"
+    '("m" "Mergiraf" magit-run-mergiraf))
   )
 
 ;;----------------------------------------------------------------------------;;
