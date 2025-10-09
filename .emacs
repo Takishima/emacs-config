@@ -63,6 +63,7 @@
 (config-require 'init-docs)
 (config-require 'init-multiple-cursors)
 (config-require 'init-magit)
+(config-require 'init-mergiraf)
 (config-require 'init-llm)
 (config-require 'init-completion)
 (config-require 'init-programming)
