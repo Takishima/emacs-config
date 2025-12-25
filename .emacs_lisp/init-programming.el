@@ -392,8 +392,8 @@
   (advice-add #'keyboard-quit :before #'lsp-ui-doc-hide)
 
   ;; Reset `lsp-ui-doc-background' after loading theme
-  (add-hook 'after-load-theme-hook
-            (lambda ()
+  (add-hook 'enable-theme-functions
+            (lambda (_theme)
               (setq lsp-ui-doc-border (face-foreground 'default))
               (set-face-background 'lsp-ui-doc-background
                                    (face-background 'tooltip))))
