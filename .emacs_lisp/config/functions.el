@@ -55,8 +55,6 @@
 	  (progn
 	    (load (file-name-sans-extension filename))
 	    (setq function (intern-soft function_name))
-	    (print function)
-	    (print (fboundp function))
 	    (if (fboundp function)
 		(progn
 		  (message "INFO: calling function %s" function_name)
