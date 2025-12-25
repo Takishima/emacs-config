@@ -62,7 +62,7 @@
   :config
   (direnv-mode)
   (defcustom dn-direnv-enabled-hosts nil
-    "List of remote hosrs to use direnv on.
+    "List of remote hosts to use direnv on.
 
      Each host must have the `direnv` executable accessible in the default environment"
     :type '(repeat string)
@@ -72,7 +72,7 @@
     "Enable Direnv for hosts in `dn-direnv-enabled-hosts'."
     (message "tramp-sh-handle-start-file-process@dn-direnv")
     (with-parsed-tramp-file-name (expand-file-name default-directory) nil
-      (if (member host my-direnv-enabled-hosts)
+      (if (member host dn-direnv-enabled-hosts)
           (pcase-let ((`(,name ,buffer ,program . ,args) args))
             `(,name
               ,buffer
@@ -392,8 +392,8 @@
   (advice-add #'keyboard-quit :before #'lsp-ui-doc-hide)
 
   ;; Reset `lsp-ui-doc-background' after loading theme
-  (add-hook 'after-load-theme-hook
-            (lambda ()
+  (add-hook 'enable-theme-functions
+            (lambda (_theme)
               (setq lsp-ui-doc-border (face-foreground 'default))
               (set-face-background 'lsp-ui-doc-background
                                    (face-background 'tooltip))))

@@ -99,23 +99,25 @@
   ;; Hack ispell-local-dictionary-alist instead.
   (setq-default ispell-extra-args (flyspell-detect-ispell-args t))
   ;; (setq ispell-cmd-args (flyspell-detect-ispell-args))
-  (defadvice ispell-word (around my-ispell-word activate)
+  (defun my-ispell-word (orig-fun &rest args)
     (let ((old-ispell-extra-args ispell-extra-args))
       (ispell-kill-ispell t)
       (setq ispell-extra-args (flyspell-detect-ispell-args))
-      ad-do-it
+      (apply orig-fun args)
       (setq ispell-extra-args old-ispell-extra-args)
       (ispell-kill-ispell t)))
+  (advice-add 'ispell-word :around #'my-ispell-word)
 
-  (defadvice flyspell-auto-correct-word (around my-flyspell-auto-correct-word activate)
+  (defun my-flyspell-auto-correct-word (orig-fun &rest args)
     (let ((old-ispell-extra-args ispell-extra-args))
       (ispell-kill-ispell t)
       ;; use emacs original arguments
       (setq ispell-extra-args (flyspell-detect-ispell-args))
-      ad-do-it
+      (apply orig-fun args)
       ;; restore our own ispell arguments
       (setq ispell-extra-args old-ispell-extra-args)
       (ispell-kill-ispell t)))
+  (advice-add 'flyspell-auto-correct-word :around #'my-flyspell-auto-correct-word)
 
   (defun text-mode-hook-setup ()
     ;; Turn off RUN-TOGETHER option when spell check text-mode
