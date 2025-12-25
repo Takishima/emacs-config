@@ -62,7 +62,7 @@
   :config
   (direnv-mode)
   (defcustom dn-direnv-enabled-hosts nil
-    "List of remote hosrs to use direnv on.
+    "List of remote hosts to use direnv on.
 
      Each host must have the `direnv` executable accessible in the default environment"
     :type '(repeat string)
