@@ -72,7 +72,7 @@
     "Enable Direnv for hosts in `dn-direnv-enabled-hosts'."
     (message "tramp-sh-handle-start-file-process@dn-direnv")
     (with-parsed-tramp-file-name (expand-file-name default-directory) nil
-      (if (member host my-direnv-enabled-hosts)
+      (if (member host dn-direnv-enabled-hosts)
           (pcase-let ((`(,name ,buffer ,program . ,args) args))
             `(,name
               ,buffer
