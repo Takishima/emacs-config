@@ -305,6 +305,11 @@ MERGE-ID is the merge identifier from git output."
          :props (:foreground "dark green" :height 1.2)
          )))
 
+(defvar conv-commit-scope-icons
+  '(("nix" :icon ?❄ :props (:foreground "#7ebae4" :height 1.2))
+    ("cmake" :icon ?🔧 :props (:foreground "#064F8C" :height 1.2)))
+  "Icons and face properties for conventional commit scopes.")
+
 (defun add-conventional-commit-faces (&rest _args)
   "Add face properties and compose symbols for buffer from conv-commit-type-desc."
   (interactive)
@@ -313,7 +318,7 @@ MERGE-ID is the merge identifier from git output."
       (let*
           (
            (type-data (cdr elt))
-           (regex (format "\\<\\(%s\\)\\((.*?)\\)*?[[:space:]]*\\(!\\)?[[:space:]]*:" (car elt)))
+           (regex (format "\\<\\(%s\\)\\((\\([^)]+\\))\\)?[[:space:]]*\\(!\\)?[[:space:]]*:" (car elt)))
            (icon (plist-get type-data :icon))
            (face-props (plist-get type-data :props))
            )
@@ -323,11 +328,18 @@ MERGE-ID is the merge identifier from git output."
             (compose-region (match-beginning 1) (match-end 1) icon)
             (when face-props
               (add-face-text-property (match-beginning 1) (match-end 1) face-props))
-            ;; (when (string-equal (match-string 2) "nix")
-            ;;   (compose-region (match-beginning 2) (match-end 2) ?🚨)
-            ;;   )
+            ;; Handle scope icons
             (when (match-beginning 3)
-              (compose-region (match-beginning 3) (match-end 3) ?🚨)
+              (let* ((scope (match-string 3))
+                     (scope-data (cdr (assoc scope conv-commit-scope-icons))))
+                (when scope-data
+                  (compose-region (match-beginning 3) (match-end 3)
+                                  (plist-get scope-data :icon))
+                  (when (plist-get scope-data :props)
+                    (add-face-text-property (match-beginning 3) (match-end 3)
+                                            (plist-get scope-data :props))))))
+            (when (match-beginning 4)
+              (compose-region (match-beginning 4) (match-end 4) ?🚨)
               )
             )
           )
@@ -369,7 +381,7 @@ Return a list (candidate, icon, description)."
   "Prompt for a conventional commit. and fill the buffer with the result."
   (interactive)
   (insert (conv-commit-type-prompt))
-  (let ((scope (completing-read "Scope: " "")))
+  (let ((scope (completing-read "Scope: " nil)))
     (insert (if (string= scope "") "" (format "(%s)" scope))))
   (insert (if (y-or-n-p "Breaking change? ") "!" ""))
   (insert ": ")
