@@ -405,6 +405,23 @@
     (lsp-install-server t))
   )
 
+;; ========================================================================== ;;
+
+(use-package cleanup-lsp-workspaces
+  :straight nil
+  :load-path (config-dotemacs-lisp)
+  :after (lsp-mode)
+  :commands (lsp-cleanup-workspaces
+             lsp-cleanup-workspaces-nonexistent
+             lsp-list-workspaces
+             lsp-cleanup-workspaces-keep-home-only
+             lsp-cleanup-workspaces-remove-all)
+  :config
+  ;; Automatically clean up non-existent workspace folders on startup
+  (lsp-cleanup-workspaces-nonexistent))
+
+;; ========================================================================== ;;
+
 ;; Debug
 (use-package dap-mode
   :straight t
@@ -479,7 +496,6 @@
         orig-result)))
   (advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
   )
-
 
 (use-package lsp-treemacs
   :after (lsp-mode treemacs)
