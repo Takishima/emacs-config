@@ -1,8 +1,8 @@
 # Emacs config review: cleanup and modularity
 
 Scope: every tracked `.el` file, the entry point, README, snippets layout,
-service file and repo metadata, originally as of `47ec94c`, re-assessed against main `a6f940d` after the
-40 cleanup commits that followed the first pass. Findings were
+service file and repo metadata, originally as of `47ec94c`, re-assessed against main `bd40982` after the
+46 cleanup commits that followed the first pass. Findings were
 checked against a running Emacs 31.1 session with this config loaded (via
 `emacsclient`). Items marked **verify** still need a manual repro. Each
 numbered item now starts with its status: **Done** (fixed on main),
@@ -20,30 +20,33 @@ Numbers that frame the rest of the review:
 | Own top-level helper libraries | 2 (`dashboard-worktrees-patch.el`, `cleanup-lsp-workspaces.el`) |
 | Commented-out `use-package` blocks | 0 (was 12) |
 
-## Status after main `a6f940d`
+## Status after main `bd40982`
 
-Main now carries most of migration phases 1 and 2 from Part 2, plus a
-batch smoke test (`test/smoke.el`). Of the 37 cleanup items:
+Main now carries migration phases 1 and 2 from Part 2 in full, most of
+phase 0, and a batch smoke test (`test/smoke.el`, run by `make check`).
+Of the 37 cleanup items:
 
 | Status | Items |
 |---|---|
-| Done | 1, 3-7, 9-22, 24, 25, 27, 28, 35 |
-| Partly | 2, 8, 26, 31, 32 |
-| Open | 23, 29, 30, 33, 34, 36, 37 |
+| Done | 1, 3-7, 9-22, 24, 25, 27-30, 35 |
+| Partly | 2, 8, 26, 31, 32, 33 |
+| Open | 23, 34, 36, 37 |
 
-The smoke test covers exactly the regressions that were fixed (feature
-name, `filename` leak, ispell args, ts-mode bindings and docsets, AUCTeX
-commands), which is the right shape for phase 0. It still needs a
-`Makefile` target and CI wiring, and it is not hermetic: it loads `.emacs`,
-so it needs a bootstrapped `straight/` directory with every package already
-cloned. A byte-compile pass over the own modules is the missing half.
+The smoke test covers the regressions that were fixed and now also
+enforces the `init-prog-<file>` naming rule for every language module,
+which is the right shape for phase 0. `make check` runs it. Still missing:
+a CI job, and a byte-compile pass over the own modules (the check that
+would catch item 37). The test is not hermetic: it loads `.emacs`, so it
+needs a bootstrapped `straight/` directory with every package already
+cloned.
 
-Section A and section B are now closed apart from the built-in
-`use-package` declaration (23). What remains is section C, in order of
-value: the header/provide/footer drift (29), the `Local Variables` footers
-(30), the namespace cleanup (31), the `lexical-binding` cookie (37), and
-the formatting pass (33). Everything in Part 2 still applies, and with the
-deletions done, phase 3 (re-cutting the modules) is the next real step.
+Sections A and B are closed apart from the built-in `use-package`
+declaration (23). Of section C, the header/provide/footer drift (29) and
+the `Local Variables` footers (30) are gone and `.dir-locals.el` now pins
+spaces for new edits (33), though 11 files still contain the old tabs.
+What remains is the namespace cleanup (31), the `lexical-binding` cookie
+(37), the re-indent pass, and the README (36). Everything in Part 2 still
+applies; phase 3 (re-cutting the modules) is the next real step.
 
 ---
 
@@ -242,7 +245,7 @@ duplicated code, C is consistency and hygiene.
 
 ### C. Consistency and hygiene
 
-29. **Open** (only `python.el` was fixed). **File headers, `provide` and "ends here" footers are out of sync** in
+29. **Done** (every language module now has a matching header, `init-prog-<file>` feature and footer, and the smoke test enforces it). **File headers, `provide` and "ends here" footers are out of sync** in
     most language modules. Concretely:
 
     | File | Header says | Provides | Footer says |
@@ -266,7 +269,7 @@ duplicated code, C is consistency and hygiene.
     `init-x`, `x`, `x.el`). This is exactly what a batch byte-compile in CI
     would catch (see Part 2, phase 0).
 
-30. **Open.** **`Local Variables` footers with `eval:` forms** are copy-pasted into
+30. **Done.** **`Local Variables` footers with `eval:` forms** are copy-pasted into
     13 files. They `setq` the global `config-dotemacs-lisp` and `config-dir`
     whenever the file is *visited*, trigger "unsafe local variable"
     prompts, and are wrong in `programming/*` (they compute `config/`
@@ -290,7 +293,7 @@ duplicated code, C is consistency and hygiene.
     `epg`, `diff-mode`, `display-line-numbers`, `printing`, `json`,
     `json-ts-mode`, `savehist`, `use-package` do not.
 
-33. **Open.** **Formatting.** 13 files mix tabs and spaces; closing parens are
+33. **Partly** (`.dir-locals.el` sets `indent-tabs-mode nil`; the existing tabs in 11 files were not re-indented). **Formatting.** 13 files mix tabs and spaces; closing parens are
     routinely on their own line; `(if x (progn …))` instead of `when`;
     `'(lambda …)` instead of `#'`/`lambda`; `(progn …)` as the sole body of
     `:config`. A one-time pass with `indent-region` under
@@ -402,11 +405,12 @@ duplicated code, C is consistency and hygiene.
    side effect of the `lsp-mode` block. The repo has no `early-init.el`;
    the host has one in `~/.emacs.d/` that lives outside this repo.
 
-8. **Verification is only half there.** `test/smoke.el` now batch-loads the
-   config and checks the fixed regressions, but nothing runs it (no
-   `Makefile`, no CI) and nothing byte-compiles the own modules. Items 29
-   and 37 in Part 1 would be caught by `byte-compile-file` with
-   `byte-compile-error-on-warn`, which the smoke test cannot see.
+8. **Verification is most of the way there.** `make check` batch-loads the
+   config through `test/smoke.el`, which checks the fixed regressions and
+   the language-module naming rule. Nothing runs it automatically (no CI),
+   and nothing byte-compiles the own modules. Item 37 in Part 1 would be
+   caught by `byte-compile-file` with `byte-compile-error-on-warn`, which
+   the smoke test cannot see.
 
 ### Proposed target structure
 
@@ -514,7 +518,7 @@ every step.
 
 | Phase | Content | Risk |
 |---|---|---|
-| 0. Safety net (**partly done**: smoke test exists) | Wire `test/smoke.el` into a `Makefile` + CI; add byte-compile of own modules; `.dir-locals.el`; fix the provide/header table (item 29); remove `Local Variables` footers. | none |
+| 0. Safety net (**mostly done**) | `make check`, `.dir-locals.el`, header/provide fixes and footer removal landed. Left: a CI job and a byte-compile target for the own modules. | none |
 | 1. Delete (**done**) | Only `(use-package use-package :straight t)` (23) is left. | none |
 | 2. Fix bugs (**done**) | Items 1-15 landed on main, as did 22, 25, 28. The one leftover is the cross-OS `compile-in-iterm` binding (26). | low |
 | 3. Re-cut modules | Split `init-emacs.el` into `ui`/`completion`/`editing`; move tooling out of `init-programming.el` into `lsp.el`; move language packages into `lang/`; create `os-darwin.el`; `lib/` + `vendor/` + `patches/` split. Pure moves, no behaviour change. | low |
@@ -528,12 +532,10 @@ is adopted.
 
 Everything from the original quick-wins list has landed except these:
 
-- Add a `Makefile` with `check: emacs --batch -l .emacs -l test/smoke.el`
-  and a byte-compile target, and a CI job that runs it.
-- Fix the header/footer drift in `json.el`, `terraform.el`, `windows.el`,
-  `yaml.el`, `web.el`, `gnuplot.el`, `robotframework.el`, `ros.el`,
-  `markdown.el`, `go.el`, and give `nix.el` a header.
-- Delete the 15 `Local Variables` footers.
+- Add a byte-compile target to the `Makefile` and a CI job that runs
+  `make check`.
+- Re-indent the 11 files that still contain tabs now that `.dir-locals.el`
+  pins spaces.
 - Replace `(use-package use-package :straight t)` with `:straight nil`, and
   add `:straight nil` to `savehist`.
 - Guard the `compile-in-iterm` bindings in `cpp.el` and `rest.el` with the
