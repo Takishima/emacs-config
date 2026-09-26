@@ -44,26 +44,6 @@
 (use-package vterm
   :straight t)
 
-;; (use-package aidermacs
-;;   :straight t
-;;   :bind (("C-c a" . aidermacs-transient-menu))
-;;   ;; :config
-;;   ;; (add-hook 'aidermacs-before-run-backend-hook
-;;   ;;           (lambda ()
-;;   ;;             (progn
-;;   ;;               (setenv "OPENAI_API_BASE" "https://api.githubcopilot.com")
-;;   ;;               (setq auth-source-1password-vault "Employee")
-;;   ;;               (setenv "OPENAI_API_KEY" (auth-source-pick-first-password :port "Employee" :host "GitHub Copilot API Token" :user "credential"))
-;;   ;;               )
-;;   ;;             ))
-;;   :custom
-;;   (aidermacs-exit-kills-buffer t)
-;;   (aidermacs-backend 'vterm)
-;;   (aidermacs-comint-multiline-newline-key "S-<return>")
-;;   (aidermacs-vterm-multiline-newline-key "S-<return>")
-;;   (aidermacs-default-chat-mode 'architect))
-
-
 ;; for eat terminal backend:
 (use-package eat :straight t)
 

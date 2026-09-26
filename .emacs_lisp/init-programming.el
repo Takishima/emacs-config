@@ -198,12 +198,6 @@
 
 ;; ========================================================================== ;;
 
-;; (use-package code-review
-;;   :straight t
-;;   )
-
-;; ========================================================================== ;;
-
 (use-package ansible
   :straight t
   )
@@ -457,15 +451,6 @@
   (require 'dap-gdb-lldb)
   )
 
-
-
-;; (use-package lsp-bridge
-;;   :straight '(lsp-bridge :type git :host github :repo "manateelazycat/lsp-bridge"
-;;             :files (:defaults "*.el" "*.py" "acm" "core" "langserver" "multiserver" "resources")
-;;             :build (:not compile))
-;;   :init
-;;   (global-lsp-bridge-mode))
-
 (when (executable-find "emacs-lsp-booster")
   (defun lsp-booster--advice-json-parse (old-fn &rest args)
     "Try to parse bytecode instead of json."
@@ -512,42 +497,6 @@
   :straight t
   :commands (treemacs)
   :after (lsp-mode))
-
-;; (use-package ruff-lsp
-;;   :straight t
-;;   :commands (treemacs)
-;;   :after (lsp-mode))
-
-;; ========================================================================== ;;
-;; (defvar eglot-clangd-exe (executable-find "clangd")
-;;   "clangd executable path")
-
-;; (use-package eglot
-;;   :straight t
-;;   :preface
-;;   :hook ((c-mode-common . eglot-ensure)
-;;          (python-mode   . eglot-ensure)
-;;          (ruby-mode     . eglot-ensure)
-;;          )
-;;   :config
-;;   (add-to-list 'eglot-server-programs
-;;                `((c++-mode) ,eglot-clangd-exe))
-;;   :config
-;;   ;; (add-hook 'eglot--managed-mode-hook
-;;   ;;           (lambda ()
-;;   ;;             (bind-keys :map eglot-mode-map
-;;   ;;                        ("C-h o"   . eglot-help-at-point)
-;;   ;;                        ("C-c C-r" . eglot-rename)
-;;   ;;                        ("C-c f"   . eglot-format)
-;;   ;;                        ("C-c C-a" . eglot-code-actions))))
-;;   (with-eval-after-load 'company
-;;     (make-local-variable 'company-transformers)
-;;     (setq company-transformers (remq 'company-sort-by-statistics company-transformers))
-;;     (setq company-transformers (remq 'company-flx-transformer company-transformers))
-;;     (setq-local company-backends '(company-files
-;;                                    (company-capf :separate company-yasnippet)
-;;                                    company-keywords)))
-;;   )
 
 ;; ========================================================================== ;;
 

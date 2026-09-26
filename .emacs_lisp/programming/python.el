@@ -108,48 +108,6 @@
 
 ;; -------------------------------------------------------------------------- ;;
 
-;; (use-package elpy
-;;   :straight t
-;;   :config
-;;   (elpy-enable)
-;;   :custom
-;;   (elpy-eldoc-show-current-function nil)
-;;   (elpy-rpc-timeout 5)
-;;   (elpy-rpc-virtualenv-path 'default)
-;;   :bind (:map elpy-mode-map
-;; 	      ("<M-left>" . nil)
-;; 	      ("<M-right>" . nil)
-;;               ("C-c C-r f" . elpy-format-code)
-;; 	      ("C-c C-k" . elpy-custom-close-all)
-;; 	      ("C-c k" . python-pytest-close-buffer)
-;; 	      ("C-b C-d" . c-hungry-delete-forward))
-;;   :config
-;;   (defun elpy-test-pytest-runner (top file module test)
-;;     "Test the project using the py.test test runner.
-
-;; This requires the pytest package to be installed."
-;;     (interactive (elpy-test-at-point))
-;;     (cond
-;;      (test
-;;       (let ((test-list (split-string test "\\.")))
-;; 	(python-pytest-function file test python-pytest-arguments)))
-;;      (module
-;;       (python-pytest-file file python-pytest-arguments))
-;;      (t
-;;       (python-pytest top python-pytest-arguments))))
-
-;;   (defun elpy-custom-close-all ()
-;;     "Close all active python shells and python-pytest buffers"
-;;     (interactive)
-;;     (progn
-;;       (python-pytest-close-buffer)
-;;       (elpy-shell-kill-all)
-;;       )
-;;     )
-;;   )
-
-;; -------------------------------------------------------------------------- ;;
-
 (use-package lsp-pyright
   :straight t
   :after lsp-mode

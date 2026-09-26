@@ -322,9 +322,6 @@ Git repository (not a worktree)."
   (bufler-mode t)
   )
 
-;; (use-package prism
-;;   :straight (prism :fetcher github :repo "alphapapa/prism.el"))
-
 ;;; Orderless
 ;; Alternative and powerful completion style (i.e. filters candidates)
 (use-package orderless
