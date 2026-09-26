@@ -42,6 +42,11 @@
 
 ;; ========================================================================== ;;
 
+(defun dn-cpp-docs-setup ()
+  "Set the devdocs and dash docsets for C/C++ buffers."
+  (setq-local devdocs-current-docs '("cpp"))
+  (setq-local dash-docs-docsets '("C++" "C")))
+
 (use-package cc-mode
   :straight nil
   :custom
@@ -52,12 +57,12 @@
                      (java-mode . "java")
                      (awk-mode . "awk")
                      (other . "gnu")))
-  :config
-  (add-hook 'c-mode-common-hook
-            (lambda () (progn
-                         (setq-local devdocs-current-docs '("cpp")))
-                         (setq-local dash-docs-docsets '("C++" "C")))
-              )
+  :hook (c-mode-common . dn-cpp-docs-setup)
+  :bind (:map c-mode-base-map
+              ("C-c c" . recompile)
+              :map c++-mode-map
+              ("C-c i" . compile-in-iterm)
+              ("C-c \\" . c-backslash-region))
   :mode
   (
    ("\\.h$" . c++-mode)
@@ -69,6 +74,17 @@
    ("\\.tpp$" . c++-mode)
    ("\\.txx$" . c++-mode))
   )
+
+(use-package c-ts-mode
+  :straight nil
+  :custom
+  (c-ts-mode-indent-offset 5)
+  :hook ((c-ts-base-mode . dn-cpp-docs-setup)
+         (c++-ts-mode . which-function-mode))
+  :bind (:map c-ts-base-mode-map
+              ("C-c c" . recompile)
+              :map c++-ts-mode-map
+              ("C-c i" . compile-in-iterm)))
 
 ;; ========================================================================== ;;
 
@@ -82,15 +98,6 @@
   :hook (c++-mode . modern-c++-font-lock-mode)
   )
 
-(add-hook 'c++-mode-hook
-	  '(lambda()
-	     (progn
-	       (define-key c-mode-base-map (kbd "C-c c")  'recompile)
-	       (define-key c++-mode-map (kbd "C-c i") 'compile-in-iterm)
-	       (define-key c++-mode-map (kbd "C-c \\") 'c-backslash-region)
-	       )
-	     )
-	  t)
 (add-hook 'c++-mode-hook 'which-function-mode)
 
 ;; -------------------------------------------------------------------------- ;;
@@ -180,6 +187,10 @@
   :straight t
   :bind
   (:map c++-mode-map
+	(("C-c C-f" . clang-format-buffer)
+	 ("C-c C-r" . clang-format-region)
+	 )
+   :map c++-ts-mode-map
 	(("C-c C-f" . clang-format-buffer)
 	 ("C-c C-r" . clang-format-region)
 	 ))

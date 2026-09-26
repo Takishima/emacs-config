@@ -60,6 +60,7 @@
             ;; Buffer local hook.
             t))
 (add-hook 'c-mode-common-hook (lambda () (dn-clang-format-save-hook)))
+(add-hook 'c-ts-base-mode-hook (lambda () (dn-clang-format-save-hook)))
 ;; (remove-hook 'c-mode-common-hook (lambda () (dn-clang-format-save-hook)))
 
 ;; ========================================================================== ;;
