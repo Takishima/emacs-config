@@ -87,18 +87,15 @@
 
 ;; ========================================================================== ;;
 
+(defun dn-pkgbuild-srcinfo-on-save ()
+  "Update .SRCINFO when saving this PKGBUILD buffer."
+  (add-hook 'before-save-hook #'pkgbuild-update-srcinfo nil t))
 
 (use-package pkgbuild-mode
   :straight t
   :mode "/PKGBUILD$"
   :functions pkgbuild-update-srcinfo
-  :config
-  (defun pkgbuild-gen-srcinfo-before-save-hook ()
-    (when (eq major-mode 'pkgbuild-mode)
-      (pkgbuild-update-srcinfo)
-      )
-    )
-    (add-hook 'before-save-hook #'pkgbuild-gen-srcinfo-before-save-hook)
+  :hook (pkgbuild-mode . dn-pkgbuild-srcinfo-on-save)
   )
 
 ;; ========================================================================== ;;
