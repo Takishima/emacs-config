@@ -44,7 +44,7 @@
 ;; ========================================================================== ;;
 
 (use-package epg
-  :straight t
+  :straight nil
   :custom
   (epg-pinentry-mode 'loopback))
 
@@ -81,14 +81,14 @@
 ;; -------------------------------------------------------------------------- ;;
 
 (use-package display-line-numbers
-  :straight t
+  :straight nil
   :config
   (global-display-line-numbers-mode 1))
 
 ;; -------------------------------------------------------------------------- ;;
 
 (use-package printing
-  :straight t
+  :straight nil
   :config
   (pr-update-menus))
 
