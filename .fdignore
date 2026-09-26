@@ -1,0 +1,6 @@
+# Exclude git directory
+.git/
+
+# Exclude cache directories
+.aider.tags.cache.v4/
+.claude/
