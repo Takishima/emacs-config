@@ -23,11 +23,25 @@
 ;; Keep language servers from starting in batch.
 (advice-add 'lsp-deferred :override #'ignore)
 
-(dn-smoke-check "init-prog-python provided" t (featurep 'init-prog-python))
 (dn-smoke-check "config-require leaks filename" nil (boundp 'filename))
 (dn-smoke-check "ispell-extra-args overridden" nil
                 (equal (default-value 'ispell-extra-args) '("--reverse")))
 (dn-smoke-check "indent-tabs-mode" nil (default-value 'indent-tabs-mode))
+
+(let* ((dir (expand-file-name "programming" config-dotemacs-lisp))
+       (skip-file (expand-file-name "skip.txt" dir))
+       (skip (when (file-exists-p skip-file)
+               (seq-remove (lambda (line)
+                             (or (string-prefix-p "#" line)
+                                 (string-prefix-p ";" line)))
+                           (with-temp-buffer
+                             (insert-file-contents skip-file)
+                             (split-string (buffer-string) "[\n\r]" t "[ \t]+"))))))
+  (dolist (file (directory-files dir nil "^[^#.].*\\.el\\'"))
+    (unless (member file skip)
+      (let ((feature (concat "init-prog-" (file-name-base file))))
+        (dn-smoke-check (concat file " provides " feature) t
+                        (featurep (intern feature)))))))
 
 (require 'magit)
 (dn-smoke-check "magit split-height-threshold" 200
