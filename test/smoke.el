@@ -29,6 +29,32 @@
 (dn-smoke-check "config-require leaks filename" nil (boundp 'filename))
 (dn-smoke-check "ispell-extra-args overridden" nil
                 (equal (default-value 'ispell-extra-args) '("--reverse")))
+(dn-smoke-check "indent-tabs-mode" nil (default-value 'indent-tabs-mode))
+
+(require 'magit)
+(dn-smoke-check "magit split-height-threshold" 200
+                (with-temp-buffer (magit-mode) split-height-threshold))
+
+(dn-smoke-check "conv-commit-type-prompt affixation" t
+                (cl-letf (((symbol-function 'completing-read)
+                           (lambda (_prompt collection &rest _)
+                             (funcall (plist-get completion-extra-properties
+                                                 :affixation-function)
+                                      (list (caar collection))))))
+                  (condition-case err
+                      (let ((triples (conv-commit-type-prompt)))
+                        (and (consp triples)
+                             (seq-every-p (lambda (x) (= (length x) 3)) triples)))
+                    (error err))))
+
+(with-current-buffer (dn-smoke-visit "PKGBUILD")
+  (dn-smoke-check "PKGBUILD local srcinfo hook" t
+                  (and (memq 'pkgbuild-update-srcinfo before-save-hook) t))
+  (dn-smoke-check "global pkgbuild save hook" nil
+                  (seq-some (lambda (f)
+                              (and (symbolp f)
+                                   (string-prefix-p "pkgbuild" (symbol-name f))))
+                            (default-value 'before-save-hook))))
 
 (dolist (spec '(("t.py" python-ts-mode ("Python 3" "NumPy" "SciPy")
                  "C-x tk" python-pytest-close-buffer)
