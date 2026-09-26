@@ -306,9 +306,10 @@ MERGE-ID is the merge identifier from git output."
          )))
 
 (defvar conv-commit-scope-icons
-  '(("nix" :icon ?❄ :props (:foreground "#7ebae4" :height 1.2))
-    ("cmake" :icon ?🔧 :props (:foreground "#064F8C" :height 1.2)))
-  "Icons and face properties for conventional commit scopes.")
+  `(("nix" :icon ,#xf1511 :props (:foreground "#7ebae4" :height 1.2))
+    ("cmake" :icon ,#xe794 :props (:foreground "#064F8C" :height 1.2)))
+  "Icons and face properties for conventional commit scopes.
+Icons use Nerd Font codepoints: nf-md-nix (U+F1511) and nf-dev-cmake (U+E794).")
 
 (defun add-conventional-commit-faces (&rest _args)
   "Add face properties and compose symbols for buffer from conv-commit-type-desc."
