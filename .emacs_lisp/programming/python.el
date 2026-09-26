@@ -279,6 +279,6 @@
 
 ;; ========================================================================== ;;
 
-(provide 'init-prog-build-systems)
+(provide 'init-prog-python)
 
-;;; init-prog-build-systems.el ends here
+;;; init-prog-python.el ends here
