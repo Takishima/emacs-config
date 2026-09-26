@@ -1,4 +1,4 @@
-;;; init-prog-python.el --- Initialisation for Python -*- lexical-binding: t -*-
+;;; python.el --- Python support -*- lexical-binding: t -*-
 
 ;; Author: Damien Nguyen
 ;; Maintainer: Damien Nguyen
@@ -232,4 +232,4 @@
 
 (provide 'init-prog-python)
 
-;;; init-prog-python.el ends here
+;;; python.el ends here

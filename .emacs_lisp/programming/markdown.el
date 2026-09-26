@@ -1,4 +1,4 @@
-;;; init-prog-markdown.el --- Markdown support -*- lexical-binding: t -*-
+;;; markdown.el --- Markdown support -*- lexical-binding: t -*-
 
 ;; Author: Damien Nguyen
 ;; Maintainer: Damien Nguyen

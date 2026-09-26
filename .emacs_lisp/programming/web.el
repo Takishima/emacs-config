@@ -1,4 +1,4 @@
-;;; init-prog-web.el --- Initialisation for MATLAB/Octave -*- lexical-binding: t -*-
+;;; web.el --- Web development support -*- lexical-binding: t -*-
 
 ;; Author: Damien Nguyen
 ;; Maintainer: Damien Nguyen
@@ -67,4 +67,4 @@
 
 (provide 'init-prog-web)
 
-;;; init-prog-web.el ends here
+;;; web.el ends here

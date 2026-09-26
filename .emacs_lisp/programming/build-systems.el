@@ -1,4 +1,4 @@
-;;; init-prog-build-systems.el --- Initialisation for build systems -*- lexical-binding: t -*-
+;;; build-systems.el --- Build systems support -*- lexical-binding: t -*-
 
 ;; Author: Damien Nguyen
 ;; Maintainer: Damien Nguyen
@@ -102,4 +102,4 @@
 
 (provide 'init-prog-build-systems)
 
-;;; init-prog-build-systems.el ends here
+;;; build-systems.el ends here

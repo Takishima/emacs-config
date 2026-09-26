@@ -1,4 +1,4 @@
-;; config-variables.el --- Configuration variables -*- lexical-binding: t -*-
+;;; config-variables.el --- Configuration variables -*- lexical-binding: t -*-
 
 ;; Author: Damien Nguyen
 ;; Maintainer: Damien Nguyen

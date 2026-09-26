@@ -1,4 +1,4 @@
-;;; init-prog-windows.el --- C++ support -*- lexical-binding: t -*-
+;;; windows.el --- PowerShell support -*- lexical-binding: t -*-
 
 ;; Author: Damien Nguyen
 ;; Maintainer: Damien Nguyen

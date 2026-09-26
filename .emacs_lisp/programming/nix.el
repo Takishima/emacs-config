@@ -1,4 +1,9 @@
-;; -*- lexical-binding: t; -*-
+;;; nix.el --- Nix support -*- lexical-binding: t -*-
+
+;;; Commentary:
+
+;;; Code:
+
 (use-package nixpkgs-fmt
   :straight t)
 
@@ -117,3 +122,7 @@
              (when (and input-file (file-exists-p input-file))
                (delete-file input-file))))))))
   (global-sops-mode 1))
+
+(provide 'init-prog-nix)
+
+;;; nix.el ends here

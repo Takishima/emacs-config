@@ -1,4 +1,4 @@
-;;; init-prog-yaml.el --- C++ support -*- lexical-binding: t -*-
+;;; yaml.el --- YAML support -*- lexical-binding: t -*-
 
 ;; Author: Damien Nguyen
 ;; Maintainer: Damien Nguyen
@@ -52,4 +52,4 @@
 
 (provide 'init-prog-yaml)
 
-;;; init-prog-yaml.el ends here
+;;; yaml.el ends here

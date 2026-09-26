@@ -1,4 +1,4 @@
-;;; init-gitlab.el --- GITLAB support -*- lexical-binding: t -*-
+;;; gitlab.el --- GitLab CI support -*- lexical-binding: t -*-
 
 ;; Author: Damien Nguyen
 ;; Maintainer: Damien Nguyen
@@ -48,6 +48,6 @@
 
 ;; ========================================================================== ;;
 
-(provide 'init-gitlab)
+(provide 'init-prog-gitlab)
 
-;;; init-gitlab.el ends here
+;;; gitlab.el ends here

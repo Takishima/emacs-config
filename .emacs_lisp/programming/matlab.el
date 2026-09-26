@@ -1,4 +1,4 @@
-;;; init-prog-matlab.el --- Initialisation for MATLAB/Octave -*- lexical-binding: t -*-
+;;; matlab.el --- MATLAB/Octave support -*- lexical-binding: t -*-
 
 ;; Author: Damien Nguyen
 ;; Maintainer: Damien Nguyen
@@ -196,4 +196,4 @@
 
 (provide 'init-prog-matlab)
 
-;;; init-prog-matlab.el ends here
+;;; matlab.el ends here

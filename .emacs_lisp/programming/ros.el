@@ -1,4 +1,4 @@
-;;; init-ros2.el --- ROS2 support -*- lexical-binding: t -*-
+;;; ros.el --- ROS2 support -*- lexical-binding: t -*-
 
 ;; Author: Damien Nguyen
 ;; Maintainer: Damien Nguyen
@@ -59,6 +59,6 @@
 
 ;; ========================================================================== ;;
 
-(provide 'init-ros2)
+(provide 'init-prog-ros)
 
-;;; init-ros2.el ends here
+;;; ros.el ends here

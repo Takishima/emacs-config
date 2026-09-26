@@ -1,4 +1,4 @@
-;;; init-docker.el --- DOCKER support -*- lexical-binding: t -*-
+;;; docker.el --- Docker support -*- lexical-binding: t -*-
 
 ;; Author: Damien Nguyen
 ;; Maintainer: Damien Nguyen
@@ -54,6 +54,6 @@
 
 ;; ========================================================================== ;;
 
-(provide 'init-docker)
+(provide 'init-prog-docker)
 
-;;; init-docker.el ends here
+;;; docker.el ends here

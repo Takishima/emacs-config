@@ -1,4 +1,4 @@
-;;; robotframework.el.el --- ROS2 support -*- lexical-binding: t -*-
+;;; robotframework.el --- Robot Framework support -*- lexical-binding: t -*-
 
 ;; Author: Damien Nguyen
 ;; Maintainer: Damien Nguyen
@@ -49,6 +49,6 @@
 
 ;; ========================================================================== ;;
 
-(provide 'robotframework.el)
+(provide 'init-prog-robotframework)
 
-;;; robotframework.el.el ends here
+;;; robotframework.el ends here

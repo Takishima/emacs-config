@@ -1,4 +1,4 @@
-;;; init-docs.el --- Initialisation for programming -*- lexical-binding: t -*-
+;;; init-docs.el --- Initialisation for documentation -*- lexical-binding: t -*-
 
 ;; Author: Damien Nguyen
 ;; Maintainer: Damien Nguyen

@@ -1,4 +1,4 @@
-;;; init-prog-terraform.el --- C++ support -*- lexical-binding: t -*-
+;;; terraform.el --- Terraform support -*- lexical-binding: t -*-
 
 ;; Author: Damien Nguyen
 ;; Maintainer: Damien Nguyen
@@ -50,4 +50,4 @@
 
 (provide 'init-prog-terraform)
 
-;;; cpp.el ends here
+;;; terraform.el ends here

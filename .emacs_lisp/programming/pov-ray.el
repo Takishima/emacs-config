@@ -1,4 +1,4 @@
-;;; init-prog-pov-ray.el --- Initialisation for POV-Ray -*- lexical-binding: t -*-
+;;; pov-ray.el --- POV-Ray support -*- lexical-binding: t -*-
 
 ;; Author: Damien Nguyen
 ;; Maintainer: Damien Nguyen
@@ -44,4 +44,4 @@
 
 (provide 'init-prog-pov-ray)
 
-;;; init-prog-pov-ray.el ends here
+;;; pov-ray.el ends here

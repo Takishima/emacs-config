@@ -1,4 +1,4 @@
-;;; init-adoc.el --- AsciiDoc support -*- lexical-binding: t -*-
+;;; adoc.el --- AsciiDoc support -*- lexical-binding: t -*-
 
 ;; Author: Damien Nguyen
 ;; Maintainer: Damien Nguyen
@@ -48,6 +48,6 @@
 
 ;; ========================================================================== ;;
 
-(provide 'init-adoc)
+(provide 'init-prog-adoc)
 
-;;; init-adoc.el ends here
+;;; adoc.el ends here

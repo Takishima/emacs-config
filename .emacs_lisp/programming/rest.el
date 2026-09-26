@@ -1,4 +1,4 @@
-;;; init-prog-rest.el --- Initialisation for ReST -*- lexical-binding: t -*-
+;;; rest.el --- reStructuredText support -*- lexical-binding: t -*-
 
 ;; Author: Damien Nguyen
 ;; Maintainer: Damien Nguyen
@@ -49,4 +49,4 @@
 
 (provide 'init-prog-rest)
 
-;;; init-prog-rest.el ends here
+;;; rest.el ends here

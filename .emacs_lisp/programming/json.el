@@ -1,4 +1,4 @@
-;;; init-prog-json.el --- C++ support -*- lexical-binding: t -*-
+;;; json.el --- JSON support -*- lexical-binding: t -*-
 
 ;; Author: Damien Nguyen
 ;; Maintainer: Damien Nguyen
@@ -52,4 +52,4 @@
 
 (provide 'init-prog-json)
 
-;;; cpp.el ends here
+;;; json.el ends here
