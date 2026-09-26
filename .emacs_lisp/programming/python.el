@@ -161,14 +161,17 @@
   (lsp-pyright-auto-import-completions nil)
   (lsp-pyright-typechecking-mode "off")
   (lsp-pyright-python-executable-cmd "python3")
-  :config
+  )
+
+(defun dn-pyright-check-update ()
+  "Report whether a newer global pyright is available from npm."
+  (interactive)
   (dn-async-process
    "npm outdated -g | grep pyright | wc -l" nil
-   (lambda (process output)
+   (lambda (_process output)
      (pcase output
        ("0\n" (message "Pyright is up to date."))
-       ("1\n" (message "A pyright update is available.")))))
-  )
+       ("1\n" (message "A pyright update is available."))))))
 
 ;; -------------------------------------------------------------------------- ;;
 
