@@ -82,8 +82,38 @@
 
 (use-package sops
   :straight t
-  :bind (("C-c C-c" . sops-save-file)
-         ("C-c C-k" . sops-cancel)
-         ("C-c C-d" . sops-edit-file))
+  :demand t
+  :bind (("C-c C-d" . sops-find-file))
   :config
+  ;; Workaround: sops--run's make-process + accept-process-output polling
+  ;; deadlocks when invoked from find-file-hook context (sentinel never
+  ;; drains). Swap to synchronous call-process.
+  (advice-add
+   'sops--run :override
+   (lambda (args &rest keys)
+     (let ((input (plist-get keys :input)))
+       (with-temp-buffer
+         (let* ((stderr-file (make-temp-file "sops-stderr-"))
+                (input-file (when input
+                              (with-file-modes #o600
+                                (make-temp-file "sops-input-"))))
+                (process-environment
+                 (cons "SOPS_DISABLE_VERSION_CHECK=true" process-environment)))
+           (when input
+             (let ((coding-system-for-write 'utf-8-unix))
+               (write-region input nil input-file nil 'silent)))
+           (unwind-protect
+               (let* ((full-args (if input-file
+                                     (append args (list input-file))
+                                   args))
+                      (exit (apply #'call-process sops-executable nil
+                                   (list t stderr-file) nil full-args))
+                      (stdout (buffer-string))
+                      (stderr (with-temp-buffer
+                                (insert-file-contents stderr-file)
+                                (buffer-string))))
+                 (list :exit-status exit :stdout stdout :stderr stderr))
+             (when (file-exists-p stderr-file) (delete-file stderr-file))
+             (when (and input-file (file-exists-p input-file))
+               (delete-file input-file))))))))
   (global-sops-mode 1))
