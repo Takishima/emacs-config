@@ -42,6 +42,14 @@
 
 ;; ========================================================================== ;;
 
+(use-package markdown-mode
+  :straight t
+  :custom
+  (markdown-fontify-code-blocks-natively t)
+)
+
+;; ========================================================================== ;;
+
 (use-package markdown-toc
   :straight t
   :after markdown-mode
