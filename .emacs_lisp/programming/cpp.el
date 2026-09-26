@@ -50,7 +50,6 @@
 (use-package cc-mode
   :straight nil
   :custom
-  (c-basic-indent 5)
   (c-basic-offset 5)
   (c-default-style '((c-mode . "stroustrup")
                      (c++-mode . "stroustrup")
@@ -99,11 +98,6 @@
   )
 
 (add-hook 'c++-mode-hook 'which-function-mode)
-
-;; -------------------------------------------------------------------------- ;;
-
-(custom-set-variables '(c-basic-indent 5)
-		      '(indent-tabs-mode nil))
 
 ;; ========================================================================== ;;
 

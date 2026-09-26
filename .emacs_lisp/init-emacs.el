@@ -92,6 +92,9 @@
 ;; Disable auto backup files
 (custom-set-variables '(make-backup-files nil))
 
+;; Indent with spaces
+(setq-default indent-tabs-mode nil)
+
 ;; Remove trailing whitespace in files
 (autoload 'nuke-trailing-whitespace "whitespace" nil t)
 
