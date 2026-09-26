@@ -14,7 +14,9 @@ These two files are expected to be located within the ``.emacs_lisp/config`` fol
 - `init-pre.el`
 - `init-post.el`
 
-Both of these files may contain a function `config-init-pre` (`config-init-post` respectively) that will be called after the file has been loaded. `init-pre.el` is loaded as soon as possible during the Emacs initialisation, whereas `init-post.el` is called at the very end of the Emacs initialisation, just before loading the custom file.
+Both of these files may contain a function `config-init-pre` (`config-init-post` respectively) that will be called after the file has been loaded. `init-pre.el` is loaded as soon as possible during the Emacs initialisation, whereas `init-post.el` is called at the very end of the Emacs initialisation.
+
+The custom file (`.emacs_lisp/custom.el`) is loaded right after `init-pre.el`, before the configuration modules, so `:custom` values in `use-package` blocks override values saved through Customize.
 
 ## Programming languages
 
