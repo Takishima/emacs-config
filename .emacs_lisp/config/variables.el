@@ -39,6 +39,10 @@
   "Emacs configuration"
   :group 'emacs)
 
+(defgroup dn nil
+  "Personal configuration."
+  :group 'emacs)
+
 (let* (
        (here (file-name-directory (or load-file-name buffer-file-name)))
        (config-root (expand-file-name (file-name-as-directory (concat here "../.."))))
