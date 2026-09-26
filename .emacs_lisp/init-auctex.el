@@ -45,16 +45,10 @@
 
 (require 'cl-lib)
 
-;; (use-package tex
-;;   :straight nil
-;;   )
-
-(use-package tex-site                   ; auctex
+(use-package tex
   :straight auctex
-  :after (tex)
+  :defer t
   :defines (latex-help-cmd-alist latex-help-file)
-  ;; :functions (TeX-run-Biber)
-  :mode ("\\.tex\\'" . TeX-latex-mode)
   :custom
   (TeX-auto-local "tex-tmp")
   (TeX-parse-self t) ; Enable parse on load.
