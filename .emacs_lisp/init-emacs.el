@@ -486,12 +486,34 @@ active region is added to the search string."
   (xref-show-xrefs-function #'consult-xref)
   (xref-show-definitions-function #'consult-xref)
 
+  ;; The :preface is evaluated earliest (and at byte-compile time), so the
+  ;; helper is always defined before anything -- including .dir-locals values
+  ;; and `consult--project-root' -- can reference it.
+  :preface
+  ;; Make consult-grep/ripgrep/fd search from the enclosing Git worktree
+  ;; root instead of the nearest project.el/projectile root.  Used via
+  ;; .dir-locals in repos with nested project markers (e.g. the paragon
+  ;; monorepo, where paragon_workspace/ carries its own package.xml +
+  ;; CMakeLists.txt and projectile picks it up as the root).  Referencing a
+  ;; named function keeps the dir-local value stable, so it can be
+  ;; whitelisted below -- `consult-project-function' is a risky local
+  ;; variable (it matches `-function$'), and a `safe-local-variable'
+  ;; predicate is ignored for risky vars; only an exact value match in
+  ;; `safe-local-variable-values' suppresses the confirmation prompt.
+  (defun dn--consult-vc-project-root (&optional _may-prompt)
+    "Return the enclosing VC (Git) root as an absolute path, or nil."
+    (when-let* ((root (vc-root-dir)))
+      (expand-file-name root)))
+
   ;; The :init configuration is always executed (Not lazy)
   :init
 
   ;; Optionally tweak the register preview window.
   ;; This adds thin lines, sorting and hides the mode line of the window.
   (advice-add #'register-preview :override #'consult-register-window)
+
+  (add-to-list 'safe-local-variable-values
+               '(consult-project-function . dn--consult-vc-project-root))
 
   ;; Configure other variables and modes in the :config section,
   ;; after lazily loading the package.
