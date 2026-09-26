@@ -388,7 +388,7 @@ Return a list (candidate, icon, description)."
 
 (add-hook 'git-commit-setup-hook
           #'(lambda ()
-              (run-with-timer 0.5 nil #'(lambda () (when (eq (point-at-eol) (point-at-bol)) (conv-commit-prompt)))))
+              (run-with-timer 0.5 nil #'(lambda () (when (eq (pos-eol) (pos-bol)) (conv-commit-prompt)))))
           )
 
 ;; ========================================================================== ;;
