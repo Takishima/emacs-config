@@ -39,33 +39,15 @@
 ;; ========================================================================== ;;
 
 (use-package exec-path-from-shell
-  :if (memq window-system '(mac ns x))
+  :if (or (memq window-system '(mac ns))
+          (memq system-type '(gnu gnu/linux gnu/kfreebsd)))
   :straight t
   :defines (exec-path-from-shell-variables)
   :custom
-  (exec-path-from-shell-variables '("LC_ALL"
-                                    "LANG"
-                                    "PATH"
-				    "MANPATH"
-				    "WORKON_HOME"
-				    "CPLUS_INCLUDE_PATH"
-				    "LD_LIBRARY_PATH"
-				    "DYLD_LIBRARY_PATH"
-                                    "LSP_USE_PLISTS"))
-  :config
-  (exec-path-from-shell-initialize)
-  )
-
-(use-package exec-path-from-shell
-  :if (member system-type '(gnu gnu/linux gnu/kfreebsd))
-  :straight t
-  :defines (exec-path-from-shell-variables)
-  :custom
-  (exec-path-from-shell-variables '("PATH"
-				    "MANPATH"
-				    "WORKON_HOME"
-				    "CPLUS_INCLUDE_PATH"
-				    "LSP_USE_PLISTS"))
+  (exec-path-from-shell-variables
+   (append '("PATH" "MANPATH" "WORKON_HOME" "CPLUS_INCLUDE_PATH" "LSP_USE_PLISTS")
+           (when (eq system-type 'darwin)
+             '("LC_ALL" "LANG" "LD_LIBRARY_PATH" "DYLD_LIBRARY_PATH"))))
   :config
   (exec-path-from-shell-initialize)
   )
