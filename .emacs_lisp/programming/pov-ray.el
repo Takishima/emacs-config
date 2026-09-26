@@ -37,8 +37,6 @@
 
 (use-package pov-mode
   :straight t
-  :config
-  (autoload 'pov-mode "pov-mode" "PoVray scene file mode" t)
   :mode ("\\.pov\\'" "\\.inc\\'")
 )
 

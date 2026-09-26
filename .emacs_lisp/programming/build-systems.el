@@ -93,8 +93,6 @@
   :mode "/PKGBUILD$"
   :functions pkgbuild-update-srcinfo
   :config
-  (autoload 'pkgbuild-mode "pkgbuild-mode.el" "PKGBUILD mode." t)
-
   (defun pkgbuild-gen-srcinfo-before-save-hook ()
     (when (eq major-mode 'pkgbuild-mode)
       (pkgbuild-update-srcinfo)
