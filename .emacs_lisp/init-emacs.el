@@ -83,13 +83,6 @@
 
 ;; ========================================================================== ;;
 
-(use-package explain-pause-mode
-  :straight nil
-  :load-path (config-dotemacs-lisp)
-)
-
-;; ========================================================================== ;;
-
 (use-package ztree
   :straight t
 )
