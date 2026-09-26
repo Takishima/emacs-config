@@ -117,7 +117,3 @@
 (provide 'config-functions)
 
 ;;; config-functions.el ends here
-
-;; Local Variables:
-;; eval: (setq here (file-name-directory (or load-file-name buffer-file-name)))
-;; End:

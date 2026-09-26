@@ -89,8 +89,3 @@
 (provide 'init-misc)
 
 ;;; init-misc.el ends here
-
-;; Local Variables:
-;; eval: (setq config-dotemacs-lisp (file-name-directory (or load-file-name buffer-file-name)))
-;; eval: (setq config-dir (file-name-as-directory (concat (file-name-as-directory config-dotemacs-lisp) "config")))
-;; End:
