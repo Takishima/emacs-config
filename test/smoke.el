@@ -1,0 +1,54 @@
+;;; smoke.el --- Batch smoke test for this configuration -*- lexical-binding: t -*-
+
+;;; Commentary:
+
+;; Run from the repository root:
+;;   emacs --batch -l .emacs -l test/smoke.el
+;; Exits non-zero if any check fails.
+
+;;; Code:
+
+(defvar dn-smoke-failures 0)
+
+(defvar dn-smoke-dir (make-temp-file "dn-smoke-" t))
+
+(defun dn-smoke-check (label expected actual)
+  "Report a failure for LABEL unless EXPECTED equals ACTUAL."
+  (unless (equal expected actual)
+    (setq dn-smoke-failures (1+ dn-smoke-failures))
+    (message "FAIL %s: expected %S, got %S" label expected actual)))
+
+(defun dn-smoke-visit (name)
+  "Visit a new file NAME in `dn-smoke-dir' and return its buffer."
+  (find-file-noselect (expand-file-name name dn-smoke-dir)))
+
+;; Keep language servers from starting in batch.
+(advice-add 'lsp-deferred :override #'ignore)
+
+(dn-smoke-check "init-prog-python provided" t (featurep 'init-prog-python))
+(dn-smoke-check "config-require leaks filename" nil (boundp 'filename))
+(dn-smoke-check "ispell-extra-args overridden" nil
+                (equal (default-value 'ispell-extra-args) '("--reverse")))
+
+(dolist (spec '(("t.py" python-ts-mode ("Python 3" "NumPy" "SciPy")
+                 "C-x tk" python-pytest-close-buffer)
+                ("t.cpp" c++-ts-mode ("C++" "C") "C-c c" recompile)
+                ("CMakeLists.txt" cmake-ts-mode ("CMake")
+                 "C-c C-f" cmake-format-buffer)))
+  (pcase-let ((`(,file ,mode ,docsets ,key ,command) spec))
+    (with-current-buffer (dn-smoke-visit file)
+      (dn-smoke-check (concat file " major-mode") mode major-mode)
+      (dn-smoke-check (concat file " dash-docs-docsets") docsets
+                      (bound-and-true-p dash-docs-docsets))
+      (dn-smoke-check (concat file " " key) command (key-binding (kbd key))))))
+
+(with-current-buffer (dn-smoke-visit "t.tex")
+  (dn-smoke-check "t.tex major-mode" 'LaTeX-mode major-mode)
+  (dn-smoke-check "t.tex latexmk command" t
+                  (and (assoc "latexmk" TeX-command-list) t)))
+
+(delete-directory dn-smoke-dir t)
+(message "smoke: %d failure(s)" dn-smoke-failures)
+(kill-emacs (if (zerop dn-smoke-failures) 0 1))
+
+;;; smoke.el ends here
