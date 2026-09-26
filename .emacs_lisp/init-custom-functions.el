@@ -103,7 +103,7 @@
   "Create a buffer local save hook."
   (add-hook 'before-save-hook
             (lambda ()
-              (when (and dn-do-clang-format (f-exists? (expand-file-name ".clang-format" (projectile-project-root))))
+              (when (and dn-do-clang-format (file-exists-p (expand-file-name ".clang-format" (projectile-project-root))))
                 (clang-format-buffer))
               nil)
             nil

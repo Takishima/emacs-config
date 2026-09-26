@@ -408,6 +408,7 @@ active region is added to the search string."
 
 ;; Example configuration for Consult
 (use-package consult
+  :straight t
   ;; Replace bindings. Lazily loaded by `use-package'.
   :bind (
          ("C-s" . consult-line)
@@ -659,6 +660,12 @@ active region is added to the search string."
 
 ;; -------------------------------------------------------------------------- ;;
 
+(use-package htmlize
+  :straight t
+  :commands (htmlize-buffer htmlize-region))
+
+;; -------------------------------------------------------------------------- ;;
+
 (defun formatted-copy-buffer ()
   "Export buffer to HTML, and copy it to the clipboard."
   (interactive)
@@ -705,7 +712,7 @@ FILTER is function that runs after the process is finished, its args should be
    :name (if name name
            "async-process")
    :filter (if filter filter
-             (lambda (process output) (message (s-trim output)))))
+             (lambda (process output) (message (string-trim output)))))
   )
 
 ;; -------------------------------------------------------------------------- ;;
@@ -749,7 +756,9 @@ size. This function also handles icons and modeline font sizes."
     (message "Font size: %s (default %s)" new-height (face-attribute 'default :height)))
   (let ((new-size (if (zerop height)
                       dn-default-icon-size
-                    (+ (/ height 5) treemacs--icon-size))))
+                    (+ (/ height 5) (if (boundp 'treemacs--icon-size)
+                                        treemacs--icon-size
+                                      dn-default-icon-size)))))
     ;; (when (fboundp 'treemacs-resize-icons)
     ;;   (treemacs-resize-icons new-size))
     (when (fboundp 'company-box-icons-resize)
