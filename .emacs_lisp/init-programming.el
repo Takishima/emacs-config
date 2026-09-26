@@ -431,10 +431,7 @@
              lsp-cleanup-workspaces-nonexistent
              lsp-list-workspaces
              lsp-cleanup-workspaces-keep-home-only
-             lsp-cleanup-workspaces-remove-all)
-  :config
-  ;; Automatically clean up non-existent workspace folders on startup
-  (lsp-cleanup-workspaces-nonexistent))
+             lsp-cleanup-workspaces-remove-all))
 
 ;; ========================================================================== ;;
 
