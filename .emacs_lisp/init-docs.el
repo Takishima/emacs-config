@@ -41,7 +41,6 @@
 (use-package devdocs
   :straight t
   :config
-  (devdocs-update-all)
   (defun dn-devdocs-install()
     (interactive)
     (devdocs-install "bash")
@@ -52,6 +51,7 @@
     (devdocs-install "git")
     (devdocs-install "nix")
     (devdocs-install "python~3.12")
+    (devdocs-update-all)
     )
   )
 
