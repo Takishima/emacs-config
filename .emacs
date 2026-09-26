@@ -27,22 +27,11 @@
 
 ;;; Code:
 
-(let (
-      (config-root (file-name-directory (or load-file-name buffer-file-name)))
-      )
-  
-  (defconst config-root (file-name-directory (or load-file-name buffer-file-name)))
-
-  (defconst config-dotemacs-lisp (file-name-as-directory (concat config-root ".emacs_lisp"))
-    "Path to .emacs directory.")
-
-  (defconst config-dir (file-name-as-directory (concat (file-name-as-directory config-dotemacs-lisp) "config"))
-    "Path to main configuration directory.")
-  )
+(let ((dir (file-name-directory (or load-file-name buffer-file-name))))
+  (require 'config-variables (concat dir ".emacs_lisp/config/variables.el")))
 
 ;; ========================================================================== ;;
 
-(require 'config-variables (concat config-dir "variables.el"))
 (require 'config-functions (concat config-dir "functions.el"))
 
 ;; -------------------------------------------------------------------------- ;;
@@ -88,7 +77,7 @@
 (when (memq window-system '(mac ns x))
     (x-focus-frame nil))
 
+(put 'narrow-to-region 'disabled nil)
+
 ;; (provide '.emacs)
 ;;; .emacs ends here
-
-(put 'narrow-to-region 'disabled nil)
