@@ -758,37 +758,6 @@ size. This function also handles icons and modeline font sizes."
 
 ;; ========================================================================== ;;
 
-(defvar dn-script-on-save
-  '(
-    ;; ("/home/someone/file.txt" . "cat ~/file.txt")
-    )
-  "File association list with their respective command.")
-
-(defun dn-cmd-after-saved-file ()
-  "Maybe execute a shell command after a file is saved."
-  (when dn-script-on-save
-    (let
-        ((command nil)
-         (match (assoc (buffer-file-name) dn-script-on-save)))
-      (when match
-        (if (file-exists-p (cdr match))
-            (setq command (cdr match))
-          (setq command (list (executable-find (cdr match) nil)))
-          (when command
-            (add-to-list 'command (buffer-file-name) t))
-          )
-        (if command
-            (shell-command (cdr match))
-          (warn "Cannot find command to execute: '%s'" command))
-        )
-      )
-    )
-  )
-
-(add-hook 'after-save-hook 'dn-cmd-after-saved-file)
-
-;; ========================================================================== ;;
-
 (provide 'init-emacs)
 
 ;;; init-emacs.el ends here
