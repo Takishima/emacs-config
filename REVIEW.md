@@ -1,8 +1,8 @@
 # Emacs config review: cleanup and modularity
 
 Scope: every tracked `.el` file, the entry point, README, snippets layout,
-service file and repo metadata, originally as of `47ec94c`, re-assessed against main `614c5c8` after the
-28 cleanup commits that followed the first pass. Findings were
+service file and repo metadata, originally as of `47ec94c`, re-assessed against main `a6f940d` after the
+40 cleanup commits that followed the first pass. Findings were
 checked against a running Emacs 31.1 session with this config loaded (via
 `emacsclient`). Items marked **verify** still need a manual repro. Each
 numbered item now starts with its status: **Done** (fixed on main),
@@ -12,24 +12,24 @@ Numbers that frame the rest of the review:
 
 | Metric | Value |
 |---|---|
-| `use-package` declarations | 149 (was 155) |
-| Own init modules (`init-*.el`) | 17 (one disabled) |
+| `use-package` declarations | 144 (was 155) |
+| Own init modules (`init-*.el`) | 16 (`init-org.el` deleted) |
 | Language modules (`programming/*.el`) | 20 (two skipped; `diff.el` and `makefile.el` removed) |
-| Largest own module | `init-emacs.el`, 777 lines |
-| Vendored third-party code | 5 files, ~4,600 lines (3,699 in `explain-pause-mode.el`) |
+| Largest own module | `init-emacs.el`, 770 lines |
+| Vendored third-party code | 4 files, ~950 lines (`explain-pause-mode.el` deleted) |
 | Own top-level helper libraries | 2 (`dashboard-worktrees-patch.el`, `cleanup-lsp-workspaces.el`) |
-| Commented-out `use-package` blocks | 11 (aidermacs, irony, elpy, eglot, cmake-ide, rtags, lsp-bridge, prism, code-review, ruff-lsp, flycheck-irony) |
+| Commented-out `use-package` blocks | 0 (was 12) |
 
-## Status after main `614c5c8`
+## Status after main `a6f940d`
 
 Main now carries most of migration phases 1 and 2 from Part 2, plus a
 batch smoke test (`test/smoke.el`). Of the 37 cleanup items:
 
 | Status | Items |
 |---|---|
-| Done | 1, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 27, 35 |
-| Partly | 2, 8, 21, 26, 31, 32 |
-| Open | 19, 20, 22, 23, 24, 25, 28, 29, 30, 33, 34, 36, 37 |
+| Done | 1, 3-7, 9-22, 24, 25, 27, 28, 35 |
+| Partly | 2, 8, 26, 31, 32 |
+| Open | 23, 29, 30, 33, 34, 36, 37 |
 
 The smoke test covers exactly the regressions that were fixed (feature
 name, `filename` leak, ispell args, ts-mode bindings and docsets, AUCTeX
@@ -38,10 +38,12 @@ commands), which is the right shape for phase 0. It still needs a
 so it needs a bootstrapped `straight/` directory with every package already
 cloned. A byte-compile pass over the own modules is the missing half.
 
-What the new commits did not touch, in order of value: the
-header/provide/footer drift (29), the `Local Variables` footers (30), the
-`explain-pause-mode` dead weight (19), the remaining commented-out blocks
-(21), and the namespace cleanup (31). Everything in Part 2 still applies.
+Section A and section B are now closed apart from the built-in
+`use-package` declaration (23). What remains is section C, in order of
+value: the header/provide/footer drift (29), the `Local Variables` footers
+(30), the namespace cleanup (31), the `lexical-binding` cookie (37), and
+the formatting pass (33). Everything in Part 2 still applies, and with the
+deletions done, phase 3 (re-cutting the modules) is the next real step.
 
 ---
 
@@ -191,20 +193,20 @@ duplicated code, C is consistency and hygiene.
       `diff.el` is not a language, hard-`require`s magit at startup, and
       hardcodes `--background=light`. Keep one.
 
-19. **Open.** **`explain-pause-mode.el` (3,699 lines) is loaded but never enabled.**
+19. **Done** (file and block deleted). **`explain-pause-mode.el` (3,699 lines) is loaded but never enabled.**
     `init-emacs.el:86` declares it with no `:config`, `:commands` or
     `:defer`. Either drop the file or install it from its GitHub recipe on
     demand (`:commands explain-pause-mode`).
 
-20. **Open.** **`init-org.el` is disabled in `.emacs` but still tracked.** It also has
+20. **Done** (deleted). **`init-org.el` is disabled in `.emacs` but still tracked.** It also has
     `org-log-done` set twice, quoted lambdas (`'(lambda …)`), a nested
     `custom-set-variables` inside `:config`, and relies on the default
     `org-directory` (`~/org`) without saying so. Either fix and re-enable, or delete it (git keeps it).
 
-21. **Partly** (the `tex` and package.el remnants went; 11 blocks remain). **Commented-out blocks** (11 `use-package` forms, `aidermacs` being the newest, plus the irony/octave/
+21. **Done.** **Commented-out blocks** (12 `use-package` forms, plus the irony/octave/
     eglot experiments, ~150 lines). History already preserves them; delete.
 
-22. **Open.** **Pointless `autoload` calls inside `:config`** (`build-systems.el:114`,
+22. **Done.** **Pointless `autoload` calls inside `:config`** (`build-systems.el:114`,
     `matlab.el:45-46`, `pov-ray.el:41`). By the time `:config` runs the
     package is loaded, so the autoload is a no-op.
 
@@ -213,17 +215,17 @@ duplicated code, C is consistency and hygiene.
     upstream repo and shadow the built-in. Also `straight-use-package 'org`
     appears in both `init-package.el` and `init-org.el`.
 
-24. **Open.** **`emojify`** is fully configured (`init-misc.el:53-74`) but its
+24. **Done** (`emojify` and `all-the-icons` removed). **`emojify`** is fully configured (`init-misc.el:53-74`) but its
     global mode is commented out, so it's ~30 lines of inert config.
 
-25. **Open.** **`init-magit.el`:** `(make-local-variable 'split-height-threshold)` at
+25. **Done** (hook-scoped `split-height-threshold`, `pos-eol`, `completing-read` with an affixation function). **`init-magit.el`:** `(make-local-variable 'split-height-threshold)` at
     load time makes the variable buffer-local in whatever buffer happens to
     be current, which is not what was intended. `point-at-eol`/
     `point-at-bol` are obsolete (`pos-eol`/`pos-bol` or
     `line-end-position`). `conv-commit-type-prompt` calls the private
     `consult--read`.
 
-26. **Partly.** The ad-hoc `c++-mode-hook` bindings became `:bind`, and a `c-ts-mode` block was added; the duplicate `c-basic-indent`, the global `indent-tabs-mode`, and the copy-pasted `:functions` remain. Also new: `compile-in-iterm` is now bound in four keymaps but only defined on darwin. **`programming/cpp.el`:** `c-basic-indent` is set both in `:custom` and
+26. **Partly.** The duplicate `c-basic-indent`, the `:functions` line, and the global `indent-tabs-mode` (now a `setq-default` in `init-emacs.el`) are fixed. Still open: `compile-in-iterm` is bound in four keymaps in `cpp.el` and in `rest.el` but only defined on darwin. **`programming/cpp.el`:** `c-basic-indent` is set both in `:custom` and
     in a later `custom-set-variables`, and that same `custom-set-variables`
     sets `indent-tabs-mode nil` globally from inside a C++ module.
     `flycheck-clang-tidy` declares `:functions flycheck-clang-analyzer-setup`
@@ -235,7 +237,7 @@ duplicated code, C is consistency and hygiene.
     built-in library, and `json.el` separately declares `json-ts-mode
     :straight t`, another built-in.
 
-28. **Open.** **`programming/build-systems.el`** adds a global `before-save-hook` for
+28. **Done** (buffer-local hook on `pkgbuild-mode`). **`programming/build-systems.el`** adds a global `before-save-hook` for
     PKGBUILD (guarded by `major-mode`); a mode-local hook is cleaner.
 
 ### C. Consistency and hygiene
@@ -383,8 +385,8 @@ duplicated code, C is consistency and hygiene.
    look for "what changes on macOS".
 
 5. **Own code, patches and vendored code share one directory.**
-   `explain-pause-mode.el`, `hl-line+.el`, `ris.el`, `project-directory.el`,
-   `cmake-format.el` (all third-party) sit next to `init-*.el`,
+   `hl-line+.el`, `ris.el`, `project-directory.el`, `cmake-format.el` (all
+   third-party) sit next to `init-*.el`,
    `dashboard-worktrees-patch.el` and the new own library
    `cleanup-lsp-workspaces.el`. Nothing marks which files are edited
    locally, which are pristine copies, and which could be straight recipes.
@@ -439,7 +441,7 @@ emacs-config/
 │   │   └── os-linux.el
 │   ├── lang/                renamed programming/, each (provide 'dn-lang-<name>)
 │   ├── lib/                 own reusable libraries: cleanup-lsp-workspaces.el (as dn-lsp-workspaces.el)
-│   ├── vendor/              pristine third-party: explain-pause-mode, hl-line+, ris, project-directory, cmake-format
+│   ├── vendor/              pristine third-party: hl-line+, ris, project-directory, cmake-format
 │   ├── patches/             dashboard-worktrees-patch.el (files that modify a package after load)
 │   └── packages/            own packages (ros2-*), unchanged
 ├── etc/                     snippets/, abbrev/, docsets/  (data, not code)
@@ -513,8 +515,8 @@ every step.
 | Phase | Content | Risk |
 |---|---|---|
 | 0. Safety net (**partly done**: smoke test exists) | Wire `test/smoke.el` into a `Makefile` + CI; add byte-compile of own modules; `.dir-locals.el`; fix the provide/header table (item 29); remove `Local Variables` footers. | none |
-| 1. Delete (**mostly done**) | Remaining: `explain-pause-mode` (19), `init-org.el` decision (20), commented blocks (21), `(use-package use-package)` (23), `emojify` (24). | none |
-| 2. Fix bugs (**done**) | Items 1-15 landed on main. Leftovers are hygiene: `autoload` in `:config` (22), `init-magit.el` obsolete calls (25), `cpp.el` duplicates and the cross-OS `compile-in-iterm` binding (26), PKGBUILD global hook (28). | low |
+| 1. Delete (**done**) | Only `(use-package use-package :straight t)` (23) is left. | none |
+| 2. Fix bugs (**done**) | Items 1-15 landed on main, as did 22, 25, 28. The one leftover is the cross-OS `compile-in-iterm` binding (26). | low |
 | 3. Re-cut modules | Split `init-emacs.el` into `ui`/`completion`/`editing`; move tooling out of `init-programming.el` into `lsp.el`; move language packages into `lang/`; create `os-darwin.el`; `lib/` + `vendor/` + `patches/` split. Pure moves, no behaviour change. | low |
 | 4. Loader + naming | `dn-` prefix everywhere; `defgroup dn`; single `dn-load-directory`; `dn-modules`/`dn-disabled-languages`; README rewrite. | medium |
 | 5. Init directory | `early-init.el` + `init.el`, `--init-directory` support, custom-file ordering fix, `straight-use-package-by-default`, defer audit. | medium |
@@ -532,13 +534,8 @@ Everything from the original quick-wins list has landed except these:
   `yaml.el`, `web.el`, `gnuplot.el`, `robotframework.el`, `ros.el`,
   `markdown.el`, `go.el`, and give `nix.el` a header.
 - Delete the 15 `Local Variables` footers.
-- Drop `explain-pause-mode` (`init-emacs.el` block and the vendored file)
-  or give it `:commands explain-pause-mode`.
-- Delete the 11 commented-out `use-package` blocks.
 - Replace `(use-package use-package :straight t)` with `:straight nil`, and
   add `:straight nil` to `savehist`.
-- Remove the duplicate `c-basic-indent` / global `indent-tabs-mode` from
-  `cpp.el`, and fix the `:functions` line in `flycheck-clang-tidy`.
 - Guard the `compile-in-iterm` bindings in `cpp.el` and `rest.el` with the
   darwin check, or define a no-op elsewhere.
 - Add the `lexical-binding` cookie to `dashboard-worktrees-patch.el`.
