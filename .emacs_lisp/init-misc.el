@@ -75,9 +75,6 @@
 (use-package all-the-icons
   :straight t)
 
-(use-package all-the-icons-ivy
-  :straight t)
-
 (use-package pacfiles-mode
   :straight t)
 

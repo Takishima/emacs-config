@@ -51,15 +51,6 @@
 
 ;; -------------------------------------------------------------------------- ;;
 
-(use-package company-web
-  :straight t
-  :after web-mode
-  :config
-  (add-to-list 'company-backends '(company-web-html :with company-yasnippet))
-  )
-
-;; -------------------------------------------------------------------------- ;;
-
 (use-package json
   :straight t
   )
