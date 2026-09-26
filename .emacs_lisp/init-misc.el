@@ -50,31 +50,6 @@
 
 ;; -------------------------------------------------------------------------- ;;
 
-(use-package emojify
-  :straight t
-  :custom
-  (emojify-inhibit-major-modes '(dired-mode
-                                 doc-view-mode
-                                 debugger-mode
-                                 pdf-view-mode
-                                 image-mode
-                                 help-mode
-                                 ibuffer-mode
-                                 magit-diff-mode
-                                 nix-mode
-                                 ert-results-mode
-                                 compilation-mode
-                                 proced-mode
-                                 mu4e-headers-mode
-                                 deft-mode
-                                 yaml-mode
-                                 prog-mode))
-  ;; :hook (after-init . global-emojify-mode)
-  )
-
-(use-package all-the-icons
-  :straight t)
-
 (use-package pacfiles-mode
   :straight t)
 
