@@ -75,7 +75,6 @@
   ;;(setq reftex-enable-partial-scans t) ;; parse only current file in multifile doc
   ;;(setq reftex-save-parse-info t) ;; save parse info into file.rel
   (reftex-use-multiple-selection-buffers t)
-  (reftex-plug-into-AUCTeX t)
 
   ;; -----------------------------------
   ;; Additional keywords
