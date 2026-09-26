@@ -48,56 +48,6 @@
 
 ;; ============================================================================ ;;
 
-(defun dn-recompile-elpa ()
-  "Recompile all Emacs lisp files in package directory"
-  (interactive)
-  (byte-recompile-directory package-user-dir nil 'force)
-  )
-
-;; ---------------------------------------------------------------------------- ;;
-
-(defun dn-reinstall-essentials ()
-  "Recompile a list of essential Emacs packages."
-  (interactive)
-  (package-refresh-contents)
-  (dolist (pkg '("auctex"
-                 "counsel"
-                 "direnv"
-                 "flycheck"
-                 "ivy"
-                 "lsp-ivy"
-                 "lsp-mode"
-                 "lsp-pyright"
-                 "lsp-treemacs"
-                 "lsp-ui"
-                 "magit"
-                 "magit-delta"
-                 "magit-gitflow"
-                 "magit-popup"
-                 "magit-section"
-                 "multiple-cursors"
-                 "smart-shift"
-                 "treemacs"
-                 "yasnippet"))
-    (unless (ignore-errors
-              (package-reinstall (intern pkg)))
-        (warn "Package %s failed to reinstall" pkg)))
-  )
-
-;; ---------------------------------------------------------------------------- ;;
-
-(defun dn-reinstall-all-activated-packages ()
-  "Refresh and reinstall all activated packages."
-  (interactive)
-  (package-refresh-contents)
-  (dolist (package-name package-activated-list)
-    (when (package-installed-p package-name)
-      (unless (ignore-errors                   ;some packages may fail to install
-                (package-reinstall package-name))
-        (warn "Package %s failed to reinstall" package-name)))))
-
-;; ============================================================================ ;;
-
 (defcustom dn-do-clang-format nil "Do clang-format on files (off by default)")
 (defun dn-clang-format-save-hook ()
   "Create a buffer local save hook."

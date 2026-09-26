@@ -35,7 +35,6 @@
 
 ;; ========================================================================== ;;
 
-;; (require 'package)
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name
@@ -53,22 +52,10 @@
   (load bootstrap-file nil 'nomessage))
 (straight-use-package 'org)
 
-;; (let* (
-;;        (no-ssl (and (memq system-type '(windows-nt ms-dos))
-;;                     (not (gnutls-available-p))))
-;;        (url (concat (if no-ssl "http" "https") "://melpa.org/packages/"))
-;;        )
-;;   (add-to-list 'package-archives (cons "melpa" url) t))
-
 ;; ========================================================================== ;;
-
 
 ;; use-package
 ;; https://github.com/jwiegley/use-package
-;; (unless (package-installed-p 'use-package)
-;;   (package-refresh-contents)
-;;   (package-install 'use-package))
-
 (straight-use-package 'use-package)
 (straight-use-package 'diminish)
 (require 'diminish)
