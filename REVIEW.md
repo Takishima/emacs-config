@@ -1,9 +1,9 @@
 # Emacs config review: cleanup and modularity
 
 Scope: every tracked `.el` file, the entry point, README, snippets layout,
-service file and repo metadata, as of `47ec94c` (main after the Go, claude-code-ide, sops and LSP-workspace changes). No Emacs binary was
-available in the review environment, so nothing below was executed. Items
-marked **verify** are strong suspicions that need a live Emacs to confirm.
+service file and repo metadata, as of `47ec94c` (main after the Go, claude-code-ide, sops and LSP-workspace changes). Findings were
+checked against a running Emacs 31.1 session with this config loaded (via
+`emacsclient`). Items marked **verify** still need a manual repro.
 
 Numbers that frame the rest of the review:
 
@@ -26,25 +26,20 @@ duplicated code, C is consistency and hygiene.
 
 ### A. Bugs and latent breakage
 
-1. **`programming/python.el` is very likely not applied at all.** (**verify**)
-   The `(use-package python …)` block uses a `:dash` keyword
-   (`python.el:59`). `:dash` is not a stock `use-package` keyword and nothing
-   in the repo defines one. `use-package` catches parse errors and turns the
-   whole form into a warning (check `*Warnings*` for "Failed to parse package
-   python"). If so, the python hooks, the ipython shell settings, the docs
-   hooks and the `C-c i` binding are all silently dropped. The same block
-   also has two `:config` sections. The same caveat applies to
-   `:ensure-system-package` in `init-magit.el` and `init-ispell.el`: it
-   only works if `use-package-ensure-system-package` is loaded, and nothing
-   requires it explicitly.
+1. **`exec-path-from-shell` initializes twice on Linux GUI sessions.**
+   `init-env.el` has one block gated on `window-system` being `mac`/`ns`/`x`
+   and another gated on `system-type` being `gnu/linux`. Under X on Linux
+   both match, so `exec-path-from-shell-initialize` runs twice and the
+   second block's variable list wins. Merge into one block with a computed
+   list.
 
 2. **`init-ispell.el` overrides its own spell-checker arguments.** Line 100
    computes `ispell-extra-args` from `flyspell-detect-ispell-args`, then line
    127 unconditionally does `(setq-default ispell-extra-args '("--reverse"))`,
-   discarding the language and camel-case flags. Also the entire ispell
-   setup, including the hunspell fallback branch, lives inside
-   `flycheck-aspell`'s `:config`, so if aspell is absent the fallback it
-   describes never runs.
+   discarding the language and camel-case flags (live default value:
+   `("--reverse")`). Also the entire ispell setup, including the hunspell
+   fallback branch, lives inside `flycheck-aspell`'s `:config`, so it is tied
+   to that package loading rather than standing on its own.
 
 3. **`programming/python.el` provides the wrong feature.** It ends with
    `(provide 'init-prog-build-systems)`, copied from `build-systems.el`. It
@@ -81,24 +76,25 @@ duplicated code, C is consistency and hygiene.
      `:straight` is silently "configure only".
 
 7. **`magit-popup` is obsolete and the one consumer is probably broken.**
-   `python-pytest` switched to transient years ago, so
+   (**verify**) `python-pytest` switched to transient years ago, so
    `magit-define-popup-option 'python-pytest-dispatch …`
-   (`python.el:244-250`) targets a transient prefix. Together with item 1
-   this whole block is suspect. `magit-popup` is also listed in
-   `emojify-inhibit-major-modes` and in `dn-reinstall-essentials`.
+   (`python.el:244-250`) targets a transient prefix, not a popup variable.
+   If it signals, `use-package` aborts the rest of that `:config`, and
+   `python-pytest-close-buffer` (`C-x tk`) is never defined. Repro: open a
+   Python buffer, press `C-x tk`, check `*Warnings*`. `magit-popup` is also
+   listed in `emojify-inhibit-major-modes` and in `dn-reinstall-essentials`.
 
 8. **`lsp-nix-nil-flake-impure` is set in `:custom` before it is defined in
-   `:config`** (`init-programming.el:347,349`). It works only because
-   `custom-initialize-reset` keeps an already-bound value. Move the
-   `lsp-defcustom` into `:init` or a `with-eval-after-load 'lsp-mode`, or
-   set the value after the definition.
+   `:config`** (`init-programming.el:348,350`). It works (live value is `t`)
+   because `defcustom` keeps an already-bound value, but it reads backwards.
+   Move the `lsp-defcustom` into a `with-eval-after-load 'lsp-mode`, or set
+   the value after the definition.
 
-9. **`init-auctex.el`: `:after (tex)` on `tex-site`** (**verify**). `tex-site`
-   is the file that sets up the autoloads that eventually load `tex`, so
-   waiting for `tex` before configuring `tex-site` may mean the
-   `:custom`/`:config` sections only run after a `.tex` file is opened, or
-   never if `tex` is loaded by another path. `reftex-plug-into-AUCTeX` is
-   set twice in that block.
+9. **`init-auctex.el`: `:after (tex)` on `tex-site`.** `:mode` still installs
+   the `auto-mode-alist` entry up front, and the `:after` body runs whenever
+   `tex` first loads, so this works. It is just an odd way to say "configure
+   AUCTeX after it loads"; `use-package tex :straight auctex` would be
+   clearer. `reftex-plug-into-AUCTeX` is set twice in that block.
 
 10. **`config-require` leaks a global variable.** `functions.el:86-87` does
     `(setq filename …)` on a name that is not in the `let`; with
@@ -116,14 +112,15 @@ duplicated code, C is consistency and hygiene.
     Customize, since `customize-set-variable` runs after `custom.el`. Decide
     which should win and make the README match.
 
-13. **`copilot-chat` still squats on the `C-c c` prefix.** Main has since
-    moved Claude to `C-c C-'` (`init-llm.el:72`), which removed the direct
-    clash with the old `claude-code-command-map`, but `C-c c f`, `C-c c o`,
-    `C-c c y` … (`init-llm.el:94-98`) are still bound in `global-map`
-    rather than a dedicated keymap, and `programming/cpp.el:88` binds
-    `C-c c` to `recompile` in `c-mode-base-map`, so in C/C++ buffers the
-    copilot-chat chords are shadowed. A single `dn-ai-map` prefix would
-    settle this.
+13. **`copilot-chat` keybindings are never installed.** The block has
+    `:after (request org markdown-mode)`, which also wraps `:bind`, and
+    nothing loads `request` until copilot-chat itself does. In the live
+    session `request` is not loaded and `where-is-internal
+    'copilot-chat-fix` is nil, so `C-c c f`/`o`/`y`/… (`init-llm.el:94-98`)
+    do nothing. Drop `:after` (`:bind` already defers the load). Once
+    bound, the chords would also clash with `programming/cpp.el:88`, which
+    binds `C-c c` to `recompile` in `c-mode-base-map`; a dedicated prefix
+    map avoids that.
 
 14. **`snippets/cmake-mode/.yas-parents` contains `"cmake-mode"`** (quoted,
     and naming itself). A snippet directory cannot be its own parent and
@@ -131,13 +128,15 @@ duplicated code, C is consistency and hygiene.
     named `"cmake-mode"`. Delete the file. `cmake-ts-mode/.yas-parents`
     correctly points at `cmake-mode`.
 
-15. **Startup does network I/O.** `init-docs.el:44` calls
-    `(devdocs-update-all)` in `:config` on every launch, and
-    `python.el:166` shells out to `npm outdated -g` on every start via
-    `dn-async-process`. Both belong in an interactive command. In the same
-    spirit, `init-programming.el:426-437` now runs
-    `lsp-cleanup-workspaces-nonexistent` (filesystem walk over every
-    remembered workspace) from `:config` at startup.
+15. **Network I/O as a side effect of loading.** `init-docs.el:44` calls
+    `(devdocs-update-all)` in `:config`, and `devdocs` is loaded eagerly, so
+    this runs on every launch. `python.el:166` shells out to `npm outdated
+    -g` from `lsp-pyright`'s `:config`, i.e. on the first Python buffer of
+    each session. Both belong in an interactive command. The
+    `lsp-cleanup-workspaces-nonexistent` call in
+    `init-programming.el:437` does *not* run at startup (`:commands` defers
+    the package); it runs on the first call of any of its commands, which
+    makes the auto-cleanup mostly inert.
 
 ### B. Dead, duplicated and obsolete code
 
@@ -150,20 +149,21 @@ duplicated code, C is consistency and hygiene.
     keeps the commented-out MELPA/`package-install` bootstrap.
 
 17. **Ivy remnants.** `all-the-icons-ivy` (`init-misc.el:79`) is installed
-    although ivy is gone; `all-the-icons` is installed while dashboard uses
-    `nerd-icons`.
+    although nothing else uses ivy, and it pulls ivy itself back in (`ivy`
+    is loaded in the live session). `all-the-icons` is installed while
+    dashboard uses `nerd-icons`.
 
 18. **The same package configured twice:**
     - `nix-mode`: `init-programming.el:235` and `programming/nix.el:72`
     - `gitlab-ci-mode`: `init-programming.el:207` and `programming/gitlab.el`
     - `make-mode`: `programming/build-systems.el:101` and
       `programming/makefile.el`
-    - `exec-path-from-shell`: two blocks in `init-env.el` differing only in
-      the variable list; one block with a computed list is simpler.
-    - difftastic: the `difftastic` package in `init-magit.el:240` **and** a
-      hand-rolled `dn/magit-*-with-difftastic` in `programming/diff.el`
-      (which is not a language, hard-`require`s magit at startup, and
-      hardcodes `--background=light`). Keep one.
+    - `exec-path-from-shell`: two blocks in `init-env.el` (see item 1).
+    - difftastic: the `difftastic` package in `init-magit.el:240` (`D`/`S`)
+      **and** a hand-rolled `dn/magit-*-with-difftastic` in
+      `programming/diff.el` (`#` → `d`/`s`). They don't clash, but
+      `diff.el` is not a language, hard-`require`s magit at startup, and
+      hardcodes `--background=light`. Keep one.
 
 19. **`explain-pause-mode.el` (3,699 lines) is loaded but never enabled.**
     `init-emacs.el:86` declares it with no `:config`, `:commands` or
@@ -172,8 +172,8 @@ duplicated code, C is consistency and hygiene.
 
 20. **`init-org.el` is disabled in `.emacs` but still tracked.** It also has
     `org-log-done` set twice, quoted lambdas (`'(lambda …)`), a nested
-    `custom-set-variables` inside `:config`, and depends on an `org-directory`
-    that nothing sets. Either fix and re-enable, or delete it (git keeps it).
+    `custom-set-variables` inside `:config`, and relies on the default
+    `org-directory` (`~/org`) without saying so. Either fix and re-enable, or delete it (git keeps it).
 
 21. **Commented-out blocks** (12 `use-package` forms, `aidermacs` being the newest, plus the irony/octave/
     eglot experiments, ~150 lines). History already preserves them; delete.
@@ -288,6 +288,10 @@ duplicated code, C is consistency and hygiene.
     which Emacs version is required (the config assumes 29+: `treesit`,
     `setopt`, built-in `use-package`).
 
+37. **Missing `lexical-binding` cookies.** Emacs 31 warns at startup for
+    `dashboard-worktrees-patch.el` (tracked) and for the untracked
+    `custom.el`, `config/init-post.el` and `~/.emacs.d/early-init.el`.
+
 ---
 
 ## Part 2: Modularity, structure and architecture
@@ -367,10 +371,11 @@ duplicated code, C is consistency and hygiene.
 7. **Startup is fully eager.** `use-package-always-defer` is nil, most
    blocks have no `:defer`/`:commands`/`:hook`, `yas-reload-all` and
    `devdocs-update-all` run at boot, and `gc-cons-threshold` is tuned as a
-   side effect of the `lsp-mode` block. There is no `early-init.el`.
+   side effect of the `lsp-mode` block. The repo has no `early-init.el`;
+   the host has one in `~/.emacs.d/` that lives outside this repo.
 
 8. **Nothing verifies the config.** No batch load, no byte-compile, no CI.
-   Items 1, 3, 7, 9, 29 in Part 1 would all have been caught by
+   Items 3, 6, 10, 29 and 37 in Part 1 would all have been caught by
    `emacs --batch -l init.el` plus `byte-compile-file` with warnings on.
 
 ### Proposed target structure
@@ -481,7 +486,7 @@ every step.
 |---|---|---|
 | 0. Safety net | `Makefile` + CI batch load; `.dir-locals.el`; fix the provide/header table (item 29); remove `Local Variables` footers. | none |
 | 1. Delete | Items 16-24, 27: package.el functions, ivy/company remnants, commented blocks, duplicates, `explain-pause-mode`, decide on `init-org.el`. | none |
-| 2. Fix bugs | Items 1-15 (python `:dash`, ispell args, `dn-cmd-after-saved-file`, `lsp-nix` ordering, keybinding clash, `.yas-parents`, network at startup, `config-require` leak). | low |
+| 2. Fix bugs | Items 1-15 (`exec-path-from-shell` double init, ispell args, `dn-cmd-after-saved-file`, `lsp-nix` ordering, copilot-chat bindings, `.yas-parents`, network at startup, `config-require` leak). | low |
 | 3. Re-cut modules | Split `init-emacs.el` into `ui`/`completion`/`editing`; move tooling out of `init-programming.el` into `lsp.el`; move language packages into `lang/`; create `os-darwin.el`; `lib/` + `vendor/` + `patches/` split. Pure moves, no behaviour change. | low |
 | 4. Loader + naming | `dn-` prefix everywhere; `defgroup dn`; single `dn-load-directory`; `dn-modules`/`dn-disabled-languages`; README rewrite. | medium |
 | 5. Init directory | `early-init.el` + `init.el`, `--init-directory` support, custom-file ordering fix, `straight-use-package-by-default`, defer audit. | medium |
@@ -492,8 +497,8 @@ is adopted.
 ### Quick wins (under an hour total)
 
 - Delete `snippets/cmake-mode/.yas-parents`.
-- Remove `:dash "Python 3" "NumPy" "SciPy"` and merge the two `:config`
-  sections in `programming/python.el`; fix its `provide`.
+- Fix the `provide` in `programming/python.el`.
+- Drop `:after (request org markdown-mode)` from `copilot-chat`.
 - Delete `(setq-default ispell-extra-args '("--reverse"))` in
   `init-ispell.el`.
 - Delete `init-custom-functions.el:51-98` (package.el helpers).
@@ -503,6 +508,6 @@ is adopted.
 - Move `(devdocs-update-all)` into `dn-devdocs-install`.
 - Add `(defgroup dn nil "Personal configuration." :group 'emacs)` to
   `config/variables.el`.
-- Move the copilot-chat chords in `init-llm.el` into their own prefix map.
+- Merge the two `exec-path-from-shell` blocks in `init-env.el`.
 - Add `:straight t` to `consult`; `:straight nil` to the built-ins in
   item 32.
