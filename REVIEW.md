@@ -1,21 +1,47 @@
 # Emacs config review: cleanup and modularity
 
 Scope: every tracked `.el` file, the entry point, README, snippets layout,
-service file and repo metadata, as of `47ec94c` (main after the Go, claude-code-ide, sops and LSP-workspace changes). Findings were
+service file and repo metadata, originally as of `47ec94c`, re-assessed against main `614c5c8` after the
+28 cleanup commits that followed the first pass. Findings were
 checked against a running Emacs 31.1 session with this config loaded (via
-`emacsclient`). Items marked **verify** still need a manual repro.
+`emacsclient`). Items marked **verify** still need a manual repro. Each
+numbered item now starts with its status: **Done** (fixed on main),
+**Partly** (some of it landed) or **Open**.
 
 Numbers that frame the rest of the review:
 
 | Metric | Value |
 |---|---|
-| `use-package` declarations | 155 |
+| `use-package` declarations | 149 (was 155) |
 | Own init modules (`init-*.el`) | 17 (one disabled) |
-| Language modules (`programming/*.el`) | 22 (two skipped) |
-| Largest own module | `init-emacs.el`, 779 lines |
+| Language modules (`programming/*.el`) | 20 (two skipped; `diff.el` and `makefile.el` removed) |
+| Largest own module | `init-emacs.el`, 777 lines |
 | Vendored third-party code | 5 files, ~4,600 lines (3,699 in `explain-pause-mode.el`) |
 | Own top-level helper libraries | 2 (`dashboard-worktrees-patch.el`, `cleanup-lsp-workspaces.el`) |
-| Commented-out `use-package` blocks | 12 (aidermacs, irony, elpy, eglot, cmake-ide, rtags, lsp-bridge, prism, code-review, ruff-lsp, flycheck-irony, tex) |
+| Commented-out `use-package` blocks | 11 (aidermacs, irony, elpy, eglot, cmake-ide, rtags, lsp-bridge, prism, code-review, ruff-lsp, flycheck-irony) |
+
+## Status after main `614c5c8`
+
+Main now carries most of migration phases 1 and 2 from Part 2, plus a
+batch smoke test (`test/smoke.el`). Of the 37 cleanup items:
+
+| Status | Items |
+|---|---|
+| Done | 1, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 27, 35 |
+| Partly | 2, 8, 21, 26, 31, 32 |
+| Open | 19, 20, 22, 23, 24, 25, 28, 29, 30, 33, 34, 36, 37 |
+
+The smoke test covers exactly the regressions that were fixed (feature
+name, `filename` leak, ispell args, ts-mode bindings and docsets, AUCTeX
+commands), which is the right shape for phase 0. It still needs a
+`Makefile` target and CI wiring, and it is not hermetic: it loads `.emacs`,
+so it needs a bootstrapped `straight/` directory with every package already
+cloned. A byte-compile pass over the own modules is the missing half.
+
+What the new commits did not touch, in order of value: the
+header/provide/footer drift (29), the `Local Variables` footers (30), the
+`explain-pause-mode` dead weight (19), the remaining commented-out blocks
+(21), and the namespace cleanup (31). Everything in Part 2 still applies.
 
 ---
 
@@ -26,14 +52,14 @@ duplicated code, C is consistency and hygiene.
 
 ### A. Bugs and latent breakage
 
-1. **`exec-path-from-shell` initializes twice on Linux GUI sessions.**
+1. **Done.** **`exec-path-from-shell` initializes twice on Linux GUI sessions.**
    `init-env.el` has one block gated on `window-system` being `mac`/`ns`/`x`
    and another gated on `system-type` being `gnu/linux`. Under X on Linux
    both match, so `exec-path-from-shell-initialize` runs twice and the
    second block's variable list wins. Merge into one block with a computed
    list.
 
-2. **`init-ispell.el` overrides its own spell-checker arguments.** Line 100
+2. **Partly.** The `--reverse` override is gone; the nesting under `flycheck-aspell` remains. **`init-ispell.el` overrides its own spell-checker arguments.** Line 100
    computes `ispell-extra-args` from `flyspell-detect-ispell-args`, then line
    127 unconditionally does `(setq-default ispell-extra-args '("--reverse"))`,
    discarding the language and camel-case flags (live default value:
@@ -41,7 +67,7 @@ duplicated code, C is consistency and hygiene.
    fallback branch, lives inside `flycheck-aspell`'s `:config`, so it is tied
    to that package loading rather than standing on its own.
 
-3. **`programming/python.el` provides the wrong feature.** It ends with
+3. **Done.** **`programming/python.el` provides the wrong feature.** It ends with
    `(provide 'init-prog-build-systems)`, copied from `build-systems.el`. It
    only loads today because the discovery loop in `init-programming.el`
    uses `intern-soft`, which falls back to `load` when the symbol is not
@@ -49,20 +75,20 @@ duplicated code, C is consistency and hygiene.
    example mentioning it in another file) would flip the loop to `require`
    and it would fail with "Required feature was not provided".
 
-4. **`programming/matlab.el` redefines the built-in `string-replace`**
+4. **Done** (the `string-as-unibyte` calls remain). **`programming/matlab.el` redefines the built-in `string-replace`**
    (line 57). Emacs 28+ ships `string-replace` with the same arity, so the
    redefinition currently works by luck. It is skipped via `skip.txt`, but
    it is a trap if the skip is ever removed. Same file uses the obsolete
    `string-as-unibyte`.
 
-5. **`init-emacs.el` `dn-cmd-after-saved-file` is broken logic.** It
+5. **Done.** **`init-emacs.el` `dn-cmd-after-saved-file` is broken logic.** It
    computes `command` then calls `(shell-command (cdr match))` ignoring it,
    `add-to-list` on a `let`-bound list never updates the executed command,
    and the warning prints `command`, which is `nil` on the failure path.
    `dn-script-on-save` is also empty, so the hook runs for nothing on every
    save. Delete or rewrite.
 
-6. **Undeclared runtime dependencies** that only work because some other
+6. **Done.** **Undeclared runtime dependencies** that only work because some other
    package pulls them in transitively:
    - `s-trim` (s.el) in `dn-async-process`, `init-emacs.el:708`
    - `f-exists?` (f.el) in `init-custom-functions.el:106`
@@ -75,7 +101,7 @@ duplicated code, C is consistency and hygiene.
      `straight-use-package-by-default` is never set, so every block without
      `:straight` is silently "configure only".
 
-7. **`magit-popup` is obsolete and the one consumer is probably broken.**
+7. **Done.** **`magit-popup` is obsolete and the one consumer is probably broken.**
    (**verify**) `python-pytest` switched to transient years ago, so
    `magit-define-popup-option 'python-pytest-dispatch …`
    (`python.el:244-250`) targets a transient prefix, not a popup variable.
@@ -84,35 +110,35 @@ duplicated code, C is consistency and hygiene.
    Python buffer, press `C-x tk`, check `*Warnings*`. `magit-popup` is also
    listed in `emojify-inhibit-major-modes` and in `dn-reinstall-essentials`.
 
-8. **`lsp-nix-nil-flake-impure` is set in `:custom` before it is defined in
+8. **Partly.** Now set with `setopt` after the definition, but still from inside the `lsp-mode` `:config`; item 15 in Part 2 (move Nix bits to `lang/nix.el`) covers the rest. **`lsp-nix-nil-flake-impure` is set in `:custom` before it is defined in
    `:config`** (`init-programming.el:348,350`). It works (live value is `t`)
    because `defcustom` keeps an already-bound value, but it reads backwards.
    Move the `lsp-defcustom` into a `with-eval-after-load 'lsp-mode`, or set
    the value after the definition.
 
-9. **`init-auctex.el`: `:after (tex)` on `tex-site`.** `:mode` still installs
+9. **Done.** **`init-auctex.el`: `:after (tex)` on `tex-site`.** `:mode` still installs
    the `auto-mode-alist` entry up front, and the `:after` body runs whenever
    `tex` first loads, so this works. It is just an odd way to say "configure
    AUCTeX after it loads"; `use-package tex :straight auctex` would be
    clearer. `reftex-plug-into-AUCTeX` is set twice in that block.
 
-10. **`config-require` leaks a global variable.** `functions.el:86-87` does
+10. **Done.** **`config-require` leaks a global variable.** `functions.el:86-87` does
     `(setq filename …)` on a name that is not in the `let`; with
     lexical-binding this creates a dynamic global `filename`.
 
-11. **`.emacs` duplicates `config-root`/`config-dir` definitions.** The
+11. **Done.** **`.emacs` duplicates `config-root`/`config-dir` definitions.** The
     `let` binding of `config-root` (line 31) is shadowed immediately by a
     `defconst` of the same name; the three `defconst`s are then redefined
     as `defcustom`s by `config/variables.el`. Keep one definition.
 
-12. **README and code disagree on `init-post.el`/custom-file order.** README
+12. **Done** (README now documents the precedence). **README and code disagree on `init-post.el`/custom-file order.** README
     says `init-post.el` runs "just before loading the custom file"; `.emacs`
     loads `custom.el` at line 56, before every module. This also means every
     `:custom` in a `use-package` block overrides whatever the user saved via
     Customize, since `customize-set-variable` runs after `custom.el`. Decide
     which should win and make the README match.
 
-13. **`copilot-chat` keybindings are never installed.** The block has
+13. **Done** (copilot-chat removed). **`copilot-chat` keybindings are never installed.** The block has
     `:after (request org markdown-mode)`, which also wraps `:bind`, and
     nothing loads `request` until copilot-chat itself does. In the live
     session `request` is not loaded and `where-is-internal
@@ -122,13 +148,13 @@ duplicated code, C is consistency and hygiene.
     binds `C-c c` to `recompile` in `c-mode-base-map`; a dedicated prefix
     map avoids that.
 
-14. **`snippets/cmake-mode/.yas-parents` contains `"cmake-mode"`** (quoted,
+14. **Done.** **`snippets/cmake-mode/.yas-parents` contains `"cmake-mode"`** (quoted,
     and naming itself). A snippet directory cannot be its own parent and
     yasnippet reads the token verbatim, so it looks for a mode literally
     named `"cmake-mode"`. Delete the file. `cmake-ts-mode/.yas-parents`
     correctly points at `cmake-mode`.
 
-15. **Network I/O as a side effect of loading.** `init-docs.el:44` calls
+15. **Done.** **Network I/O as a side effect of loading.** `init-docs.el:44` calls
     `(devdocs-update-all)` in `:config`, and `devdocs` is loaded eagerly, so
     this runs on every launch. `python.el:166` shells out to `npm outdated
     -g` from `lsp-pyright`'s `:config`, i.e. on the first Python buffer of
@@ -140,7 +166,7 @@ duplicated code, C is consistency and hygiene.
 
 ### B. Dead, duplicated and obsolete code
 
-16. **Package manager leftovers.** `init-custom-functions.el` still carries
+16. **Done.** **Package manager leftovers.** `init-custom-functions.el` still carries
     `dn-recompile-elpa`, `dn-reinstall-essentials`, and
     `dn-reinstall-all-activated-packages`, all built on `package.el`
     (`package-user-dir`, `package-reinstall`, `package-activated-list`). The
@@ -148,12 +174,12 @@ duplicated code, C is consistency and hygiene.
     names `counsel`, `ivy`, `lsp-ivy`, which are gone. `init-package.el`
     keeps the commented-out MELPA/`package-install` bootstrap.
 
-17. **Ivy remnants.** `all-the-icons-ivy` (`init-misc.el:79`) is installed
+17. **Done.** **Ivy remnants.** `all-the-icons-ivy` (`init-misc.el:79`) is installed
     although nothing else uses ivy, and it pulls ivy itself back in (`ivy`
     is loaded in the live session). `all-the-icons` is installed while
     dashboard uses `nerd-icons`.
 
-18. **The same package configured twice:**
+18. **Done.** **The same package configured twice:**
     - `nix-mode`: `init-programming.el:235` and `programming/nix.el:72`
     - `gitlab-ci-mode`: `init-programming.el:207` and `programming/gitlab.el`
     - `make-mode`: `programming/build-systems.el:101` and
@@ -165,56 +191,56 @@ duplicated code, C is consistency and hygiene.
       `diff.el` is not a language, hard-`require`s magit at startup, and
       hardcodes `--background=light`. Keep one.
 
-19. **`explain-pause-mode.el` (3,699 lines) is loaded but never enabled.**
+19. **Open.** **`explain-pause-mode.el` (3,699 lines) is loaded but never enabled.**
     `init-emacs.el:86` declares it with no `:config`, `:commands` or
     `:defer`. Either drop the file or install it from its GitHub recipe on
     demand (`:commands explain-pause-mode`).
 
-20. **`init-org.el` is disabled in `.emacs` but still tracked.** It also has
+20. **Open.** **`init-org.el` is disabled in `.emacs` but still tracked.** It also has
     `org-log-done` set twice, quoted lambdas (`'(lambda …)`), a nested
     `custom-set-variables` inside `:config`, and relies on the default
     `org-directory` (`~/org`) without saying so. Either fix and re-enable, or delete it (git keeps it).
 
-21. **Commented-out blocks** (12 `use-package` forms, `aidermacs` being the newest, plus the irony/octave/
+21. **Partly** (the `tex` and package.el remnants went; 11 blocks remain). **Commented-out blocks** (11 `use-package` forms, `aidermacs` being the newest, plus the irony/octave/
     eglot experiments, ~150 lines). History already preserves them; delete.
 
-22. **Pointless `autoload` calls inside `:config`** (`build-systems.el:114`,
+22. **Open.** **Pointless `autoload` calls inside `:config`** (`build-systems.el:114`,
     `matlab.el:45-46`, `pov-ray.el:41`). By the time `:config` runs the
     package is loaded, so the autoload is a no-op.
 
-23. **`(use-package use-package :straight t)`** in `init-package.el`.
+23. **Open.** **`(use-package use-package :straight t)`** in `init-package.el`.
     `use-package` is built into Emacs 29+; straight will clone the
     upstream repo and shadow the built-in. Also `straight-use-package 'org`
     appears in both `init-package.el` and `init-org.el`.
 
-24. **`emojify`** is fully configured (`init-misc.el:53-74`) but its
+24. **Open.** **`emojify`** is fully configured (`init-misc.el:53-74`) but its
     global mode is commented out, so it's ~30 lines of inert config.
 
-25. **`init-magit.el`:** `(make-local-variable 'split-height-threshold)` at
+25. **Open.** **`init-magit.el`:** `(make-local-variable 'split-height-threshold)` at
     load time makes the variable buffer-local in whatever buffer happens to
     be current, which is not what was intended. `point-at-eol`/
     `point-at-bol` are obsolete (`pos-eol`/`pos-bol` or
     `line-end-position`). `conv-commit-type-prompt` calls the private
     `consult--read`.
 
-26. **`programming/cpp.el`:** `c-basic-indent` is set both in `:custom` and
+26. **Partly.** The ad-hoc `c++-mode-hook` bindings became `:bind`, and a `c-ts-mode` block was added; the duplicate `c-basic-indent`, the global `indent-tabs-mode`, and the copy-pasted `:functions` remain. Also new: `compile-in-iterm` is now bound in four keymaps but only defined on darwin. **`programming/cpp.el`:** `c-basic-indent` is set both in `:custom` and
     in a later `custom-set-variables`, and that same `custom-set-variables`
     sets `indent-tabs-mode nil` globally from inside a C++ module.
     `flycheck-clang-tidy` declares `:functions flycheck-clang-analyzer-setup`
     (copy-paste from the block above).
 
-27. **`programming/web.el` installs `company-web`** and pushes to
+27. **Done.** **`programming/web.el` installs `company-web`** and pushes to
     `company-backends`, but company is not in the config (completion is
     `:capf`). `(use-package json :straight t)` in the same file is a
     built-in library, and `json.el` separately declares `json-ts-mode
     :straight t`, another built-in.
 
-28. **`programming/build-systems.el`** adds a global `before-save-hook` for
+28. **Open.** **`programming/build-systems.el`** adds a global `before-save-hook` for
     PKGBUILD (guarded by `major-mode`); a mode-local hook is cleaner.
 
 ### C. Consistency and hygiene
 
-29. **File headers, `provide` and "ends here" footers are out of sync** in
+29. **Open** (only `python.el` was fixed). **File headers, `provide` and "ends here" footers are out of sync** in
     most language modules. Concretely:
 
     | File | Header says | Provides | Footer says |
@@ -224,21 +250,21 @@ duplicated code, C is consistency and hygiene.
     | `programming/windows.el` | "C++ support" | `init-prog-windows` | `windows.el ends here` |
     | `programming/yaml.el` | "C++ support" | `init-prog-yaml` | ok |
     | `programming/makefile.el` | "Initialisation for Python" | `init-prog-makefile` | `init-prog-build-systems.el` |
-    | `programming/python.el` | ok | `init-prog-build-systems` | `init-prog-build-systems.el` |
     | `programming/web.el` | "MATLAB/Octave" | `init-prog-web` | ok |
     | `programming/gnuplot.el` | "MATLAB/Octave" | ok | ok |
     | `programming/robotframework.el` | "ROS2 support", file name `robotframework.el.el` | `robotframework.el` | `robotframework.el.el` |
     | `programming/ros.el` | `init-ros2.el` | `init-ros2` | `init-ros2.el` |
     | `programming/cpp.el` | ok | `cpp` (no prefix) | ok |
-    | `programming/diff.el`, `nix.el` | no header at all | nothing | none |
+    | `programming/nix.el` | no header at all | nothing | none |
     | `init-docs.el` | "Initialisation for programming" | ok | ok |
     | `config/variables.el` | header starts with `;;` not `;;;` | ok | ok |
 
-    Four different feature-name conventions coexist (`init-prog-x`,
+    `go.el` and `markdown.el` also say `go.el`/`markdown.el` in the footer but
+    provide `init-prog-*`. Four different feature-name conventions coexist (`init-prog-x`,
     `init-x`, `x`, `x.el`). This is exactly what a batch byte-compile in CI
     would catch (see Part 2, phase 0).
 
-30. **`Local Variables` footers with `eval:` forms** are copy-pasted into
+30. **Open.** **`Local Variables` footers with `eval:` forms** are copy-pasted into
     13 files. They `setq` the global `config-dotemacs-lisp` and `config-dir`
     whenever the file is *visited*, trigger "unsafe local variable"
     prompts, and are wrong in `programming/*` (they compute `config/`
@@ -246,7 +272,7 @@ duplicated code, C is consistency and hygiene.
     the repo root, or with a proper load-path so flymake/flycheck can find
     `config-functions`.
 
-31. **Namespace.** Personal symbols use `dn-`, `dn/`, `dn--`, `my-`, `pd--`,
+31. **Partly** (`defgroup dn` exists now; names unchanged). **Namespace.** Personal symbols use `dn-`, `dn/`, `dn--`, `my-`, `pd--`,
     `conv-commit-`, `yas-lib-`, or no prefix at all (`en-abb`, `fr-abb`,
     `imdoc`, `crm-indicator`, `revert-all-buffers`, `kill-from-line-beginning`,
     `shutdown-emacs-server`, `magit-push-to-all-remotes`,
@@ -257,19 +283,19 @@ duplicated code, C is consistency and hygiene.
     Pick one prefix (`dn-`) and one customization group (`dn`, which is
     referenced by six `defcustom`s but never `defgroup`ed).
 
-32. **Built-in libraries declared inconsistently.** `cc-mode`, `python`,
+32. **Partly.** `epg`, `diff-mode`, `display-line-numbers`, `printing`, `json`, `json-ts-mode` are fixed; `use-package` itself is still `:straight t` and `savehist` has no `:straight` at all. **Built-in libraries declared inconsistently.** `cc-mode`, `python`,
     `make-mode`, `rst`, `lsp-nix`, `vertico-*` correctly use `:straight nil`;
     `epg`, `diff-mode`, `display-line-numbers`, `printing`, `json`,
     `json-ts-mode`, `savehist`, `use-package` do not.
 
-33. **Formatting.** 13 files mix tabs and spaces; closing parens are
+33. **Open.** **Formatting.** 13 files mix tabs and spaces; closing parens are
     routinely on their own line; `(if x (progn …))` instead of `when`;
     `'(lambda …)` instead of `#'`/`lambda`; `(progn …)` as the sole body of
     `:config`. A one-time pass with `indent-region` under
     `indent-tabs-mode nil` (enforced through `.dir-locals.el`) plus
     `checkdoc` would settle this.
 
-34. **Host-specific artifacts in the repo.** `emacs.service` hardcodes
+34. **Open.** **Host-specific artifacts in the repo.** `emacs.service` hardcodes
     `/snap/bin/emacs` and `LD_LIBRARY_PATH=/usr/local/lib` with commented
     alternatives; the four `docsets/*.tgz` are Git LFS blobs (not
     fetchable in this environment) that `dn-dash-docs-install` re-installs
@@ -277,10 +303,10 @@ duplicated code, C is consistency and hygiene.
     generation probably belong in the home-manager config, with this repo
     referencing them by path.
 
-35. **`.emacs` trailing statement.** `(put 'narrow-to-region 'disabled nil)`
+35. **Done.** **`.emacs` trailing statement.** `(put 'narrow-to-region 'disabled nil)`
     sits after the `;;; .emacs ends here` footer.
 
-36. **README gaps.** It does not mention that `config-require` looks in
+36. **Open** (the custom-file paragraph was added; the rest is not). **README gaps.** It does not mention that `config-require` looks in
     `.emacs_lisp/config/` *first* (`functions.el:82-87`), so a gitignored
     `config/init-magit.el` silently replaces the tracked module. That is a
     useful override hook but it is undocumented and easy to trip over. The
@@ -288,7 +314,7 @@ duplicated code, C is consistency and hygiene.
     which Emacs version is required (the config assumes 29+: `treesit`,
     `setopt`, built-in `use-package`).
 
-37. **Missing `lexical-binding` cookies.** Emacs 31 warns at startup for
+37. **Open.** **Missing `lexical-binding` cookies.** Emacs 31 warns at startup for
     `dashboard-worktrees-patch.el` (tracked) and for the untracked
     `custom.el`, `config/init-post.el` and `~/.emacs.d/early-init.el`.
 
@@ -374,9 +400,11 @@ duplicated code, C is consistency and hygiene.
    side effect of the `lsp-mode` block. The repo has no `early-init.el`;
    the host has one in `~/.emacs.d/` that lives outside this repo.
 
-8. **Nothing verifies the config.** No batch load, no byte-compile, no CI.
-   Items 3, 6, 10, 29 and 37 in Part 1 would all have been caught by
-   `emacs --batch -l init.el` plus `byte-compile-file` with warnings on.
+8. **Verification is only half there.** `test/smoke.el` now batch-loads the
+   config and checks the fixed regressions, but nothing runs it (no
+   `Makefile`, no CI) and nothing byte-compiles the own modules. Items 29
+   and 37 in Part 1 would be caught by `byte-compile-file` with
+   `byte-compile-error-on-warn`, which the smoke test cannot see.
 
 ### Proposed target structure
 
@@ -484,9 +512,9 @@ every step.
 
 | Phase | Content | Risk |
 |---|---|---|
-| 0. Safety net | `Makefile` + CI batch load; `.dir-locals.el`; fix the provide/header table (item 29); remove `Local Variables` footers. | none |
-| 1. Delete | Items 16-24, 27: package.el functions, ivy/company remnants, commented blocks, duplicates, `explain-pause-mode`, decide on `init-org.el`. | none |
-| 2. Fix bugs | Items 1-15 (`exec-path-from-shell` double init, ispell args, `dn-cmd-after-saved-file`, `lsp-nix` ordering, copilot-chat bindings, `.yas-parents`, network at startup, `config-require` leak). | low |
+| 0. Safety net (**partly done**: smoke test exists) | Wire `test/smoke.el` into a `Makefile` + CI; add byte-compile of own modules; `.dir-locals.el`; fix the provide/header table (item 29); remove `Local Variables` footers. | none |
+| 1. Delete (**mostly done**) | Remaining: `explain-pause-mode` (19), `init-org.el` decision (20), commented blocks (21), `(use-package use-package)` (23), `emojify` (24). | none |
+| 2. Fix bugs (**done**) | Items 1-15 landed on main. Leftovers are hygiene: `autoload` in `:config` (22), `init-magit.el` obsolete calls (25), `cpp.el` duplicates and the cross-OS `compile-in-iterm` binding (26), PKGBUILD global hook (28). | low |
 | 3. Re-cut modules | Split `init-emacs.el` into `ui`/`completion`/`editing`; move tooling out of `init-programming.el` into `lsp.el`; move language packages into `lang/`; create `os-darwin.el`; `lib/` + `vendor/` + `patches/` split. Pure moves, no behaviour change. | low |
 | 4. Loader + naming | `dn-` prefix everywhere; `defgroup dn`; single `dn-load-directory`; `dn-modules`/`dn-disabled-languages`; README rewrite. | medium |
 | 5. Init directory | `early-init.el` + `init.el`, `--init-directory` support, custom-file ordering fix, `straight-use-package-by-default`, defer audit. | medium |
@@ -496,18 +524,21 @@ is adopted.
 
 ### Quick wins (under an hour total)
 
-- Delete `snippets/cmake-mode/.yas-parents`.
-- Fix the `provide` in `programming/python.el`.
-- Drop `:after (request org markdown-mode)` from `copilot-chat`.
-- Delete `(setq-default ispell-extra-args '("--reverse"))` in
-  `init-ispell.el`.
-- Delete `init-custom-functions.el:51-98` (package.el helpers).
-- Delete `all-the-icons-ivy`, `magit-popup`, `company-web`, the second
-  `nix-mode`/`gitlab-ci-mode`/`make-mode` blocks, and
-  `programming/diff.el` or the `difftastic` block.
-- Move `(devdocs-update-all)` into `dn-devdocs-install`.
-- Add `(defgroup dn nil "Personal configuration." :group 'emacs)` to
-  `config/variables.el`.
-- Merge the two `exec-path-from-shell` blocks in `init-env.el`.
-- Add `:straight t` to `consult`; `:straight nil` to the built-ins in
-  item 32.
+Everything from the original quick-wins list has landed except these:
+
+- Add a `Makefile` with `check: emacs --batch -l .emacs -l test/smoke.el`
+  and a byte-compile target, and a CI job that runs it.
+- Fix the header/footer drift in `json.el`, `terraform.el`, `windows.el`,
+  `yaml.el`, `web.el`, `gnuplot.el`, `robotframework.el`, `ros.el`,
+  `markdown.el`, `go.el`, and give `nix.el` a header.
+- Delete the 15 `Local Variables` footers.
+- Drop `explain-pause-mode` (`init-emacs.el` block and the vendored file)
+  or give it `:commands explain-pause-mode`.
+- Delete the 11 commented-out `use-package` blocks.
+- Replace `(use-package use-package :straight t)` with `:straight nil`, and
+  add `:straight nil` to `savehist`.
+- Remove the duplicate `c-basic-indent` / global `indent-tabs-mode` from
+  `cpp.el`, and fix the `:functions` line in `flycheck-clang-tidy`.
+- Guard the `compile-in-iterm` bindings in `cpp.el` and `rest.el` with the
+  darwin check, or define a no-op elsewhere.
+- Add the `lexical-binding` cookie to `dashboard-worktrees-patch.el`.
