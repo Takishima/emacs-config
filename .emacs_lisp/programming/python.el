@@ -49,16 +49,16 @@
   :straight nil
   :config
   (progn
-    (add-hook 'python-mode-hook 'highlight-indentation-mode)
-    ;; (add-hook 'python-mode-hook 'eldoc-mode)
-    (add-hook 'python-mode-hook 'sphinx-doc-mode))
-  :bind (:map python-mode-map
+    (add-hook 'python-base-mode-hook 'highlight-indentation-mode)
+    ;; (add-hook 'python-base-mode-hook 'eldoc-mode)
+    (add-hook 'python-base-mode-hook 'sphinx-doc-mode))
+  :bind (:map python-base-mode-map
 	      (
                ("C-c i" . python-insert-docstring-with-google-style-at-point)
                ))
   :dash "Python 3" "NumPy" "SciPy"
   :config
-  (add-hook 'python-mode-hook
+  (add-hook 'python-base-mode-hook
             (lambda () (progn
                          (setq-local devdocs-current-docs '("python~3.12")))
                          (setq-local dash-docs-docsets '("Python 3" "NumPy" "SciPy")))
@@ -153,10 +153,10 @@
 (use-package lsp-pyright
   :straight t
   :after lsp-mode
-  :hook (python-mode . (lambda ()
-                         (config-unless-system 'darwin
-                           (require 'lsp-pyright)
-                           (lsp-deferred))))
+  :hook (python-base-mode . (lambda ()
+                              (config-unless-system 'darwin
+                                (require 'lsp-pyright)
+                                (lsp-deferred))))
   :custom
   (lsp-pyright-auto-import-completions nil)
   (lsp-pyright-typechecking-mode "off")
@@ -204,7 +204,7 @@
 (use-package yapfify
   :straight t
   :bind
-  (:map python-mode-map
+  (:map python-base-mode-map
         ("C-c C-y" . yapfify-region-or-buffer))
   )
 
@@ -219,7 +219,7 @@
 (use-package python-pytest
   :straight t
   :after python
-  :bind (:map python-mode-map
+  :bind (:map python-base-mode-map
 	      (("C-x tp" . python-pytest-dispatch)
 	       ("C-x tt" . python-pytest)
 	       ("C-x tf" . python-pytest-file)
@@ -238,7 +238,8 @@
      "--maxfail=5"))    ;; exit in 5 continuous failures in a run
   :functions python-pytest--project-name
   :config
-  (which-key-add-major-mode-key-based-replacements 'python-mode "t" "Testing")
+  (dolist (mode '(python-mode python-ts-mode))
+    (which-key-add-major-mode-key-based-replacements mode "t" "Testing"))
   (defun python-pytest-close-buffer ()
     "Close the python-pytest buffer (if it exists)."
     (interactive)

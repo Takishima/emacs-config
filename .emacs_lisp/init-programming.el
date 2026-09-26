@@ -441,7 +441,7 @@
          (dap-session-created . (lambda (&_rest) (dap-hydra)))
          (dap-stopped . (lambda (_args) (dap-hydra)))
          (dap-terminated . (lambda (&_rest) (dap-hydra/nil)))
-         (python-mode . (lambda () (require 'dap-python)))
+         (python-base-mode . (lambda () (require 'dap-python)))
          (go-ts-mode . (lambda () (require 'dap-go)))
          (diff-mode . (lambda () (dap-mode -1)))
          (powershell-mode . (lambda () (dap-mode -1)))
