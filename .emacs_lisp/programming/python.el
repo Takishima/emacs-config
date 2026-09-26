@@ -235,18 +235,7 @@
      "--maxfail=5"))    ;; exit in 5 continuous failures in a run
   :functions python-pytest--project-name
   :config
-  (require 'magit-popup)
   (which-key-add-major-mode-key-based-replacements 'python-mode "t" "Testing")
-  (defun python-pytest-cov--choose-report-type (prompt _value)
-    "Helper to choose a pytest coverage report type using PROMPT."
-    (completing-read
-     prompt '("term" "term-missing" "annotate" "html") nil t))
-  (magit-define-popup-option 'python-pytest-dispatch ?c "Coverage" "--cov=")
-  (magit-define-popup-option
-    'python-pytest-dispatch
-    ?r
-    "Coverage report" "--cov-report="
-    'python-pytest-cov--choose-report-type)
   (defun python-pytest-close-buffer ()
     "Close the python-pytest buffer (if it exists)."
     (interactive)

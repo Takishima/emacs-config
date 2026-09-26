@@ -221,10 +221,6 @@ MERGE-ID is the merge identifier from git output."
   :hook (magit-mode . turn-on-magit-gitflow)
   )
 
-(use-package magit-popup
-  :straight t
-  )
-
 ;; ========================================================================== ;;
 
 (use-package magit-delta
