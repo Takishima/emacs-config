@@ -124,7 +124,7 @@
 
 (use-package flycheck-clang-tidy
   :straight t
-  :functions flycheck-clang-analyzer-setup
+  :functions flycheck-clang-tidy-setup
   :after flycheck
   :config (flycheck-clang-tidy-setup)
   )
