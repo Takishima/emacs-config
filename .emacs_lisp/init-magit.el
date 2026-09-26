@@ -371,11 +371,11 @@ Return a list (candidate, icon, description)."
 
 (defun conv-commit-type-prompt ()
   (interactive)
-  (consult--read conv-commit-type-desc
-                 :prompt "Commit type: "
-                 :annotate #'conv-commit-type-completion-decorate
-                 )
-  )
+  (let ((completion-extra-properties
+         (list :affixation-function
+               (lambda (types)
+                 (mapcar #'conv-commit-type-completion-decorate types)))))
+    (completing-read "Commit type: " conv-commit-type-desc)))
 (defun conv-commit-prompt ()
   "Prompt for a conventional commit. and fill the buffer with the result."
   (interactive)
