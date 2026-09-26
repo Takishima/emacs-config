@@ -356,6 +356,21 @@
     :package-version '(lsp-mode . "9.0.0"))
   )
 
+;; Ignore transient CMake directories that can disappear mid-walk and harden
+;; the directory walk against TOCTOU races (e.g. `__cmake_systeminformation'
+;; created and removed during CMake's `enable_language' probe).
+(with-eval-after-load 'lsp-mode
+  (dolist (p '("[/\\\\]__cmake_systeminformation\\'"
+               "[/\\\\]CMakeFiles\\'"
+               "[/\\\\]_deps\\'"
+               "[/\\\\]\\.cmake\\'"))
+    (add-to-list 'lsp-file-watch-ignored-directories p))
+  (advice-add 'lsp--all-watchable-directories :around
+              (lambda (orig-fn &rest args)
+                (condition-case nil
+                    (apply orig-fn args)
+                  (file-missing nil)))))
+
 ;; Taken from https://tychoish.com/post/emacs-and-lsp-mode/
 (use-package lsp-ui
   :straight t
