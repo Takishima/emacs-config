@@ -42,15 +42,17 @@
 
 ;; ========================================================================== ;;
 
+(defun dn-magit-split-height-threshold ()
+  "Set `split-height-threshold' to 200 in the current magit buffer."
+  (setq-local split-height-threshold 200))
+
 (use-package magit
   :straight t
   :commands magit
   :hook
   (git-commit-setup . git-commit-turn-on-flyspell)
+  (magit-mode . dn-magit-split-height-threshold)
   :config
-  (make-local-variable 'split-height-threshold)
-  (setq split-height-threshold 200)
-
   (defun magit-push-to-all-remotes ()
     "Push a branch to all the remotes."
     (interactive)
