@@ -345,7 +345,6 @@
   ;; python-related settings)
   (lsp-pyls-plugins-autopep8-enabled nil)
   (lsp-pyls-plugins-yapf-enabled t)
-  (lsp-nix-nil-flake-impure t)
   :config
   (lsp-defcustom lsp-nix-nil-flake-impure nil
     "Use --impure flag when evaluating flake inputs.
@@ -354,6 +353,7 @@
     :group 'lsp-nix-nil
     :lsp-path "nil.nix.flake.impure"
     :package-version '(lsp-mode . "9.0.0"))
+  (setopt lsp-nix-nil-flake-impure t)
   )
 
 ;; Ignore transient CMake directories that can disappear mid-walk and harden
