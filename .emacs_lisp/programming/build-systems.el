@@ -46,16 +46,16 @@
   (cmake-font-lock-modes '(cmake-mode cmake-ts-mode))
   )
 
+(defun dn-cmake-docs-setup ()
+  "Set the devdocs and dash docsets for CMake buffers."
+  (setq-local devdocs-current-docs '("cmake~3.31"))
+  (setq-local dash-docs-docsets '("CMake")))
+
 (use-package cmake-mode
   :straight t
   :mode
   ("CMakeLists\\.txt\\'" "\\.cmake\\'")
-  :config
-  (add-hook 'cmake-mode-hook
-            (lambda () (progn
-                         (setq-local devdocs-current-docs '("cmake~3.31")))
-                         (setq-local dash-docs-docsets '("CMake")))
-              )
+  :hook ((cmake-mode cmake-ts-mode) . dn-cmake-docs-setup)
   )
 
 ;; -------------------------------------------------------------------------- ;;
@@ -63,14 +63,14 @@
 (use-package cmake-format
   :straight nil
   :load-path config-dotemacs-lisp
-  :bind
-  (:map cmake-mode-map
-        (;; ("C-c i" . compile-in-iterm)
-         ("C-c C-f" . cmake-format-buffer)
-         ))
   :hook
-  (cmake-mode . cmake-format-mode)
+  ((cmake-mode cmake-ts-mode) . cmake-format-mode)
   (cmake-mode . lsp-deferred)
+  :config
+  (with-eval-after-load 'cmake-mode
+    (keymap-set cmake-mode-map "C-c C-f" #'cmake-format-buffer))
+  (with-eval-after-load 'cmake-ts-mode
+    (keymap-set cmake-ts-mode-map "C-c C-f" #'cmake-format-buffer))
   )
 
 ;; -------------------------------------------------------------------------- ;;

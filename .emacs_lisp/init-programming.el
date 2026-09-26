@@ -446,7 +446,7 @@
          (diff-mode . (lambda () (dap-mode -1)))
          (powershell-mode . (lambda () (dap-mode -1)))
          (shell-script-mode . (lambda () (dap-mode -1)))
-         (cmake-mode . (lambda () (dap-mode -1)))
+         ((cmake-mode cmake-ts-mode) . (lambda () (dap-mode -1)))
          ;; ((c-mode c++-mode objc-mode swift-mode) . (lambda () (require 'dap-lldb)))
          (powershell-mode . (lambda () (require 'dap-pwsh))))
   :config
