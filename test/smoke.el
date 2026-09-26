@@ -2,9 +2,7 @@
 
 ;;; Commentary:
 
-;; Run from the repository root:
-;;   emacs --batch -l .emacs -l test/smoke.el
-;; Exits non-zero if any check fails.
+;; Run with `make check'.  Exits non-zero if any check fails.
 
 ;;; Code:
 
