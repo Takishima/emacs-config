@@ -122,9 +122,7 @@
   (defun text-mode-hook-setup ()
     ;; Turn off RUN-TOGETHER option when spell check text-mode
     (setq-local ispell-extra-args (flyspell-detect-ispell-args)))
-  (add-hook 'text-mode-hook 'text-mode-hook-setup)  
-
-  (setq-default ispell-extra-args '("--reverse"))
+  (add-hook 'text-mode-hook 'text-mode-hook-setup)
 
   (setq ispell-silently-savep t)
 
