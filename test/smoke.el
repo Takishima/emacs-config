@@ -85,6 +85,14 @@
   (dn-smoke-check "t.tex latexmk command" t
                   (and (assoc "latexmk" TeX-command-list) t)))
 
+(dn-smoke-check "use-package warnings" nil
+                (when-let* ((buf (get-buffer "*Warnings*")))
+                  (with-current-buffer buf
+                    (save-excursion
+                      (goto-char (point-min))
+                      (when (re-search-forward "(use-package)" nil t)
+                        (buffer-substring (pos-bol) (pos-eol)))))))
+
 (delete-directory dn-smoke-dir t)
 (message "smoke: %d failure(s)" dn-smoke-failures)
 (kill-emacs (if (zerop dn-smoke-failures) 0 1))
