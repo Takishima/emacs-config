@@ -109,11 +109,6 @@
 		      '(line-number-mode t)
 		      '(column-number-mode t))
 
-(config-when-system 'darwin
-  (add-to-list 'default-frame-alist '(font . "Monaco" )
-	       )
-  )
-
 (save-place-mode t)
 
 ;; (unless (and (version< emacs-version "27")
@@ -650,44 +645,6 @@ active region is added to the search string."
 				       "Query replace"  t))))
   (with-current-buffer reb-target-buffer
     (query-replace-regexp (reb-target-binding reb-regexp) to-string)))
-
-;; -------------------------------------------------------------------------- ;;
-
-(use-package htmlize
-  :straight t
-  :commands (htmlize-buffer htmlize-region))
-
-;; -------------------------------------------------------------------------- ;;
-
-(defun formatted-copy-buffer ()
-  "Export buffer to HTML, and copy it to the clipboard."
-  (interactive)
-  (save-window-excursion
-    (let* ((buf (htmlize-buffer))
-           (html (with-current-buffer buf (buffer-string))))
-      (with-current-buffer buf
-	(progn
-	  (shell-command-on-region
-	   (point-min)
-	   (point-max)
-	   "textutil -stdin -format html -convert rtf -stdout | pbcopy"))
-	(kill-buffer buf)
-	))))
-
-(defun formatted-copy-region ()
-  "Export region to HTML, and copy it to the clipboard."
-  (interactive)
-  (save-window-excursion
-    (let* ((buf (htmlize-region (region-beginning) (region-end)))
-           (html (with-current-buffer buf (buffer-string))))
-      (with-current-buffer buf
-	(progn
-	  (shell-command-on-region
-	   (point-min)
-	   (point-max)
-	   "textutil -stdin -format html -convert rtf -stdout | pbcopy"))
-	(kill-buffer buf)
-	))))
 
 ;; -------------------------------------------------------------------------- ;;
 

@@ -60,6 +60,8 @@
 (config-require 'init-ispell)
 
 (config-require 'init-misc)
+(config-when-system 'darwin
+  (config-require 'init-os-darwin))
 
 (config-require 'init-keybindings)
 (config-require 'init-custom-functions)

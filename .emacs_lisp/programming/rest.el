@@ -39,10 +39,7 @@
 
 (use-package rst
   :straight nil
-  :bind
-  (:map rst-mode-map
-	(("C-c i" . compile-in-iterm)
-	 ))
+  :defer t
   )
 
 ;; ========================================================================== ;;

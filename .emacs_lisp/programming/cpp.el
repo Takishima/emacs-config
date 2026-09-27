@@ -60,7 +60,6 @@
   :bind (:map c-mode-base-map
               ("C-c c" . recompile)
               :map c++-mode-map
-              ("C-c i" . compile-in-iterm)
               ("C-c \\" . c-backslash-region))
   :mode
   (
@@ -81,9 +80,7 @@
   :hook ((c-ts-base-mode . dn-cpp-docs-setup)
          (c++-ts-mode . which-function-mode))
   :bind (:map c-ts-base-mode-map
-              ("C-c c" . recompile)
-              :map c++-ts-mode-map
-              ("C-c i" . compile-in-iterm)))
+              ("C-c c" . recompile)))
 
 ;; ========================================================================== ;;
 

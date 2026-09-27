@@ -148,35 +148,6 @@
 
 (setq compilation-scroll-output 'first-error)
 
-;; -------------------------------------------------------------------------- ;;
-
-(config-when-system 'darwin
-  (defvar compile-in-iterms-command "make")
-  ;; (defcustom dn-compile-in-iterms-history nil
-  ;;   "History variable for"
-  ;;   :type '(repeat string)
-  ;;   :group 'dn)
-  (defvar compile-in-iterms-history nil)
-  (defun compile-in-iterm (command)
-    (interactive
-     (list
-      (read-from-minibuffer (format "Command [%s]: " (car compile-in-iterms-history))
-                            nil ;; INITIAL-CONTENT (deprecated)
-                            nil ;; KEYMAP
-                            nil ;; READ
-                            'compile-in-iterms-history
-                            (if 'compile-in-iterms-history (car compile-in-iterms-history) ("make")))
-      ))
-    (progn
-      (when (string= "" command) (setq command (car compile-in-iterms-history)))
-      (do-applescript
-       (concat "tell application \"iTerm\"\ntell current session of current window\nwrite text \""
-	       (replace-regexp-in-string "\"" "\\\"" command t t)
-	       "\"\nend tell\nend tell")
-       )
-      ))
-  )
-
 ;; ========================================================================== ;;
 
 (use-package editorconfig

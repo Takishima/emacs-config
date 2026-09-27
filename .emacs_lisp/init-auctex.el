@@ -105,32 +105,6 @@
   (add-to-list 'TeX-command-list
                '("Biber" "biber %s" TeX-run-Biber nil t :help "Run Biber"))
 
-  (when (eq system-type 'darwin)
-    (let (
-          (skim-path "/Applications/Skim.app/Contents/SharedSupport/")
-          (skim-exec "displayline")
-          )
-      (push skim-path exec-path)
-      (setq skim-exec (executable-find skim-exec))
-      (pop exec-path)
-      (when skim-exec
-        (setq TeX-view-program-selection (append '((output-pdf "macos-skim"))
-                                                 (cl-remove-if (lambda (el) (eq (car el) 'output-pdf))
-                                                               TeX-view-program-selection)))
-        (setq TeX-view-program-list (push `("macos-skim" ,(concat skim-exec " -b -g %n %o %b"))
-                                          TeX-view-program-list))
-        )
-      )
-    )
-
-  ;; -----------------------------------
-  ;; Setup PATH
-
-  (config-when-system 'darwin
-    (setenv "PATH" (concat (getenv "PATH") ":/Library/TeX/texbin"))
-    (add-to-list 'exec-path "/Library/TeX/texbin" t)
-    )
-
   (defun latex-help-get-cmd-alist ()    ;corrected version:
     "Scoop up the commands in the index of the latex info manual.
    The values are saved in `latex-help-cmd-alist' for speed."
