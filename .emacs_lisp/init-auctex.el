@@ -162,7 +162,6 @@
 
 (use-package ris
   :straight nil
-  :load-path config-dotemacs-lisp
   :mode ("\\.ris\\'")
   )
 

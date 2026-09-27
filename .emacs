@@ -34,6 +34,9 @@
 
 (require 'config-functions (concat config-dir "functions.el"))
 
+(dolist (dir '("vendor" "lib"))
+  (add-to-list 'load-path (expand-file-name dir config-dotemacs-lisp)))
+
 ;; -------------------------------------------------------------------------- ;;
 
 (config-load-file-exec-func (concat config-dir "init-pre.el")

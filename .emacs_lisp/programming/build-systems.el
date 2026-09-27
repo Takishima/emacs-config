@@ -65,7 +65,6 @@
 
 (use-package cmake-format
   :straight nil
-  :load-path config-dotemacs-lisp
   :hook
   ((cmake-mode cmake-ts-mode) . cmake-format-mode)
   (cmake-mode . lsp-deferred)

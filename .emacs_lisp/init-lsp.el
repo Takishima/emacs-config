@@ -163,7 +163,6 @@
 
 (use-package cleanup-lsp-workspaces
   :straight nil
-  :load-path (config-dotemacs-lisp)
   :after (lsp-mode)
   :commands (lsp-cleanup-workspaces
              lsp-cleanup-workspaces-nonexistent

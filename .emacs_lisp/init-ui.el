@@ -66,7 +66,6 @@
 		      '(column-number-mode t))
 
 (use-package hl-line+
-  :load-path (config-dotemacs-lisp)
   :config
   (hl-line-when-idle-interval 0.2)
   (toggle-hl-line-when-idle 1))
@@ -114,7 +113,7 @@ Git repository (not a worktree)."
     (interactive)
     (switch-to-buffer "*dashboard*"))
   )
-(load-file (expand-file-name "dashboard-worktrees-patch.el" config-dotemacs-lisp))
+(load-file (expand-file-name "patches/dashboard-worktrees-patch.el" config-dotemacs-lisp))
 
 ;; ========================================================================== ;;
 
