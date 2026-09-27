@@ -1,0 +1,99 @@
+{
+  "nodes": {
+    "claude-code-ide": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1789402899,
+        "narHash": "sha256-u+87PjLh0Mc7C8nvDG758rdgpmjED8G/hO+FE1tj7DU=",
+        "owner": "manzaltu",
+        "repo": "claude-code-ide.el",
+        "rev": "50a3d55262805d7207889ed429ff30da96fbf68b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "manzaltu",
+        "repo": "claude-code-ide.el",
+        "type": "github"
+      }
+    },
+    "datetime": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1732056021,
+        "narHash": "sha256-p9X0MDIWj8zCV2XqTtBEpXiKBpvz6Pru4U782GVuApE=",
+        "owner": "Takishima",
+        "repo": "datetime",
+        "rev": "c25b998642eac905d63a48728ecccd035cb658f6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Takishima",
+        "repo": "datetime",
+        "type": "github"
+      }
+    },
+    "docker-compose-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1598794579,
+        "narHash": "sha256-TfQ0r6bSjQglSyvz9OQVKmJSBRy37pDLqk/LwqPUdYg=",
+        "owner": "meqif",
+        "repo": "docker-compose-mode",
+        "rev": "abaa4f3aeb5c62d7d16e186dd7d77f4e846e126a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "meqif",
+        "repo": "docker-compose-mode",
+        "type": "github"
+      }
+    },
+    "home-manager": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1790365885,
+        "narHash": "sha256-iQ0ebhiVo64NktTnwft9hNxlFu4j5cvljVxyJaEVIP4=",
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "rev": "7b4c5ec4bedaf1e062bbc1bcaeddbc6bd242aa1b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1790463110,
+        "narHash": "sha256-hKlVl12B1dF0Q5vd9dY3lIJM5mFGWYSlXwSLAqHZ1+s=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "e158d9ed9b51c98974c5e66e1ba1c9e0255fecaa",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "claude-code-ide": "claude-code-ide",
+        "datetime": "datetime",
+        "docker-compose-mode": "docker-compose-mode",
+        "home-manager": "home-manager",
+        "nixpkgs": "nixpkgs"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

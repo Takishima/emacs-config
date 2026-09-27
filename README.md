@@ -26,6 +26,27 @@ or through `DN_PACKAGE_MANAGER=nix` for `make check` and `--init-directory`.
 
 When the checkout is read-only, set `config-local-dir` (or `DN_EMACS_LOCAL_DIR`) to a writable directory: `init-pre.el`, `init-post.el` and `custom.el` are read from and written to it instead of the checkout, and a module file there replaces the tracked one. Unset, everything stays in the checkout as described below.
 
+## Nix
+
+`flake.nix` exports the same configuration for home-manager. `homeModules.default` adds `programs.emacs-config`, which builds on home-manager's `programs.emacs` (package, `extraPackages`, `overrides`) and offers the wrapped Emacs to `services.emacs.package`:
+
+```nix
+{
+  imports = [ inputs.emacs-config.homeModules.default ];
+  programs.emacs-config = {
+    enable = true;
+    checkout = "/home/me/src/emacs-config";  # optional: load a live checkout
+    tools.enableAll = true;
+  };
+}
+```
+
+With `manageElispPackages` (the default) every name in `elispPackages`, which defaults to the roster in `nix/elisp-packages.nix`, is built into the Emacs wrapper and straight never runs. The packages nixpkgs lacks are flake inputs built in the same file. The lsp-mode family is rebuilt with `LSP_USE_PLISTS`, which its byte-compiled code fixes at build time. Set it to `false` for a first step where home-manager places the files and straight keeps installing packages.
+
+`tools.enableAll` puts the everyday groups of `nix/tools.nix` on the wrapped Emacs's PATH, ahead of the profile's. `tools.<group>.enable` and `tools.<group>.packages` control one group, and each option's description names its tools. `tools.base` (aspell and delta) is always there, and fonts go to the profile. nixpkgs' `copilot` carries the unfree `copilot-language-server`: allow it in `nixpkgs.config.allowUnfreePredicate`, or drop `copilot` from `elispPackages`.
+
+`nix flake check` runs `make check`, `make compile` and `make packages` with the built Emacs and no network, checks that `nix/elisp-packages.nix` names exactly what `test/packages.el` prints, evaluates the module in both modes and builds its wrapper. `nix run` starts the built Emacs on this checkout; `nix develop` gives a shell where `make packages` runs in nix mode.
+
 # Loading order
 
 `init.el` loads `.emacs`, which loads, in order:
