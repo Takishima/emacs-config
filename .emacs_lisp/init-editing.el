@@ -125,6 +125,13 @@
 
 ;; -------------------------------------------------------------------------- ;;
 
+(defun dn-display-ansi-colors ()
+  "Render the ANSI colour codes in the current buffer."
+  (interactive)
+  (ansi-color-apply-on-region (point-min) (point-max)))
+
+;; -------------------------------------------------------------------------- ;;
+
 (defun reb-query-replace (to-string)
   "Replace current RE from point with `query-replace-regexp'."
   (interactive
@@ -133,6 +140,12 @@
 				       "Query replace"  t))))
   (with-current-buffer reb-target-buffer
     (query-replace-regexp (reb-target-binding reb-regexp) to-string)))
+
+;; -------------------------------------------------------------------------- ;;
+
+(global-set-key (kbd "M-s M-l") 'sort-lines)
+(global-set-key (kbd "s-R") 'revert-all-buffers)
+(global-set-key (kbd "s-r") 'revert-buffer)
 
 ;; ========================================================================== ;;
 

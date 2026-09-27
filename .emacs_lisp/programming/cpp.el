@@ -126,9 +126,26 @@
 
 ;; ========================================================================== ;;
 
+(defcustom dn-do-clang-format nil
+  "Run clang-format before saving C/C++ buffers in projects with a .clang-format."
+  :type 'boolean
+  :group 'dn)
+
+(defun dn-clang-format-save-hook ()
+  "Add a buffer-local `before-save-hook' that runs clang-format when enabled."
+  (add-hook 'before-save-hook
+            (lambda ()
+              (when (and dn-do-clang-format
+                         (file-exists-p (expand-file-name ".clang-format"
+                                                          (projectile-project-root))))
+                (clang-format-buffer))
+              nil)
+            nil t))
+
 (use-package clang-format
   :straight t
   :commands (clang-format-buffer clang-format-region)
+  :hook ((c-mode-common c-ts-base-mode) . dn-clang-format-save-hook)
   :init
   (with-eval-after-load 'cc-mode
     (keymap-set c++-mode-map "C-c C-f" #'clang-format-buffer)

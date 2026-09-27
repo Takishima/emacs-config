@@ -86,8 +86,7 @@
             init-project init-docs init-multiple-cursors init-magit
             init-mergiraf init-llm init-lsp init-programming init-auctex
             init-ispell)
-          (when (eq system-type 'darwin) '(init-os-darwin))
-          '(init-keybindings init-custom-functions))
+          (when (eq system-type 'darwin) '(init-os-darwin)))
   "Modules loaded in order by .emacs.
 Override it per host in config/init-pre.el, e.g.
   (setq dn-modules (remq \\='init-llm dn-modules))"
