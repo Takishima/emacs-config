@@ -23,6 +23,9 @@
 ;; Keep language servers from starting in batch.
 (advice-add 'lsp-deferred :override #'ignore)
 
+(dolist (feature '(lsp-mode yasnippet devdocs))
+  (dn-smoke-check (format "%s deferred at startup" feature) nil
+                  (featurep feature)))
 (dn-smoke-check "config-require leaks filename" nil (boundp 'filename))
 (dn-smoke-check "ispell-extra-args overridden" nil
                 (equal (default-value 'ispell-extra-args) '("--reverse")))
