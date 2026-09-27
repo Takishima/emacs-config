@@ -55,3 +55,7 @@ Modules are loaded with `config-require`, which looks in `.emacs_lisp/config/` b
 # Checking the config
 
 `make check` loads the whole config in batch mode and runs `test/smoke.el`. It exits non-zero on a load error, a `use-package` warning or a failed check.
+
+`make compile` loads the config the same way, then byte-compiles the configuration's own files into a temporary directory. It exits non-zero if any file fails to compile; warnings are printed but do not fail it.
+
+Both load `init.el`, so the first run on a machine clones every package and takes a while.
