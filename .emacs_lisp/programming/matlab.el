@@ -35,7 +35,7 @@
 (require 'use-package)
 
 (use-package matlab
-  :straight t
+  :straight matlab-mode
   :defines matlab-mode-map
   :bind
   (:map matlab-mode-map

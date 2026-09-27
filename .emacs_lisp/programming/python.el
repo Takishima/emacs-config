@@ -84,11 +84,6 @@
 (use-package ruff-format
   :straight t)
 
-(use-package lsp-pylyzer
-  :straight (:host github :repo "emacs-lsp/lsp-pylyzer" :files ("*.el"))
-  :after lsp-mode
-  )
-
 (use-package lsp-pyright
   :straight t
   :after lsp-mode
