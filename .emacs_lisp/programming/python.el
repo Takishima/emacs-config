@@ -104,6 +104,7 @@
 (use-package lsp-pylyzer
   :straight (:host github :repo "emacs-lsp/lsp-pylyzer" :files ("*.el"))
   :straight t
+  :after lsp-mode
   ;; :hook (python-mode . (lambda ()
   ;;                         (require 'lsp-pylyzer)
   ;;                         (lsp-deffered)))
