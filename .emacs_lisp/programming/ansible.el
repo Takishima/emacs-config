@@ -1,4 +1,4 @@
-;;; terraform.el --- Terraform support -*- lexical-binding: t -*-
+;;; ansible.el --- Ansible support -*- lexical-binding: t -*-
 
 ;; Author: Damien Nguyen
 ;; Maintainer: Damien Nguyen
@@ -42,16 +42,16 @@
 
 ;; ========================================================================== ;;
 
-(use-package terraform-mode
+(use-package ansible
   :straight t
   )
 
-(use-package hcl-mode
+(use-package ansible-doc
   :straight t
   )
 
 ;; ========================================================================== ;;
 
-(provide 'init-prog-terraform)
+(provide 'init-prog-ansible)
 
-;;; terraform.el ends here
+;;; ansible.el ends here

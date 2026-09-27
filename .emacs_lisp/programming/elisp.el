@@ -1,4 +1,4 @@
-;;; terraform.el --- Terraform support -*- lexical-binding: t -*-
+;;; elisp.el --- Emacs Lisp support -*- lexical-binding: t -*-
 
 ;; Author: Damien Nguyen
 ;; Maintainer: Damien Nguyen
@@ -42,16 +42,20 @@
 
 ;; ========================================================================== ;;
 
-(use-package terraform-mode
-  :straight t
-  )
+(add-hook 'emacs-lisp-mode-hook
+          (lambda () (progn
+                       (setq-local devdocs-current-docs '("elisp")))
+            (setq-local dash-docs-docsets '("Emacs Lisp")))
+          )
 
-(use-package hcl-mode
+;; -------------------------------------------------------------------------- ;;
+
+(use-package flycheck-elsa
   :straight t
   )
 
 ;; ========================================================================== ;;
 
-(provide 'init-prog-terraform)
+(provide 'init-prog-elisp)
 
-;;; terraform.el ends here
+;;; elisp.el ends here

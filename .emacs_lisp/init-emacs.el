@@ -184,12 +184,6 @@ Git repository (not a worktree)."
    ("C-c C-d" . helpful-at-point))
   )
 
-(add-hook 'emacs-lisp-mode-hook
-          (lambda () (progn
-                       (setq-local devdocs-current-docs '("elisp")))
-            (setq-local dash-docs-docsets '("Emacs Lisp")))
-          )
-
 ;; Enable vertico
 (use-package vertico
   :straight t
