@@ -36,6 +36,11 @@
                          "worktree /repo-feature\nHEAD 123\nbranch refs/heads/feature\n")))
 (dn-smoke-check "ispell-extra-args overridden" nil
                 (equal (default-value 'ispell-extra-args) '("--reverse")))
+(dn-smoke-check "ispell args without a spell checker" nil
+                (condition-case err
+                    (let ((ispell-program-name nil))
+                      (dn-flyspell-detect-ispell-args t))
+                  (error err)))
 (dn-smoke-check "indent-tabs-mode" nil (default-value 'indent-tabs-mode))
 (dolist (module dn-modules)
   (dn-smoke-check (format "module %s loaded" module) t (featurep module)))

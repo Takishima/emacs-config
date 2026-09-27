@@ -54,6 +54,7 @@
 If RUN-TOGETHER is non-nil, also spell check CamelCase words."
   (let (args)
     (cond
+     ((not (stringp ispell-program-name)))
      ((string-match "aspell$" ispell-program-name)
       ;; Force the English dictionary for aspell
       ;; Support Camel Case spelling check (tested with aspell 0.6)
