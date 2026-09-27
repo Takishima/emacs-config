@@ -41,7 +41,7 @@
 (defun yas-lib-cmake--find-function-definition (&optional search-point)
   "Search forward from point for a CMake function or macro definition.
 SEARCH-POINT bounds the search.  Match groups 1 to 3 hold the name,
-the arguments and the body.  Signal an error if there is no match."
+the arguments and the body.  Return nil if there is no match."
   (save-excursion
     (search-forward-regexp (rx (* whitespace)
                                (or "function" "macro")
@@ -55,7 +55,7 @@ the arguments and the body.  Signal an error if there is no match."
                                ")"
                                (group (*? anything))
                                (or "endfunction" "endmacro"))
-                           search-point))
+                           search-point t))
   )
 
 (defun yas-lib-cmake--cmake-parse-arguments (cmake-parse-args)
