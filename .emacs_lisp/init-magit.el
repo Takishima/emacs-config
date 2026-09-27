@@ -85,6 +85,7 @@
     )
 
   (defun dn-magit-org-read-date (&rest _ignored)
+    "Read a date with `org-read-date', ignoring the transient reader arguments."
     (org-read-date))
 
   (transient-define-argument magit-log:--since ()
@@ -102,7 +103,6 @@
     :reader #'dn-magit-org-read-date)
 
   ;; ------------------------------------------------------------------------ ;;
-  ;; Register new transients
 
   (transient-append-suffix 'magit-log "-L"
     '(magit-log:--since))
@@ -120,14 +120,13 @@
     '("g" "All (except github)" dn-magit-push-to-all-remotes-except-github))
 
   ;; ------------------------------------------------------------------------ ;;
-  ;; Pre-commit support
 
   (defun dn-magit-run-precommit-manual ()
     "Run `pre-commit run --hook-stage manual' in the current repository."
     (interactive)
     (let ((default-directory (magit-toplevel)))
-      (magit-start-process shell-file-name nil 
-                           shell-command-switch 
+      (magit-start-process shell-file-name nil
+                           shell-command-switch
                            "pre-commit run --hook-stage manual"))
     (magit-process-buffer))
 
@@ -135,7 +134,6 @@
     '("P" "Pre-commit manual" dn-magit-run-precommit-manual))
 
   ;; ------------------------------------------------------------------------ ;;
-  ;; Mergiraf support
 
   (defun dn-magit-run-mergiraf-solve-file ()
     "Run `mergiraf solve' on the file at point or prompt for a file."
@@ -216,7 +214,6 @@ MERGE-ID is the merge identifier from git output."
   )
 
 ;;----------------------------------------------------------------------------;;
-;; Git flow support
 
 (use-package magit-gitflow
   :straight t
@@ -254,7 +251,8 @@ MERGE-ID is the merge identifier from git output."
 
 ;; ========================================================================== ;;
 
-(defvar dn-conv-commit-type-desc nil "Type of conventional commit")
+(defvar dn-conv-commit-type-desc nil
+  "Conventional commit types, each with a description, an icon and face properties.")
 (setq dn-conv-commit-type-desc
       '(("build"
          :desc "Changes that affect the build system or external dependencies."
@@ -310,7 +308,8 @@ MERGE-ID is the merge identifier from git output."
 Icons use Nerd Font codepoints: nf-md-nix (U+F1511) and nf-dev-cmake (U+E794).")
 
 (defun dn-conv-commit-add-faces (&rest _args)
-  "Add face properties and compose symbols for buffer from dn-conv-commit-type-desc."
+  "Compose icons and add faces for conventional commit headers in the buffer.
+Types come from `dn-conv-commit-type-desc', scopes from `dn-conv-commit-scope-icons'."
   (interactive)
   (with-silent-modifications
     (dolist (elt dn-conv-commit-type-desc nil)
@@ -327,7 +326,6 @@ Icons use Nerd Font codepoints: nf-md-nix (U+F1511) and nf-dev-cmake (U+E794).")
             (compose-region (match-beginning 1) (match-end 1) icon)
             (when face-props
               (add-face-text-property (match-beginning 1) (match-end 1) face-props))
-            ;; Handle scope icons
             (when (match-beginning 3)
               (let* ((scope (match-string 3))
                      (scope-data (cdr (assoc scope dn-conv-commit-scope-icons))))
@@ -370,6 +368,7 @@ Return a list (candidate, icon, description)."
 
 
 (defun dn-conv-commit-type-prompt ()
+  "Read a conventional commit type, showing each type's icon and description."
   (interactive)
   (let ((completion-extra-properties
          (list :affixation-function
@@ -377,7 +376,7 @@ Return a list (candidate, icon, description)."
                  (mapcar #'dn-conv-commit-type-completion-decorate types)))))
     (completing-read "Commit type: " dn-conv-commit-type-desc)))
 (defun dn-conv-commit-prompt ()
-  "Prompt for a conventional commit. and fill the buffer with the result."
+  "Prompt for a conventional commit type, scope and breaking flag, and insert them."
   (interactive)
   (insert (dn-conv-commit-type-prompt))
   (let ((scope (completing-read "Scope: " nil)))
@@ -392,7 +391,6 @@ Return a list (candidate, icon, description)."
           )
 
 ;; ========================================================================== ;;
-;; Mergiraf support for smerge-mode
 
 (require 'smerge-mode)
 
@@ -406,7 +404,7 @@ Return a list (candidate, icon, description)."
 
 (defun dn-smerge-mergiraf-solve ()
   "Run `mergiraf solve' on the current buffer to resolve merge conflicts.
-After running mergiraf, the buffer is reverted and smerge-mode is re-enabled
+After running mergiraf, the buffer is reverted and `smerge-mode' is re-enabled
 if conflicts remain."
   (interactive)
   (unless buffer-file-name
@@ -415,18 +413,15 @@ if conflicts remain."
     (user-error "No merge conflicts found in buffer"))
 
   (let ((filename (buffer-file-name)))
-    ;; Save the buffer before running mergiraf
     (save-buffer)
 
     (message "Running mergiraf solve on %s..." (file-name-nondirectory filename))
 
-    ;; Run mergiraf synchronously and capture output
     (let* ((output-buffer (generate-new-buffer "*mergiraf output*"))
            (exit-code (call-process "mergiraf" nil output-buffer nil
                                    "solve" filename)))
       (if (= exit-code 0)
           (progn
-            ;; Success - revert buffer and check for remaining conflicts
             (revert-buffer t t t)
             (if (dn-smerge-mergiraf-has-conflicts-p)
                 (progn
@@ -436,7 +431,6 @@ if conflicts remain."
                 (smerge-mode -1)
                 (message "Mergiraf successfully resolved all conflicts!"))))
         (progn
-          ;; Failed - show error output
           (message "Mergiraf failed to solve conflicts (exit code %d)" exit-code)
           (with-current-buffer output-buffer
             (goto-char (point-min))
@@ -453,11 +447,10 @@ This is a convenience command that combines solving and saving."
     (save-buffer)))
 
 ;; ========================================================================== ;;
-;; Add mergiraf command to smerge-mode keymap
 
 (with-eval-after-load 'smerge-mode
-  (define-key smerge-mode-map (kbd "C-c ^ m") 'dn-smerge-mergiraf-solve)
-  (define-key smerge-mode-map (kbd "C-c ^ M") 'dn-smerge-mergiraf-solve-and-save))
+  (keymap-set smerge-mode-map "C-c ^ m" 'dn-smerge-mergiraf-solve)
+  (keymap-set smerge-mode-map "C-c ^ M" 'dn-smerge-mergiraf-solve-and-save))
 
 ;; ========================================================================== ;;
 

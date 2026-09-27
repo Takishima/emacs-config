@@ -62,16 +62,12 @@
   :straight (:host github :repo "alphapapa/bufler.el"
                    :files (:defaults (:exclude "helm-bufler.el")))
   :bind
-  ("C-x C-b" . bufler-list)                ;; orig. list-buffers
-  ;; :custom
-  ;; (bufler-face-prefix "prism-level-")
+  ("C-x C-b" . bufler-list)                ; replaces `list-buffers'
   :config
   (bufler-mode t)
   )
 
 ;; ========================================================================== ;;
-
-;; Automatically guess indent offsets, tab, spaces settings, etc.
 
 (use-package dtrt-indent
   :straight t)
@@ -91,12 +87,12 @@
   (defcustom dn-direnv-enabled-hosts nil
     "List of remote hosts to use direnv on.
 
-     Each host must have the `direnv` executable accessible in the default environment"
+Each host must have the `direnv' executable in its default environment."
     :type '(repeat string)
     :group 'dn)
 
   (defun tramp-sh-handle-start-file-process@dn-direnv (args)
-    "Enable Direnv for hosts in `dn-direnv-enabled-hosts'."
+    "Wrap the program in ARGS with `direnv exec' on `dn-direnv-enabled-hosts'."
     (message "tramp-sh-handle-start-file-process@dn-direnv")
     (with-parsed-tramp-file-name (expand-file-name default-directory) nil
       (if (member host dn-direnv-enabled-hosts)

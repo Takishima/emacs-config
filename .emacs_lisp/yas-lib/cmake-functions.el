@@ -39,7 +39,9 @@
 (require 'cl-lib)
 
 (defun yas-lib-cmake--find-function-definition (&optional search-point)
-  "Find a CMake function/macro definition starting at SEARCH-POINT."
+  "Search forward from point for a CMake function or macro definition.
+SEARCH-POINT bounds the search.  Match groups 1 to 3 hold the name,
+the arguments and the body.  Signal an error if there is no match."
   (save-excursion
     (search-forward-regexp (rx (* whitespace)
                                (or "function" "macro")

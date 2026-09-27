@@ -44,7 +44,9 @@
 ;; ========================================================================== ;;
 
 (defun config-load-file-exec-func (filename function &optional err)
-  "Load file FILENAME if it exists and then call a function FUNCTION."
+  "Load file FILENAME if it exists and then call FUNCTION.
+If ERR is non-nil, signal a `user-error' when FILENAME or FUNCTION is
+missing."
   (let
       (
        (function_name (symbol-name function))
@@ -76,7 +78,7 @@
 ;; ========================================================================== ;;
 
 (defun config-require (feature)
-  "Same as (require FEATURE) but assuming the file is within config-dotemacs-lisp."
+  "Require FEATURE from its file in `config-dir' or `config-dotemacs-lisp'."
   (let* (
         (feature-name (symbol-name feature))
         (filename1 (concat config-dir feature-name ".el"))
@@ -101,7 +103,7 @@ one that does not provide PREFIX<base> signals an error."
 ;; ========================================================================== ;;
 
 (defmacro config-when-system (type &rest body)
-  "Evaluate BODY if `system-type' equals TYPE."
+  "Evaluate BODY if `system-type' equals TYPE or is a member of it."
   (declare (indent defun))
   `(if (symbolp ,type)
        (when (eq system-type (intern-soft ,type))
@@ -112,7 +114,7 @@ one that does not provide PREFIX<base> signals an error."
   )
 
 (defmacro config-unless-system (type &rest body)
-  "Evaluate BODY if `system-type' does not equals TYPE or is not contained in TYPE."
+  "Evaluate BODY unless `system-type' equals TYPE or is a member of it."
   (declare (indent defun))
   `(if (symbolp ,type)
        (unless (eq system-type (intern-soft ,type))
@@ -126,13 +128,11 @@ one that does not provide PREFIX<base> signals an error."
 
 ;; From https://github.com/KaratasFurkan/.emacs.d
 (defun dn-async-process (command &optional name filter)
-  "Start an async process by running the COMMAND string with bash. Return the
-process object for it.
+  "Run the COMMAND string with bash asynchronously and return the process.
+NAME is the process name, \"async-process\" by default.
 
-NAME is name for the process. Default is \"async-process\".
-
-FILTER is function that runs after the process is finished, its args should be
-\"(process output)\". Default is just messages the output."
+FILTER is the process filter, called with the process and each chunk of
+its output.  By default it messages the output."
   (make-process
    :command `("bash" "-c" ,command)
    :name (if name name

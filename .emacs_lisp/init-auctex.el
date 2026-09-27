@@ -51,27 +51,17 @@
   :defines (latex-help-cmd-alist latex-help-file)
   :custom
   (TeX-auto-local "tex-tmp")
-  (TeX-parse-self t) ; Enable parse on load.
-  (TeX-auto-save t) ; Enable parse on save.
-  (TeX-PDF-mode t) ; Default to PDFTeX
+  (TeX-parse-self t)
+  (TeX-auto-save t)
+  (TeX-PDF-mode t)
 
   (LaTeX-clean-intermediate-suffixes '("\\.aux" "\\.bbl" "\\.blg" "\\.brf" "\\.fot" "\\.glo" "\\.gls" "\\.idx" "\\.ilg" "\\.ind" "\\.lof" "\\.log" "\\.lot" "\\.nav" "\\.out" "\\.snm" "\\.toc" "\\.url" "\\.synctex\\.gz" "\\.bcf" "\\.run\\.xml" "\\.fls" "-blx\\.bib" "\\.acn" "\\.acr" "\\.alg" "\\.glg" "\\.xdv" "\\.fdb_latexmk" "\\.ist"))
 
-  ;; -----------------------------------
-  ;; RefTeX related settings
+  (reftex-plug-into-AUCTeX t)
 
-  (reftex-plug-into-AUCTeX t) ; Turn on RefTeX interface to AUCTeX
-
-    ;; Recognize \addbibresource as bibliography command
   (reftex-bibliography-commands '("bibliography" "nobibliography" "addbibresource"))
 
-  ;; Make RefTeX faster
-  ;;(setq reftex-enable-partial-scans t) ;; parse only current file in multifile doc
-  ;;(setq reftex-save-parse-info t) ;; save parse info into file.rel
   (reftex-use-multiple-selection-buffers t)
-
-  ;; -----------------------------------
-  ;; Additional keywords
 
   (font-latex-match-reference-keywords
         '(("cite" "[{")
@@ -93,9 +83,6 @@
 
   :config
 
-  ;; -----------------------------------
-  ;; TeX compile commands
-
   (add-to-list 'TeX-command-list
                '("latexmk" "latexmk -xelatex -pv -shell-escape %s" TeX-run-TeX nil t :help "Process file with latexmk"))
   (add-to-list 'TeX-command-list
@@ -105,10 +92,10 @@
   (add-to-list 'TeX-command-list
                '("Biber" "biber %s" dn-tex-run-biber nil t :help "Run Biber"))
 
-  (defun latex-help-get-cmd-alist ()    ;corrected version:
+  ;; Replaces the upstream definition of this function with a corrected one.
+  (defun latex-help-get-cmd-alist ()
     "Scoop up the commands in the index of the latex info manual.
-   The values are saved in `latex-help-cmd-alist' for speed."
-    ;; mm, does it contain any cached entries
+The values are saved in `latex-help-cmd-alist' for speed."
     (if (not (assoc "\\begin" latex-help-cmd-alist))
         (save-window-excursion
           (setq latex-help-cmd-alist nil)
@@ -136,15 +123,13 @@
         (TeX-synchronous-sentinel name file process))))
 
   (defun dn-tex-biber-sentinel (process name)
-    "Cleanup TeX output buffer after running Biber."
+    "Report the warnings and errors Biber wrote to the TeX output buffer.
+PROCESS and NAME are the arguments of a `TeX-sentinel-function'."
     (goto-char (point-max))
     (cond
-     ;; Check whether Biber reports any warnings or errors.
      ((re-search-backward (concat
                            "^(There \\(?:was\\|were\\) \\([0-9]+\\) "
                            "\\(warnings?\\|error messages?\\))") nil t)
-      ;; Tell the user their number so that she sees whether the
-      ;; situation is getting better or worse.
       (message (concat "Biber finished with %s %s. "
                        "Type `%s' to display output.")
                (match-string 1) (match-string 2)
@@ -172,7 +157,7 @@
   :after (lsp-mode)
   :hook (text-mode . (lambda ()
                        (require 'lsp-ltex)
-                       (lsp-deferred)))  ; or lsp-deferred
+                       (lsp-deferred)))
   :custom
   (lsp-ltex-version "15.2.0")
   )

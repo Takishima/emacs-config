@@ -52,23 +52,20 @@
       mac-option-modifier 'super
       default-input-method "MacOSX")
 
-;; Apple Swiss keyboard layout...
-(global-set-key (kbd "s-g") (lambda() (interactive) (insert "@")))
-(global-set-key (kbd "s-3") (lambda() (interactive) (insert "#")))
-(global-set-key (kbd "s-4") (lambda() (interactive) (insert "Ç")))
-(global-set-key (kbd "s-5") (lambda() (interactive) (insert "[")))
-(global-set-key (kbd "s-6") (lambda() (interactive) (insert "]")))
-(global-set-key (kbd "s-7") (lambda() (interactive) (insert "|")))
-(global-set-key (kbd "s-8") (lambda() (interactive) (insert "{")))
-(global-set-key (kbd "s-9") (lambda() (interactive) (insert "}")))
-(global-set-key (kbd "s-/") (lambda() (interactive) (insert "\\")))
-(global-set-key (kbd "s-n") (lambda() (interactive) (insert "~")))
-;; (global-set-key (kbd "±") 'text-scale-increase)
-;; (global-set-key (kbd "–") 'text-scale-decrease)
+;; Option is Super, so restore the characters the Swiss layout types with Option.
+(keymap-global-set "s-g" (lambda() (interactive) (insert "@")))
+(keymap-global-set "s-3" (lambda() (interactive) (insert "#")))
+(keymap-global-set "s-4" (lambda() (interactive) (insert "Ç")))
+(keymap-global-set "s-5" (lambda() (interactive) (insert "[")))
+(keymap-global-set "s-6" (lambda() (interactive) (insert "]")))
+(keymap-global-set "s-7" (lambda() (interactive) (insert "|")))
+(keymap-global-set "s-8" (lambda() (interactive) (insert "{")))
+(keymap-global-set "s-9" (lambda() (interactive) (insert "}")))
+(keymap-global-set "s-/" (lambda() (interactive) (insert "\\")))
+(keymap-global-set "s-n" (lambda() (interactive) (insert "~")))
 
 ;; ========================================================================== ;;
 
-;; Allow editing of binary .plist files.
 (add-to-list 'jka-compr-compression-info-list
              ["\\.plist$"
               "converting text XML to binary plist"
@@ -78,14 +75,15 @@
               "plutil"
               ("-convert" "xml1" "-o" "-" "-")
               nil nil "bplist"])
-;;It is necessary to perform an update!
+;; Changes to `jka-compr-compression-info-list' take effect only after this.
 (jka-compr-update)
 
 ;; ========================================================================== ;;
 
 (defvar dn-compile-in-iterm-command "make"
   "Command `dn-compile-in-iterm' offers when its history is empty.")
-(defvar dn-compile-in-iterm-history nil)
+(defvar dn-compile-in-iterm-history nil
+  "Minibuffer history of `dn-compile-in-iterm'.")
 
 (defun dn-compile-in-iterm (command)
   "Type COMMAND into the current iTerm session.
@@ -140,7 +138,7 @@ An empty answer reuses the last command, or `dn-compile-in-iterm-command'."
   :commands (htmlize-buffer htmlize-region))
 
 (defun formatted-copy-buffer ()
-  "Export buffer to HTML, and copy it to the clipboard."
+  "Export buffer to HTML, and copy it to the clipboard as rich text."
   (interactive)
   (save-window-excursion
     (let* ((buf (htmlize-buffer))

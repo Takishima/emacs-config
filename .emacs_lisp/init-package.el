@@ -54,12 +54,9 @@
 
 ;; ========================================================================== ;;
 
-;; use-package
-;; https://github.com/jwiegley/use-package
 (straight-use-package 'diminish)
 (require 'diminish)
 
-;; Explicitly load use-package-diminish
 (with-eval-after-load 'use-package
   (require 'use-package-diminish))
 

@@ -30,6 +30,8 @@
 
 ;;; Commentary:
 
+;; Set `auth-source-1password-vault' to choose the default 1Password vault.
+
 ;;; Code:
 
 ;; ========================================================================== ;;
@@ -65,7 +67,6 @@
 (use-package auth-source-1password
   :straight t
   :config
-  ;; Customize auth-source-1password-vault to select default vault
   (auth-source-1password-enable)
   )
 

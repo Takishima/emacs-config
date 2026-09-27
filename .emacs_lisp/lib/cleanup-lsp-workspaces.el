@@ -59,13 +59,11 @@ This is safe to run automatically on startup."
          (kept-folders '())
          (removed-count 0))
 
-    ;; Helper function to check if folder exists and is accessible
     (cl-labels ((folder-exists-p (folder)
                   (and (not (or (string-prefix-p "/ssh:" folder)
                                (file-remote-p folder)))  ; Skip remote without connecting
                        (file-directory-p folder))))
 
-      ;; Clean global workspace folders
       (dolist (folder folders)
         (if (folder-exists-p folder)
             (push folder kept-folders)
@@ -75,7 +73,6 @@ This is safe to run automatically on startup."
 
       (setf (lsp-session-folders session) (reverse kept-folders))
 
-      ;; Clean per-server workspace folders
       (let ((server-folders (lsp-session-server-id->folders session)))
         (maphash
          (lambda (server-id folders-list)
@@ -96,7 +93,7 @@ This is safe to run automatically on startup."
 ;; ========================================================================== ;;
 
 (defun dn-lsp-cleanup-workspaces ()
-  "Remove /tmp, /nix/store, and remote (/ssh:) folders from LSP workspaces.
+  "Remove remote, missing, /tmp and /nix/store folders from LSP workspaces.
 This is safe and won't trigger Tramp connections."
   (interactive)
   (let* ((session (lsp-session))
@@ -104,26 +101,19 @@ This is safe and won't trigger Tramp connections."
          (kept-folders '())
          (removed-count 0))
 
-    ;; Helper function to check if folder should be kept
     (cl-labels ((should-keep-folder (folder)
                   (cond
-                   ;; Remove remote paths
                    ((or (string-prefix-p "/ssh:" folder)
                         (file-remote-p folder))
                     nil)
-                   ;; Remove non-existent local directories
                    ((not (file-directory-p folder))
                     nil)
-                   ;; Remove /tmp folders
                    ((string-prefix-p "/tmp/" folder)
                     nil)
-                   ;; Remove /nix/store folders
                    ((string-prefix-p "/nix/store/" folder)
                     nil)
-                   ;; Keep everything else
                    (t t))))
 
-      ;; Clean global workspace folders
       (dolist (folder folders)
         (if (should-keep-folder folder)
             (push folder kept-folders)
@@ -133,7 +123,6 @@ This is safe and won't trigger Tramp connections."
 
       (setf (lsp-session-folders session) (reverse kept-folders))
 
-      ;; Clean per-server workspace folders
       (let ((server-folders (lsp-session-server-id->folders session)))
         (maphash
          (lambda (server-id folders-list)
@@ -183,12 +172,10 @@ This is safe and won't trigger Tramp connections."
            (kept-folders '())
            (removed-count 0))
 
-      ;; Helper function to check if folder should be kept
       (cl-labels ((should-keep-folder (folder)
                     (and (not (file-remote-p folder))
                          (string-prefix-p home folder))))
 
-        ;; Clean global workspace folders
         (dolist (folder folders)
           (if (should-keep-folder folder)
               (push folder kept-folders)
@@ -196,7 +183,6 @@ This is safe and won't trigger Tramp connections."
 
         (setf (lsp-session-folders session) (reverse kept-folders))
 
-        ;; Clean per-server workspace folders
         (let ((server-folders (lsp-session-server-id->folders session)))
           (maphash
            (lambda (server-id folders-list)
@@ -224,10 +210,8 @@ Use this to start fresh with a clean workspace list."
            (folders (lsp-session-folders session))
            (removed-count (length folders)))
 
-      ;; Clear global workspace folders
       (setf (lsp-session-folders session) '())
 
-      ;; Clear per-server workspace folders
       (let ((server-folders (lsp-session-server-id->folders session)))
         (maphash
          (lambda (server-id folders-list)

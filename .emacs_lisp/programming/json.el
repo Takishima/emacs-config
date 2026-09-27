@@ -48,7 +48,6 @@
 (use-package json-ts-mode
   :straight nil
   :mode "\\.json\\'"
-  ;; json-ts-mode uses built-in treesit, no external dependency needed
   )
 
 ;; ========================================================================== ;;

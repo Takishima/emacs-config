@@ -6,9 +6,11 @@
 
 ;;; Code:
 
-(defvar dn-smoke-failures 0)
+(defvar dn-smoke-failures 0
+  "Number of failed checks.")
 
-(defvar dn-smoke-dir (make-temp-file "dn-smoke-" t))
+(defvar dn-smoke-dir (make-temp-file "dn-smoke-" t)
+  "Scratch directory for the files the checks visit, deleted afterwards.")
 
 (defun dn-smoke-check (label expected actual)
   "Report a failure for LABEL unless EXPECTED equals ACTUAL."

@@ -1,5 +1,4 @@
-;;; .emacs --- Summary  -*- lexical-binding: t; -*-
-;; My emacs config file
+;;; .emacs --- Emacs configuration  -*- lexical-binding: t; -*-
 ;;
 ;; MIT License
 
@@ -59,11 +58,9 @@
 
 ;; ========================================================================== ;;
 
-;; Bring the window into focus
 (when (memq window-system '(mac ns x))
     (x-focus-frame nil))
 
 (put 'narrow-to-region 'disabled nil)
 
-;; (provide '.emacs)
 ;;; .emacs ends here

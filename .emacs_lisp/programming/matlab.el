@@ -52,7 +52,7 @@
   )
 
 (defun imdoc-capture-arguments(args_str)
-  "Process a string containing the arguments list."
+  "Return the list of argument names found in ARGS_STR."
   (let (
         (index 0)
         (end_idx 0)
@@ -79,7 +79,7 @@
     ))
 
 (defun imdoc-capture-return-value(ret_str_raw)
-  "Process a string containing the return values list."
+  "Return the list of return value names found in RET_STR_RAW, or nil."
   (if ret_str_raw
       (let (
             (index 0)
@@ -110,7 +110,7 @@
   )
 
 (defun imdoc()
-  "Insert matlab documentation template for a function."
+  "Insert a MATLAB documentation template for the buffer's first function."
   (interactive)
   (let (
         (counter 0)
@@ -122,7 +122,6 @@
         (length 0)
         )
     (progn
-      ;; first extract function name & argument list
       (goto-char 0)
       (condition-case err
           (progn
@@ -139,12 +138,10 @@
            (setq func_args (match-string 2))
            ))
         )
-      ;; (re-search-forward "\\s-*function\\s-*\\(\\[?[a-zA-Z0-9_, ]+\\]?\\)\\s-*=\\s-*\\([a-zA-Z0-9_]+\\)\\s-*(?\\(.*\\))?")
 
       (setq func_ret (imdoc-capture-return-value func_ret))
       (setq func_args (imdoc-capture-arguments func_args))
 
-      ;; insert data
       (insert "\n")
       (insert (concat "% ======================================"
                       "========================================\n"))
@@ -156,7 +153,6 @@
           (setq length (- 15 (string-width var)))
           (when (< length 0) (setq length 0))
           (insert (concat "%       '" (format "%s':" var) (make-string length ? ) "\n"))
-          ;; (insert (concat "%     " (format "%-15s" var) ": \n"))
           )
         )
       (if func_ret
@@ -167,7 +163,6 @@
                 (setq length (- 15 (string-width var)))
                 (when (< length 0) (setq length 0))
                 (insert (concat "%       '" (format "%s':" var) (make-string length ? ) "\n"))
-                ;; (insert (concat "%     - " (format "%-15s" var) ": \n"))
                 )
               )
             )
@@ -182,15 +177,6 @@
   )
 
 ;; ========================================================================== ;;
-
-;; Octaveload-path mode
-;; (autoload 'octave-mode "octave-mod" nil t)
-
-;; ;; Change comment char to '%'
-;; (setq octave-comment-char ?%)
-;; (add-hook 'octave-mode-hook
-;;        (lambda ()
-;;          (modify-syntax-entry ?% "<" octave-mode-syntax-table)))
 
 ;; ========================================================================== ;;
 

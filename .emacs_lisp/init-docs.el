@@ -36,13 +36,13 @@
 ;;; Code:
 
 ;; ============================================================================================== ;;
-;; DevDocs
 
 (use-package devdocs
   :straight t
   :defer t
   :init
   (defun dn-devdocs-install()
+    "Install the DevDocs documents this configuration uses, then update all."
     (interactive)
     (devdocs-install "bash")
     (devdocs-install "click")
@@ -58,7 +58,6 @@
 
 
 ;; ---------------------------------------------------------------------------------------------- ;;
-;; Dash docs
 
 (use-package dash-docs
   :straight t
@@ -67,6 +66,8 @@
   (dash-docs-browser-func 'eww)
   :config
   (defun dn-dash-docs-install()
+    "Install the Dash docsets this configuration uses.
+The Nix docsets come from the tarballs under `config-dotemacs-lisp'."
     (interactive)
     (dash-docs-install-docset "Boost")
     (dash-docs-install-docset "C")

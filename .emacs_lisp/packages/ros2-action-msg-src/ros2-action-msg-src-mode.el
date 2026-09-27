@@ -50,11 +50,11 @@
 
 (defvar ros2-action-msg-src--keywords-regexp
   (format "%s" (regexp-opt ros2-action-msg-src--keywords 'symbols))
-  "Regex to match keywords")
+  "Regexp matching the symbols in `ros2-action-msg-src--keywords'.")
 
 (defvar ros2-action-msg-src--variable-decl-regexp
   (format "\\(%s\\)[[:space:]]+\\([a-zA-Z0-9_]+\\)" (regexp-opt ros2-action-msg-src--keywords))
-  "Regex to match keywords")
+  "Regexp matching a declaration, with its type in group 1 and its name in 2.")
 
 (if (fboundp 'defvar-keymap)
     ;; defvar-keymap is an Emacs 29.x addition

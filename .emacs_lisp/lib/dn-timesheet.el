@@ -113,7 +113,7 @@ Return the position of the heading, or nil if there is none."
   (goto-char (or start (point-min)))
   (let ((re (format "^\\*\\{%d\\} +%s[ \t]*$" level (regexp-quote title))))
     (when (re-search-forward re bound t)
-      (goto-char (line-beginning-position)))))
+      (goto-char (pos-bol)))))
 
 (defun dn-timesheet--day-heading (time)
   "Return the text of the heading of the day of TIME."
@@ -154,7 +154,7 @@ when one is found."
   (let ((end (save-excursion (outline-next-heading) (point)))
         (re (concat "^[ \t]*" org-clock-string " *\\(\\[[^]]+\\]\\)[ \t]*$")))
     (when (re-search-forward re end t)
-      (goto-char (line-beginning-position))
+      (goto-char (pos-bol))
       (org-time-string-to-time (match-string 1)))))
 
 (defun dn-timesheet--running-here-p (&optional day-pos)

@@ -42,8 +42,6 @@
 
 ;; ========================================================================== ;;
 
-;; Load leuven theme
-
 (use-package leuven-theme
   :straight t
   :load-path "themes"
@@ -52,7 +50,6 @@
 
 ;; ========================================================================== ;;
 
-;; which-key
 (use-package which-key
   :straight t
   :config
@@ -60,7 +57,6 @@
 
 ;; ========================================================================== ;;
 
-;; Always show matching paranthesis, line and column number
 (custom-set-variables '(show-paren-mode 1)
                       '(line-number-mode t)
                       '(column-number-mode t))
@@ -72,7 +68,6 @@
 
 (global-hl-line-mode 0)
 
-;; Remove redundant UI
 (tool-bar-mode -1)
 
 ;; ========================================================================== ;;
@@ -143,8 +138,8 @@
 
 ;; From https://github.com/KaratasFurkan/.emacs.d
 (defun dn-adjust-font-size (height)
-  "Adjust font size by given height. If height is '0', reset font
-size. This function also handles icons and modeline font sizes."
+  "Adjust the font size by HEIGHT, or reset it to `dn-default-font-size' if 0.
+Also resize the mode line and, when `company-box' is loaded, its icons."
   (interactive "nHeight ('0' to reset): ")
   (let ((new-height (if (zerop height)
                         dn-default-font-size
@@ -158,8 +153,6 @@ size. This function also handles icons and modeline font sizes."
                     (+ (/ height 5) (if (boundp 'treemacs--icon-size)
                                         treemacs--icon-size
                                       dn-default-icon-size)))))
-    ;; (when (fboundp 'treemacs-resize-icons)
-    ;;   (treemacs-resize-icons new-size))
     (when (fboundp 'company-box-icons-resize)
       (company-box-icons-resize new-size)))
   )

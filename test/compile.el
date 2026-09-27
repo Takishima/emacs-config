@@ -22,10 +22,10 @@
 (defvar dn-compile-out (make-temp-file "dn-compile-" t)
   "Directory receiving the .elc files, deleted afterwards.")
 
-(setq byte-compile-dest-file-function
-      (lambda (file)
-        (expand-file-name (concat (file-name-nondirectory file) "c")
-                          dn-compile-out)))
+(setopt byte-compile-dest-file-function
+        (lambda (file)
+          (expand-file-name (concat (file-name-nondirectory file) "c")
+                            dn-compile-out)))
 
 (let ((failures 0))
   (dolist (dir dn-compile-dirs)

@@ -74,10 +74,9 @@
   )
 
 ;; ========================================================================== ;;
-;; Compilation
 
 (defun dn-bury-compile-buffer-if-successful (buffer string)
-  "Bury a compilation buffer if succeeded without warnings "
+  "Kill compilation BUFFER if STRING reports success and it has no warnings."
   (when (and
          (buffer-live-p buffer)
          (string-match "compilation" (buffer-name buffer))
@@ -89,7 +88,6 @@
     (run-with-timer 1 nil
                     (lambda (buf)
                       (bury-buffer buf)
-                      ;; (switch-to-prev-buffer (get-buffer-window buf) 'bury)
                       (when (get-buffer-window buf)
                         (delete-window (get-buffer-window buf))
                         )
@@ -100,7 +98,7 @@
 
 ;; -------------------------------------------------------------------------- ;;
 
-(setq compilation-scroll-output 'first-error)
+(setopt compilation-scroll-output 'first-error)
 
 ;; ========================================================================== ;;
 
@@ -110,11 +108,9 @@
 
 ;; ========================================================================== ;;
 
-;; Built-in treesit configuration (Emacs 29+)
 (when (and (fboundp 'treesit-available-p)
            (treesit-available-p))
   
-  ;; Auto-install treesit grammars when needed
   (setq treesit-language-source-alist
         '((bash "https://github.com/tree-sitter/tree-sitter-bash")
           (c "https://github.com/tree-sitter/tree-sitter-c")
@@ -136,7 +132,6 @@
           (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
           (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
 
-  ;; Function to install missing grammars
   (defun dn-treesit-install-all-grammars ()
     "Install all treesit grammars defined in `treesit-language-source-alist'."
     (interactive)
@@ -146,14 +141,12 @@
           (message "Installing treesit grammar for %s..." lang)
           (treesit-install-language-grammar lang)))))
 
-  ;; Auto-install grammars on first use
   (advice-add 'treesit-parser-create :before
               (lambda (language &rest _)
                 (unless (treesit-language-available-p language)
                   (message "Auto-installing treesit grammar for %s..." language)
                   (treesit-install-language-grammar language))))
 
-  ;; Enable treesit modes by default where available
   (add-to-list 'major-mode-remap-alist '(conf-toml-mode . toml-ts-mode))
   (add-to-list 'major-mode-remap-alist '(sh-mode . bash-ts-mode)))
 

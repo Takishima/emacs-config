@@ -53,7 +53,6 @@
   :config
   (progn
     (add-hook 'python-base-mode-hook 'highlight-indentation-mode)
-    ;; (add-hook 'python-base-mode-hook 'eldoc-mode)
     (add-hook 'python-base-mode-hook 'sphinx-doc-mode))
   :bind (:map python-base-mode-map
               (
@@ -104,9 +103,6 @@
 (use-package lsp-pylyzer
   :straight (:host github :repo "emacs-lsp/lsp-pylyzer" :files ("*.el"))
   :after lsp-mode
-  ;; :hook (python-mode . (lambda ()
-  ;;                         (require 'lsp-pylyzer)
-  ;;                         (lsp-deffered)))
   )
 
 ;; -------------------------------------------------------------------------- ;;
@@ -193,10 +189,10 @@
                ))
   :custom
   (python-pytest-arguments
-   '("--color"          ;; colored output in the buffer
-     "--failed-first"   ;; run the previous failed tests first
-     "-p no:warnings"   ;; ignore warnings
-     "--maxfail=5"))    ;; exit in 5 continuous failures in a run
+   '("--color"
+     "--failed-first"
+     "-p no:warnings"
+     "--maxfail=5"))
   :functions python-pytest--project-name
   :config
   (dolist (mode '(python-mode python-ts-mode))
@@ -220,10 +216,6 @@
 
 (use-package sphinx-mode
   :straight t
-  :bind
-  ;; (:map sphinx-mode-map
-  ;;       (("C-c i" . dn-compile-in-iterm)
-  ;;        ))
   )
 
 ;; -------------------------------------------------------------------------- ;;

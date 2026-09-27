@@ -39,17 +39,16 @@
 
 (require 'ros)
 
-(defvar ros2-keybindings-mode--keymap (make-keymap) "num-mode keymap.")
-(define-key ros2-keybindings-mode--keymap (kbd "C-c C-r") 'hydra-ros-main/body)
+(defvar ros2-keybindings-mode--keymap (make-keymap) "Keymap for `ros2-keybindings-mode'.")
+(keymap-set ros2-keybindings-mode--keymap "C-c C-r" 'hydra-ros-main/body)
 
 
 (define-minor-mode ros2-keybindings-mode
-  "Minor mode to set some keybindings with the ROS package"
-  ;; The initial value.
+  "Minor mode binding keys to commands of the `ros' package.
+
+\\{ros2-keybindings-mode--keymap}"
   :init-value nil
-  ;; The indicator for the mode line.
   :lighter " ROS2KBD"
-  ;; The minor mode bindings.
   :keymap
   ros2-keybindings-mode--keymap
   )

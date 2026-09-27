@@ -56,29 +56,21 @@
 
 ;; ========================================================================== ;;
 
-;; Disable auto backup files
 (custom-set-variables '(make-backup-files nil))
 
-;; Indent with spaces
 (setq-default indent-tabs-mode nil)
 
-;; Remove trailing whitespace in files
 (autoload 'nuke-trailing-whitespace "whitespace" nil t)
 
-;; Easier question answers
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-;; Make script file executable by default
 (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
 
 (save-place-mode t)
 
-;; (unless (and (version< emacs-version "27")
-;;              (require 'so-long nil :noerror))
-;;     (package-install 'so-long))
 (global-so-long-mode)
 
-(global-subword-mode)  ; navigationInCamelCase
+(global-subword-mode)
 
 (delete-selection-mode)
 
@@ -91,7 +83,7 @@
    ("M-m s" . mc/mark-next-like-this-symbol)
    ("M-m w" . mc/mark-next-like-this-word))
   :init
-  (global-unset-key (kbd "M-m"))
+  (keymap-global-unset "M-m")
   )
 
 ;; ========================================================================== ;;
@@ -106,10 +98,9 @@
   (global-whitespace-cleanup-mode))
 
 ;; ========================================================================== ;;
-;; Some emacs function definitions
 
 (defun shutdown-emacs-server ()
-  "Kill the emacs daemon"
+  "Kill the Emacs daemon, saving modified buffers without asking."
   (interactive)
   (let (
         (last-nonmenu-event nil)
@@ -120,14 +111,14 @@
 ;; -------------------------------------------------------------------------- ;;
 
 (defun kill-from-line-beginning ()
-  "Kills from beginning of line to point"
+  "Kill from the beginning of the line to point."
   (interactive)
-  (kill-region (line-beginning-position) (point)))
+  (kill-region (pos-bol) (point)))
 
 ;; -------------------------------------------------------------------------- ;;
 
 (defun revert-all-buffers ()
-  "Refreshes all open buffers from their respective files."
+  "Revert every unmodified buffer whose file still exists."
   (interactive)
   (dolist (buf (buffer-list))
     (with-current-buffer buf
@@ -145,7 +136,8 @@
 ;; -------------------------------------------------------------------------- ;;
 
 (defun reb-query-replace (to-string)
-  "Replace current RE from point with `query-replace-regexp'."
+  "Query-replace the current `re-builder' regexp with TO-STRING from point.
+Work in `reb-target-buffer' through `query-replace-regexp'."
   (interactive
    (progn (barf-if-buffer-read-only)
           (list (query-replace-read-to (reb-target-binding reb-regexp)
@@ -155,18 +147,18 @@
 
 ;; -------------------------------------------------------------------------- ;;
 
-(global-set-key (kbd "M-s M-l") 'sort-lines)
-(global-set-key (kbd "s-R") 'revert-all-buffers)
-(global-set-key (kbd "s-r") 'revert-buffer)
+(keymap-global-set "M-s M-l" 'sort-lines)
+(keymap-global-set "s-R" 'revert-all-buffers)
+(keymap-global-set "s-r" 'revert-buffer)
 
 ;; ========================================================================== ;;
 
-;; Load custom abbrev file
 (setq-default abbrev-mode t)
 (read-abbrev-file (expand-file-name "abbrev_defs" config-dotemacs-lisp))
-(setq save-abbrevs t)
+(setopt save-abbrevs t)
 
 (defun en-abb ()
+  "Replace all abbrevs with those of `abbrev-file-name' plus the English ones."
   (interactive)
   (kill-all-abbrevs)
   (read-abbrev-file)
@@ -174,6 +166,7 @@
   )
 
 (defun fr-abb ()
+  "Replace all abbrevs with those of `abbrev-file-name' plus the French ones."
   (interactive)
   (kill-all-abbrevs)
   (read-abbrev-file)
@@ -181,8 +174,6 @@
   )
 
 ;; ========================================================================== ;;
-
-;; Load Yasnippet
 
 (unless (boundp 'config-yasnippet-dir)
   (defconst config-yasnippet-dir (concat config-dotemacs-lisp "snippets/")))

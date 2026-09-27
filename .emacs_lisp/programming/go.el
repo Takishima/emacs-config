@@ -105,8 +105,8 @@
 ;; ========================================================================== ;;
 
 (with-eval-after-load 'go-ts-mode
-  (define-key go-ts-mode-map (kbd "C-c C-f") #'lsp-format-buffer)
-  (define-key go-ts-mode-map (kbd "C-c C-r") #'lsp-format-region))
+  (keymap-set go-ts-mode-map "C-c C-f" #'lsp-format-buffer)
+  (keymap-set go-ts-mode-map "C-c C-r" #'lsp-format-region))
 
 ;; ========================================================================== ;;
 

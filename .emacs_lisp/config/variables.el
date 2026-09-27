@@ -36,7 +36,7 @@
 ;;; Code:
 
 (defgroup config nil
-  "Emacs configuration"
+  "Emacs configuration."
   :group 'emacs)
 
 (defgroup dn nil
