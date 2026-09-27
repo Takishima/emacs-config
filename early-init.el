@@ -8,6 +8,9 @@
 (setq package-enable-at-startup nil)
 
 ;; Keep straight's builds and session state in ~/.emacs.d under --init-directory.
-(setq user-emacs-directory (expand-file-name "~/.emacs.d/"))
+;; EMACS_USER_DIRECTORY overrides that, e.g. for a throwaway directory in CI.
+(setq user-emacs-directory
+      (file-name-as-directory
+       (expand-file-name (or (getenv "EMACS_USER_DIRECTORY") "~/.emacs.d/"))))
 
 ;;; early-init.el ends here

@@ -11,7 +11,7 @@ ln -s "$PWD/init.el" ~/.emacs.d/init.el
 ln -s "$PWD/early-init.el" ~/.emacs.d/early-init.el
 ```
 
-To run another checkout without relinking, start `emacs --init-directory <checkout>`. `early-init.el` keeps `user-emacs-directory` at `~/.emacs.d`, so straight's builds and session state are shared.
+To run another checkout without relinking, start `emacs --init-directory <checkout>`. `early-init.el` keeps `user-emacs-directory` at `~/.emacs.d`, so straight's builds and session state are shared. Set `EMACS_USER_DIRECTORY` to use another directory instead, for example a throwaway one that straight bootstraps from scratch.
 
 # Loading order
 
