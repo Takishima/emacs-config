@@ -81,6 +81,12 @@
     )
   )
 
+(defcustom dn-disabled-languages '(matlab gnuplot)
+  "Language modules in programming/ that are not loaded, by file base name.
+Override it per host in config/init-pre.el."
+  :group 'dn
+  :type '(repeat symbol))
+
 (provide 'config-variables)
 
 ;;; config-variables.el ends here

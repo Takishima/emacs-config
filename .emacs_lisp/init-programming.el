@@ -161,25 +161,13 @@
 
 (let* (
        (dir-path (file-name-as-directory (concat config-dotemacs-lisp "programming")))
-       (skip-file (concat dir-path "skip.txt"))
-       (skip-names (list))
        (require-name)
        (dir-list (directory-files dir-path t "^[^#\\.].*\\.el$"))
        )
-  (if (file-exists-p skip-file)
-      (progn
-	(setq skip-names (seq-remove (lambda (el) (or (string-prefix-p "#" el) (string-prefix-p ";" el)))
-                                     (with-temp-buffer (insert-file-contents (concat dir-path "skip.txt"))
-					               (split-string (buffer-string) "[\n\r]" t "[ \t]+"))
-                                     )
-              )
-	(message "INFO: will be skipping the following: %S" skip-names)
-	)
-    )
   (dolist (fname dir-list)
     (setq require-name (intern-soft (concat "init-prog-"
         				    (file-name-sans-extension (file-name-nondirectory fname)))))
-    (unless (member (file-name-nondirectory fname) skip-names)
+    (unless (memq (intern (file-name-base fname)) dn-disabled-languages)
       ;; (byte-recompile-file fname nil 0)
       (if require-name
           (progn

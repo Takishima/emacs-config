@@ -27,18 +27,13 @@
 (dn-smoke-check "ispell-extra-args overridden" nil
                 (equal (default-value 'ispell-extra-args) '("--reverse")))
 (dn-smoke-check "indent-tabs-mode" nil (default-value 'indent-tabs-mode))
+(dolist (lang dn-disabled-languages)
+  (dn-smoke-check (format "disabled language %s loaded" lang) nil
+                  (featurep (intern (format "init-prog-%s" lang)))))
 
-(let* ((dir (expand-file-name "programming" config-dotemacs-lisp))
-       (skip-file (expand-file-name "skip.txt" dir))
-       (skip (when (file-exists-p skip-file)
-               (seq-remove (lambda (line)
-                             (or (string-prefix-p "#" line)
-                                 (string-prefix-p ";" line)))
-                           (with-temp-buffer
-                             (insert-file-contents skip-file)
-                             (split-string (buffer-string) "[\n\r]" t "[ \t]+"))))))
+(let ((dir (expand-file-name "programming" config-dotemacs-lisp)))
   (dolist (file (directory-files dir nil "^[^#.].*\\.el\\'"))
-    (unless (member file skip)
+    (unless (memq (intern (file-name-base file)) dn-disabled-languages)
       (let ((feature (concat "init-prog-" (file-name-base file))))
         (dn-smoke-check (concat file " provides " feature) t
                         (featurep (intern feature)))))))
