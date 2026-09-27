@@ -42,6 +42,16 @@
 
 ;; ========================================================================== ;;
 
+(defcustom dn-lsp-mode-disabled
+  (append '(emacs-lisp-mode lisp-mode makefile-mode direnv-envrc-mode bat-mode)
+          (unless (memq system-type '(windows-nt ms-dos))
+            '(powershell-mode)))
+  "Major modes for which `prog-mode-hook' does not start `lsp-deferred'."
+  :type '(repeat symbol)
+  :group 'dn)
+
+;; -------------------------------------------------------------------------- ;;
+
 (use-package lsp-mode
   :straight t
   :defines lsp-language-id-configuration

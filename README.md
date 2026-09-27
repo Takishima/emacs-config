@@ -18,7 +18,7 @@ To run another checkout without relinking, start `emacs --init-directory <checko
 `init.el` loads `.emacs`, which loads, in order:
 
 1. `.emacs_lisp/config/init-pre.el`, if it exists, then calls `config-init-pre` if that file defines it.
-1. `init-custom.el`, then the custom file `.emacs_lisp/custom.el`, if it exists. Because the custom file loads before the other modules, `:custom` values in `use-package` blocks override values saved through Customize.
+1. The custom file `.emacs_lisp/custom.el`, if it exists. Because the custom file loads before the other modules, `:custom` values in `use-package` blocks override values saved through Customize.
 1. Each module in `dn-modules`, in order. `init-programming.el` then loads every language module in `programming/` except those listed in `dn-disabled-languages`.
 1. `.emacs_lisp/config/init-post.el`, if it exists, then `config-init-post` if defined.
 
