@@ -83,7 +83,7 @@
 
 (defcustom dn-modules
   (append '(init-package init-env init-ui init-completion init-editing
-            init-project init-docs init-magit init-llm init-lsp
+            init-project init-docs init-org init-magit init-llm init-lsp
             init-programming init-auctex init-ispell)
           (when (eq system-type 'darwin) '(init-os-darwin)))
   "Modules loaded in order by .emacs.

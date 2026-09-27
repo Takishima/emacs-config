@@ -23,7 +23,7 @@
 ;; Keep language servers from starting in batch.
 (advice-add 'lsp-deferred :override #'ignore)
 
-(dolist (feature '(lsp-mode yasnippet devdocs))
+(dolist (feature '(lsp-mode yasnippet devdocs dn-timesheet))
   (dn-smoke-check (format "%s deferred at startup" feature) nil
                   (featurep feature)))
 (dn-smoke-check "config-require leaks filename" nil (boundp 'filename))
@@ -112,6 +112,48 @@
                   (and (assoc "latexmk" TeX-command-list) t))
   (dn-smoke-check "TeX-run-Biber is AUCTeX's compiled definition" t
                   (compiled-function-p (symbol-function 'TeX-run-Biber))))
+
+;; Timesheet: the keys are bound without loading the library, and a
+;; check-in followed by a check-out records one CLOCK line for the day.
+(dn-smoke-check "C-c w i" 'dn-timesheet-check-in (key-binding (kbd "C-c w i")))
+(dn-smoke-check "C-c w o" 'dn-timesheet-check-out (key-binding (kbd "C-c w o")))
+(require 'dn-timesheet)
+(let* ((dn-timesheet-file (expand-file-name "timesheet.org" dn-smoke-dir))
+       (today (decode-time))
+       (at (lambda (hour)
+             (encode-time (list 0 0 hour (nth 3 today) (nth 4 today) (nth 5 today))))))
+  (dn-timesheet-check-in (funcall at 9))
+  (dn-smoke-check "timesheet check-in clocks in the timesheet" t
+                  (and (org-clocking-p)
+                       (equal (buffer-file-name (marker-buffer org-clock-marker))
+                              dn-timesheet-file)))
+  (dn-timesheet-check-in (funcall at 10))
+  (dn-smoke-check "timesheet second check-in keeps the first" 9
+                  (decoded-time-hour (decode-time org-clock-start-time)))
+  (dn-timesheet-check-out (funcall at 18))
+  (dn-smoke-check "timesheet check-out stops the clock" nil (org-clocking-p))
+  (with-current-buffer (dn-timesheet-buffer)
+    (dn-smoke-check "timesheet day heading" t
+                    (and (dn-timesheet--find-heading
+                          (format-time-string dn-timesheet-day-heading-format) 2)
+                         t))
+    (dn-smoke-check "timesheet clock line" t
+                    (and (string-match-p "^CLOCK: \\[.*\\]--\\[.*\\] =>  9:00$"
+                                         (buffer-string))
+                         t))
+    (dn-smoke-check "timesheet clock tables" (length dn-timesheet-clock-tables)
+                    (how-many "^#\\+BEGIN: clocktable" (point-min) (point-max)))
+    (dn-smoke-check "timesheet saved" nil (buffer-modified-p))
+    ;; A clock left open by a past session, with nothing clocking now.
+    (dn-timesheet--find-day (funcall at 9))
+    (forward-line)
+    (insert "CLOCK: " (format-time-string (org-time-stamp-format t t) (funcall at 19)) "\n")
+    (dn-timesheet-check-out (funcall at 20))
+    (dn-smoke-check "timesheet check-out closes a stale clock" t
+                    (and (string-match-p "^CLOCK: \\[.*\\]--\\[.*\\] =>  1:00$"
+                                         (buffer-string))
+                         t))
+    (kill-buffer)))
 
 (dn-smoke-check "use-package warnings" nil
                 (when-let* ((buf (get-buffer "*Warnings*")))

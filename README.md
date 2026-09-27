@@ -52,6 +52,21 @@ Modules are loaded with `config-require`, which looks in `.emacs_lisp/config/` b
 | `.emacs_lisp/abbrev_*` | Abbrev tables |
 | `.emacs_lisp/docsets/` | Dash docsets installed by `dn-dash-docs-install` |
 
+# Timesheet
+
+`init-org.el` loads `lib/dn-timesheet.el`, which keeps a daily timesheet in `dn-timesheet-file` (default `~/.emacs.d/timesheet.org`) using Org's clock. The file has one heading per ISO week and one subheading per day, plus a `Report` section with clock tables for the current week and month. The commands live under `C-c w`:
+
+| Key | Command | Effect |
+|---|---|---|
+| `C-c w i` | `dn-timesheet-check-in` | Clock in on today's heading, creating the file, week and day as needed |
+| `C-c w o` | `dn-timesheet-check-out` | Clock out; also closes a clock left open by a previous session |
+| `C-c w t` | `dn-timesheet-toggle` | Check in or out, whichever applies |
+| `C-c w s` | `dn-timesheet-status` | Show the time worked today |
+| `C-c w r` | `dn-timesheet-report` | Refresh the clock tables and show the report |
+| `C-c w f` | `dn-timesheet-open` | Visit the timesheet at today's heading |
+
+Check-in and check-out take a prefix argument (`C-u C-c w i`) to enter the time by hand, for a forgotten check-in or check-out. A second check-in on the same day is a no-op.
+
 # Checking the config
 
 `make check` loads the whole config in batch mode and runs `test/smoke.el`. It exits non-zero on a load error, a `use-package` warning or a failed check.
