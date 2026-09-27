@@ -55,13 +55,6 @@
 
 ;; -------------------------------------------------------------------------- ;;
 
-(use-package display-line-numbers
-  :straight nil
-  :config
-  (global-display-line-numbers-mode 1))
-
-;; -------------------------------------------------------------------------- ;;
-
 (use-package printing
   :straight nil
   :config

@@ -43,52 +43,6 @@
 (require 'config-functions (concat config-dir "functions.el"))
 
 ;; ========================================================================== ;;
-;; Automatically guess indent offsets, tab, spaces settings, etc.
-
-(use-package dtrt-indent
-  :straight t)
-
-;; -------------------------------------------------------------------------- ;;
-
-(use-package project-directory
-  :straight nil
-  :load-path config-dotemacs-lisp)
-
-;; ========================================================================== ;;
-
-(use-package direnv
-  :if (executable-find "direnv")
-  :straight t
-  :config
-  (direnv-mode)
-  (defcustom dn-direnv-enabled-hosts nil
-    "List of remote hosts to use direnv on.
-
-     Each host must have the `direnv` executable accessible in the default environment"
-    :type '(repeat string)
-    :group 'dn)
-
-  (defun tramp-sh-handle-start-file-process@dn-direnv (args)
-    "Enable Direnv for hosts in `dn-direnv-enabled-hosts'."
-    (message "tramp-sh-handle-start-file-process@dn-direnv")
-    (with-parsed-tramp-file-name (expand-file-name default-directory) nil
-      (if (member host dn-direnv-enabled-hosts)
-          (pcase-let ((`(,name ,buffer ,program . ,args) args))
-            `(,name
-              ,buffer
-              "direnv"
-              "exec"
-              ,localname
-              ,program
-              ,@args))
-        args)))
-
-  (with-eval-after-load "tramp-sh"
-    (advice-add 'tramp-sh-handle-start-file-process
-                :filter-args #'tramp-sh-handle-start-file-process@dn-direnv))
-  )
-
-;; ========================================================================== ;;
 
 (use-package diff-mode
   :straight nil
@@ -147,25 +101,6 @@
 ;; -------------------------------------------------------------------------- ;;
 
 (setq compilation-scroll-output 'first-error)
-
-;; ========================================================================== ;;
-
-(use-package editorconfig
-  :straight t
-  :config
-  (editorconfig-mode 1)
-  )
-
-(use-package editorconfig-generate
-  :straight t
-  )
-
-(use-package editorconfig-domain-specific
-  :straight t
-  )
-
-(use-package editorconfig-custom-majormode
-  :straight t)
 
 ;; ========================================================================== ;;
 

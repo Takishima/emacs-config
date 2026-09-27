@@ -140,7 +140,7 @@ Git repository (not a worktree).")
          (`ls-files       (dashboard-ls--files))
          (t (user-error "Unknown section for search: %s" section))))))
 
-;; Configuration is handled in init-emacs.el via dn-dashboard-worktrees-path
+;; Configuration is handled in init-ui.el via dn-dashboard-worktrees-path
 
 (provide 'dashboard-worktrees-patch)
 ;;; dashboard-worktrees-patch.el ends here
