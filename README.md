@@ -46,7 +46,6 @@ Modules are loaded with `config-require`, which looks in `.emacs_lisp/config/` b
 | `.emacs_lisp/config/` | Paths (`variables.el`), loader helpers (`functions.el`) and the untracked per-host files |
 | `.emacs_lisp/vendor/` | Third-party libraries |
 | `.emacs_lisp/lib/` | Own libraries |
-| `.emacs_lisp/patches/` | Code that modifies a package after it loads |
 | `.emacs_lisp/packages/` | Own packages (ROS 2 modes) |
 | `.emacs_lisp/yas-lib/` | Helpers for snippets; `foo.el` must provide `yas-lib-foo` |
 | `.emacs_lisp/snippets/` | yasnippet snippets |

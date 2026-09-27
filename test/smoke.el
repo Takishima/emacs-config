@@ -27,6 +27,13 @@
   (dn-smoke-check (format "%s deferred at startup" feature) nil
                   (featurep feature)))
 (dn-smoke-check "config-require leaks filename" nil (boundp 'filename))
+(dn-smoke-check "dashboard worktrees item registered" 'dn-dashboard-insert-worktrees
+                (alist-get 'worktrees dashboard-item-generators))
+(dn-smoke-check "worktree porcelain parsing" '("/repo" "/repo-feature")
+                (dn-dashboard-worktrees--parse
+                 (concat "worktree /repo\nHEAD abc\nbranch refs/heads/main\n\n"
+                         "worktree /repo-detached\nHEAD def\ndetached\n\n"
+                         "worktree /repo-feature\nHEAD 123\nbranch refs/heads/feature\n")))
 (dn-smoke-check "ispell-extra-args overridden" nil
                 (equal (default-value 'ispell-extra-args) '("--reverse")))
 (dn-smoke-check "indent-tabs-mode" nil (default-value 'indent-tabs-mode))
