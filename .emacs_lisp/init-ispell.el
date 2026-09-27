@@ -63,9 +63,7 @@ If RUN-TOGETHER is non-nil, also spell check CamelCase words."
           (setq args (append args '("--camel-case"))))
 
          (t
-          (setq args (append args '("--run-together" "--run-together-limit=16")))))))
-     ((string-match "hunspell$" ispell-program-name)
-      (setq args "-d en_GB")))
+          (setq args (append args '("--run-together" "--run-together-limit=16"))))))))
     args))
 
 (cond
@@ -81,8 +79,6 @@ If RUN-TOGETHER is non-nil, also spell check CamelCase words."
           '(("en_GB" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_GB") nil utf-8))))
  (t (setq ispell-program-name nil)))
 
-;; hunspell ignores `ispell-extra-args'; it takes its arguments from
-;; `ispell-local-dictionary-alist'.
 (setq-default ispell-extra-args (dn-flyspell-detect-ispell-args t))
 
 (defun dn--ispell-with-plain-args (orig-fun &rest args)
