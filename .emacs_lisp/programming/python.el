@@ -189,7 +189,7 @@
 	       ("C-x tM" . python-pytest-function-dwim)
 	       ("C-x tr" . python-pytest-repeat)
 	       ("C-x tl" . python-pytest-last-failed)
-	       ("C-x tk" . python-pytest-close-buffer)
+	       ("C-x tk" . dn-python-pytest-close-buffer)
 	       ))
   :custom
   (python-pytest-arguments
@@ -201,7 +201,7 @@
   :config
   (dolist (mode '(python-mode python-ts-mode))
     (which-key-add-major-mode-key-based-replacements mode "t" "Testing"))
-  (defun python-pytest-close-buffer ()
+  (defun dn-python-pytest-close-buffer ()
     "Close the python-pytest buffer (if it exists)."
     (interactive)
     (let ((name python-pytest-buffer-name)
@@ -222,7 +222,7 @@
   :straight t
   :bind
   ;; (:map sphinx-mode-map
-  ;;       (("C-c i" . compile-in-iterm)
+  ;;       (("C-c i" . dn-compile-in-iterm)
   ;;        ))
   )
 

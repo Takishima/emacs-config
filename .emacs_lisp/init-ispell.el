@@ -52,7 +52,7 @@
   ;; if (aspell installed) { use aspell}
   ;; else if (hunspell installed) { use hunspell }
   ;; whatever spell checker I use, I always use English dictionary
-  (defun flyspell-detect-ispell-args (&optional run-together)
+  (defun dn-flyspell-detect-ispell-args (&optional run-together)
     "if RUN-TOGETHER is true, spell check the CamelCase words."
     (let (args)
       (cond
@@ -97,12 +97,12 @@
   ;; ispell-extra-args is the command arguments which will *always* be used when start ispell process
   ;; Please note when you use hunspell, ispell-extra-args will NOT be used.
   ;; Hack ispell-local-dictionary-alist instead.
-  (setq-default ispell-extra-args (flyspell-detect-ispell-args t))
-  ;; (setq ispell-cmd-args (flyspell-detect-ispell-args))
+  (setq-default ispell-extra-args (dn-flyspell-detect-ispell-args t))
+  ;; (setq ispell-cmd-args (dn-flyspell-detect-ispell-args))
   (defun my-ispell-word (orig-fun &rest args)
     (let ((old-ispell-extra-args ispell-extra-args))
       (ispell-kill-ispell t)
-      (setq ispell-extra-args (flyspell-detect-ispell-args))
+      (setq ispell-extra-args (dn-flyspell-detect-ispell-args))
       (apply orig-fun args)
       (setq ispell-extra-args old-ispell-extra-args)
       (ispell-kill-ispell t)))
@@ -112,7 +112,7 @@
     (let ((old-ispell-extra-args ispell-extra-args))
       (ispell-kill-ispell t)
       ;; use emacs original arguments
-      (setq ispell-extra-args (flyspell-detect-ispell-args))
+      (setq ispell-extra-args (dn-flyspell-detect-ispell-args))
       (apply orig-fun args)
       ;; restore our own ispell arguments
       (setq ispell-extra-args old-ispell-extra-args)
@@ -121,7 +121,7 @@
 
   (defun text-mode-hook-setup ()
     ;; Turn off RUN-TOGETHER option when spell check text-mode
-    (setq-local ispell-extra-args (flyspell-detect-ispell-args)))
+    (setq-local ispell-extra-args (dn-flyspell-detect-ispell-args)))
   (add-hook 'text-mode-hook 'text-mode-hook-setup)
 
   (setq ispell-silently-savep t)

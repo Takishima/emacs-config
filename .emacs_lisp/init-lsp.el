@@ -152,7 +152,7 @@
               (set-face-background 'lsp-ui-doc-background
                                    (face-background 'tooltip))))
 
-  (defun lsp-update-server ()
+  (defun dn-lsp-update-server ()
     "Update LSP server."
     (interactive)
     ;; Equals to `C-u M-x lsp-install-server'
@@ -164,11 +164,11 @@
 (use-package cleanup-lsp-workspaces
   :straight nil
   :after (lsp-mode)
-  :commands (lsp-cleanup-workspaces
-             lsp-cleanup-workspaces-nonexistent
-             lsp-list-workspaces
-             lsp-cleanup-workspaces-keep-home-only
-             lsp-cleanup-workspaces-remove-all))
+  :commands (dn-lsp-cleanup-workspaces
+             dn-lsp-cleanup-workspaces-nonexistent
+             dn-lsp-list-workspaces
+             dn-lsp-cleanup-workspaces-keep-home-only
+             dn-lsp-cleanup-workspaces-remove-all))
 
 ;; ========================================================================== ;;
 
@@ -207,7 +207,7 @@
   )
 
 (when (executable-find "emacs-lsp-booster")
-  (defun lsp-booster--advice-json-parse (old-fn &rest args)
+  (defun dn-lsp-booster--advice-json-parse (old-fn &rest args)
     "Try to parse bytecode instead of json."
     (or
      (when (equal (following-char) ?#)
@@ -220,9 +220,9 @@
                   'json-parse-buffer
                 'json-read)
               :around
-              #'lsp-booster--advice-json-parse)
+              #'dn-lsp-booster--advice-json-parse)
 
-  (defun lsp-booster--advice-final-command (old-fn cmd &optional test?)
+  (defun dn-lsp-booster--advice-final-command (old-fn cmd &optional test?)
     "Prepend emacs-lsp-booster command to lsp CMD."
     (let ((orig-result (funcall old-fn cmd test?)))
       (if (and (not test?)                             ;; for check lsp-server-present?
@@ -236,7 +236,7 @@
             (message "Using emacs-lsp-booster for %s!" orig-result)
             (cons "emacs-lsp-booster" orig-result))
         orig-result)))
-  (advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
+  (advice-add 'lsp-resolve-final-command :around #'dn-lsp-booster--advice-final-command)
   )
 
 (use-package lsp-treemacs

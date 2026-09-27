@@ -83,24 +83,24 @@
 
 ;; ========================================================================== ;;
 
-(defvar compile-in-iterms-command "make")
-;; (defcustom dn-compile-in-iterms-history nil
+(defvar dn-compile-in-iterm-command "make")
+;; (defcustom dn-compile-in-iterm-history nil
 ;;   "History variable for"
 ;;   :type '(repeat string)
 ;;   :group 'dn)
-(defvar compile-in-iterms-history nil)
-(defun compile-in-iterm (command)
+(defvar dn-compile-in-iterm-history nil)
+(defun dn-compile-in-iterm (command)
   (interactive
    (list
-    (read-from-minibuffer (format "Command [%s]: " (car compile-in-iterms-history))
+    (read-from-minibuffer (format "Command [%s]: " (car dn-compile-in-iterm-history))
                           nil ;; INITIAL-CONTENT (deprecated)
                           nil ;; KEYMAP
                           nil ;; READ
-                          'compile-in-iterms-history
-                          (if 'compile-in-iterms-history (car compile-in-iterms-history) ("make")))
+                          'dn-compile-in-iterm-history
+                          (if 'dn-compile-in-iterm-history (car dn-compile-in-iterm-history) ("make")))
     ))
   (progn
-    (when (string= "" command) (setq command (car compile-in-iterms-history)))
+    (when (string= "" command) (setq command (car dn-compile-in-iterm-history)))
     (do-applescript
      (concat "tell application \"iTerm\"\ntell current session of current window\nwrite text \""
              (replace-regexp-in-string "\"" "\\\"" command t t)
@@ -109,11 +109,11 @@
     ))
 
 (with-eval-after-load 'cc-mode
-  (keymap-set c++-mode-map "C-c i" #'compile-in-iterm))
+  (keymap-set c++-mode-map "C-c i" #'dn-compile-in-iterm))
 (with-eval-after-load 'c-ts-mode
-  (keymap-set c++-ts-mode-map "C-c i" #'compile-in-iterm))
+  (keymap-set c++-ts-mode-map "C-c i" #'dn-compile-in-iterm))
 (with-eval-after-load 'rst
-  (keymap-set rst-mode-map "C-c i" #'compile-in-iterm))
+  (keymap-set rst-mode-map "C-c i" #'dn-compile-in-iterm))
 
 ;; ========================================================================== ;;
 

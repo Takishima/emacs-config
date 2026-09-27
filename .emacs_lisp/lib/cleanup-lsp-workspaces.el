@@ -38,11 +38,11 @@
 ;; such as remote paths, temporary directories, and non-existent folders.
 ;;
 ;; Main functions:
-;; - `lsp-cleanup-workspaces': Remove problematic folders (recommended)
-;; - `lsp-cleanup-workspaces-nonexistent': Remove only non-existent directories
-;; - `lsp-list-workspaces': List all workspace folders
-;; - `lsp-cleanup-workspaces-keep-home-only': Keep only $HOME folders
-;; - `lsp-cleanup-workspaces-remove-all': Remove all workspace folders
+;; - `dn-lsp-cleanup-workspaces': Remove problematic folders (recommended)
+;; - `dn-lsp-cleanup-workspaces-nonexistent': Remove only non-existent directories
+;; - `dn-lsp-list-workspaces': List all workspace folders
+;; - `dn-lsp-cleanup-workspaces-keep-home-only': Keep only $HOME folders
+;; - `dn-lsp-cleanup-workspaces-remove-all': Remove all workspace folders
 
 ;;; Code:
 
@@ -50,7 +50,7 @@
 
 ;; ========================================================================== ;;
 
-(defun lsp-cleanup-workspaces-nonexistent ()
+(defun dn-lsp-cleanup-workspaces-nonexistent ()
   "Remove only non-existent workspace folders.
 This is safe to run automatically on startup."
   (interactive)
@@ -95,7 +95,7 @@ This is safe to run automatically on startup."
 
 ;; ========================================================================== ;;
 
-(defun lsp-cleanup-workspaces ()
+(defun dn-lsp-cleanup-workspaces ()
   "Remove /tmp, /nix/store, and remote (/ssh:) folders from LSP workspaces.
 This is safe and won't trigger Tramp connections."
   (interactive)
@@ -154,7 +154,7 @@ This is safe and won't trigger Tramp connections."
 
 ;; ========================================================================== ;;
 
-(defun lsp-list-workspaces ()
+(defun dn-lsp-list-workspaces ()
   "List all LSP workspace folders (safe - no Tramp)."
   (interactive)
   (let* ((session (lsp-session))
@@ -173,7 +173,7 @@ This is safe and won't trigger Tramp connections."
 
 ;; ========================================================================== ;;
 
-(defun lsp-cleanup-workspaces-keep-home-only ()
+(defun dn-lsp-cleanup-workspaces-keep-home-only ()
   "Keep only workspace folders under your home directory."
   (interactive)
   (when (yes-or-no-p "This will remove ALL workspaces outside $HOME. Continue? ")
@@ -215,7 +215,7 @@ This is safe and won't trigger Tramp connections."
 
 ;; ========================================================================== ;;
 
-(defun lsp-cleanup-workspaces-remove-all ()
+(defun dn-lsp-cleanup-workspaces-remove-all ()
   "Remove ALL workspace folders from LSP session.
 Use this to start fresh with a clean workspace list."
   (interactive)

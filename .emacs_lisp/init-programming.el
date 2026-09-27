@@ -137,7 +137,7 @@
           (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
 
   ;; Function to install missing grammars
-  (defun treesit-install-all-grammars ()
+  (defun dn-treesit-install-all-grammars ()
     "Install all treesit grammars defined in `treesit-language-source-alist'."
     (interactive)
     (dolist (grammar treesit-language-source-alist)

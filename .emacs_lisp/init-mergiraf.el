@@ -41,7 +41,7 @@
 ;;   enabled. Press C-c ^ m to run mergiraf on the current buffer.
 ;;
 ;; Commands:
-;;   smerge-mergiraf-solve - Run mergiraf solve on the current buffer
+;;   dn-smerge-mergiraf-solve - Run mergiraf solve on the current buffer
 
 ;;; Code:
 
@@ -51,20 +51,20 @@
 
 ;; ========================================================================== ;;
 
-(defun smerge-mergiraf-has-conflicts-p ()
+(defun dn-smerge-mergiraf-has-conflicts-p ()
   "Check if the current buffer contains merge conflict markers."
   (save-excursion
     (goto-char (point-min))
     (re-search-forward "^<<<<<<< " nil t)))
 
-(defun smerge-mergiraf-solve ()
+(defun dn-smerge-mergiraf-solve ()
   "Run `mergiraf solve' on the current buffer to resolve merge conflicts.
 After running mergiraf, the buffer is reverted and smerge-mode is re-enabled
 if conflicts remain."
   (interactive)
   (unless buffer-file-name
     (user-error "Buffer is not visiting a file"))
-  (unless (smerge-mergiraf-has-conflicts-p)
+  (unless (dn-smerge-mergiraf-has-conflicts-p)
     (user-error "No merge conflicts found in buffer"))
 
   (let ((filename (buffer-file-name)))
@@ -81,7 +81,7 @@ if conflicts remain."
           (progn
             ;; Success - revert buffer and check for remaining conflicts
             (revert-buffer t t t)
-            (if (smerge-mergiraf-has-conflicts-p)
+            (if (dn-smerge-mergiraf-has-conflicts-p)
                 (progn
                   (smerge-mode 1)
                   (message "Mergiraf partially resolved conflicts. Manual resolution needed."))
@@ -97,11 +97,11 @@ if conflicts remain."
               (message "Mergiraf output: %s" (buffer-string))))))
       (kill-buffer output-buffer))))
 
-(defun smerge-mergiraf-solve-and-save ()
+(defun dn-smerge-mergiraf-solve-and-save ()
   "Run `mergiraf solve' on the current buffer and save the result.
 This is a convenience command that combines solving and saving."
   (interactive)
-  (smerge-mergiraf-solve)
+  (dn-smerge-mergiraf-solve)
   (when (buffer-modified-p)
     (save-buffer)))
 
@@ -109,8 +109,8 @@ This is a convenience command that combines solving and saving."
 ;; Add mergiraf command to smerge-mode keymap
 
 (with-eval-after-load 'smerge-mode
-  (define-key smerge-mode-map (kbd "C-c ^ m") 'smerge-mergiraf-solve)
-  (define-key smerge-mode-map (kbd "C-c ^ M") 'smerge-mergiraf-solve-and-save))
+  (define-key smerge-mode-map (kbd "C-c ^ m") 'dn-smerge-mergiraf-solve)
+  (define-key smerge-mode-map (kbd "C-c ^ M") 'dn-smerge-mergiraf-solve-and-save))
 
 ;; ========================================================================== ;;
 

@@ -53,14 +53,14 @@
   (git-commit-setup . git-commit-turn-on-flyspell)
   (magit-mode . dn-magit-split-height-threshold)
   :config
-  (defun magit-push-to-all-remotes ()
+  (defun dn-magit-push-to-all-remotes ()
     "Push a branch to all the remotes."
     (interactive)
     (dolist (remote (magit-list-remotes))
       (magit-push-current (concat remote "/" (magit-get-current-branch))
 			  (magit-push-arguments))))
 
-  (defun magit-push-to-all-remotes-except-upstream ()
+  (defun dn-magit-push-to-all-remotes-except-upstream ()
     "Push a branch to all the remotes (except upstream)."
     (interactive)
     (dolist (remote (magit-list-remotes))
@@ -72,7 +72,7 @@
       )
     )
 
-  (defun magit-push-to-all-remotes-except-github ()
+  (defun dn-magit-push-to-all-remotes-except-github ()
     "Push a branch to all the remotes (except github)."
     (interactive)
     (dolist (remote (magit-list-remotes))
@@ -84,7 +84,7 @@
       )
     )
 
-  (defun magit-org-read-date (&rest _ignored)
+  (defun dn-magit-org-read-date (&rest _ignored)
     (org-read-date))
 
   (transient-define-argument magit-log:--since ()
@@ -92,14 +92,14 @@
     :class 'transient-option
     :key "?S"
     :argument "--since="
-    :reader #'magit-org-read-date)
+    :reader #'dn-magit-org-read-date)
 
   (transient-define-argument magit-log:--until ()
     :description "Show commits older than a specific date."
     :class 'transient-option
     :key "?U"
     :argument "--until="
-    :reader #'magit-org-read-date)
+    :reader #'dn-magit-org-read-date)
 
   ;; ------------------------------------------------------------------------ ;;
   ;; Register new transients
@@ -111,18 +111,18 @@
     '(magit-log:--until))
 
   (transient-append-suffix 'magit-push "e"
-    '("A" "All" magit-push-to-all-remotes))
+    '("A" "All" dn-magit-push-to-all-remotes))
 
   (transient-append-suffix 'magit-push "A"
-    '("a" "All (except upstream)" magit-push-to-all-remotes-except-upstream))
+    '("a" "All (except upstream)" dn-magit-push-to-all-remotes-except-upstream))
 
   (transient-append-suffix 'magit-push "a"
-    '("g" "All (except github)" magit-push-to-all-remotes-except-github))
+    '("g" "All (except github)" dn-magit-push-to-all-remotes-except-github))
 
   ;; ------------------------------------------------------------------------ ;;
   ;; Pre-commit support
 
-  (defun magit-run-precommit-manual ()
+  (defun dn-magit-run-precommit-manual ()
     "Run `pre-commit run --hook-stage manual' in the current repository."
     (interactive)
     (let ((default-directory (magit-toplevel)))
@@ -132,12 +132,12 @@
     (magit-process-buffer))
 
   (transient-append-suffix 'magit-run "b"
-    '("P" "Pre-commit manual" magit-run-precommit-manual))
+    '("P" "Pre-commit manual" dn-magit-run-precommit-manual))
 
   ;; ------------------------------------------------------------------------ ;;
   ;; Mergiraf support
 
-  (defun magit-run-mergiraf-solve-file ()
+  (defun dn-magit-run-mergiraf-solve-file ()
     "Run `mergiraf solve' on the file at point or prompt for a file."
     (interactive)
     (let* ((default-directory (magit-toplevel))
@@ -163,7 +163,7 @@
             (magit-process-buffer))
         (user-error "No file selected"))))
 
-  (defun magit-run-mergiraf-solve-all ()
+  (defun dn-magit-run-mergiraf-solve-all ()
     "Run `mergiraf solve' on all conflicted files in the repository."
     (interactive)
     (let* ((default-directory (magit-toplevel))
@@ -190,7 +190,7 @@
             (magit-process-buffer))
         (message "No conflicted files found"))))
 
-  (defun magit-run-mergiraf-review (merge-id)
+  (defun dn-magit-run-mergiraf-review (merge-id)
     "Review mergiraf's automatic conflict resolution with `mergiraf review'.
 MERGE-ID is the merge identifier from git output."
     (interactive "sMerge ID: ")
@@ -204,15 +204,15 @@ MERGE-ID is the merge identifier from git output."
                               (format "mergiraf review %s" (shell-quote-argument merge-id)))
           (magit-process-buffer)))))
 
-  (transient-define-prefix magit-run-mergiraf ()
+  (transient-define-prefix dn-magit-run-mergiraf ()
     "Mergiraf commands for resolving merge conflicts."
     ["Mergiraf"
-     ("f" "Solve file at point" magit-run-mergiraf-solve-file)
-     ("a" "Solve all conflicts" magit-run-mergiraf-solve-all)
-     ("r" "Review merge" magit-run-mergiraf-review)])
+     ("f" "Solve file at point" dn-magit-run-mergiraf-solve-file)
+     ("a" "Solve all conflicts" dn-magit-run-mergiraf-solve-all)
+     ("r" "Review merge" dn-magit-run-mergiraf-review)])
 
   (transient-append-suffix 'magit-run "P"
-    '("m" "Mergiraf" magit-run-mergiraf))
+    '("m" "Mergiraf" dn-magit-run-mergiraf))
   )
 
 ;;----------------------------------------------------------------------------;;

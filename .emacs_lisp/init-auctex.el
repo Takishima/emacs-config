@@ -103,7 +103,7 @@
   (add-to-list 'TeX-command-list
                '("make" "make %s" TeX-run-TeX nil t :help "Process file with GNU make (and makefile)"))
   (add-to-list 'TeX-command-list
-               '("Biber" "biber %s" TeX-run-Biber nil t :help "Run Biber"))
+               '("Biber" "biber %s" dn-tex-run-biber nil t :help "Run Biber"))
 
   (defun latex-help-get-cmd-alist ()    ;corrected version:
     "Scoop up the commands in the index of the latex info manual.
@@ -127,15 +127,15 @@
   (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
 
 
-  (defun TeX-run-Biber (name command file)
+  (defun dn-tex-run-biber (name command file)
     "Create a process for NAME using COMMAND to format FILE with Biber."
     (let ((process (TeX-run-command name command file)))
-      (setq TeX-sentinel-function 'TeX-Biber-sentinel)
+      (setq TeX-sentinel-function 'dn-tex-biber-sentinel)
       (if TeX-process-asynchronous
           process
         (TeX-synchronous-sentinel name file process))))
 
-  (defun TeX-Biber-sentinel (process name)
+  (defun dn-tex-biber-sentinel (process name)
     "Cleanup TeX output buffer after running Biber."
     (goto-char (point-max))
     (cond

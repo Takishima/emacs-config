@@ -69,7 +69,7 @@
                             (default-value 'before-save-hook))))
 
 (dolist (spec '(("t.py" python-ts-mode ("Python 3" "NumPy" "SciPy")
-                 "C-x tk" python-pytest-close-buffer)
+                 "C-x tk" dn-python-pytest-close-buffer)
                 ("t.cpp" c++-ts-mode ("C++" "C") "C-c c" recompile)
                 ("CMakeLists.txt" cmake-ts-mode ("CMake")
                  "C-c C-f" cmake-format-buffer)))
@@ -83,7 +83,9 @@
 (with-current-buffer (dn-smoke-visit "t.tex")
   (dn-smoke-check "t.tex major-mode" 'LaTeX-mode major-mode)
   (dn-smoke-check "t.tex latexmk command" t
-                  (and (assoc "latexmk" TeX-command-list) t)))
+                  (and (assoc "latexmk" TeX-command-list) t))
+  (dn-smoke-check "TeX-run-Biber is AUCTeX's compiled definition" t
+                  (compiled-function-p (symbol-function 'TeX-run-Biber))))
 
 (dn-smoke-check "use-package warnings" nil
                 (when-let* ((buf (get-buffer "*Warnings*")))
