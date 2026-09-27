@@ -52,6 +52,10 @@
 
 ;; ========================================================================== ;;
 
+(defun dn-go-enable-format-on-save ()
+  "Enable `lsp-format-buffer' in `before-save-hook' (buffer-local)."
+  (add-hook 'before-save-hook #'lsp-format-buffer nil t))
+
 (use-package go-ts-mode
   :straight nil
   :mode (("\\.go\\'"     . go-ts-mode)
@@ -65,10 +69,6 @@
             (lambda ()
               (setq-local devdocs-current-docs '("go"))
               (setq-local dash-docs-docsets '("Go")))))
-
-(defun dn-go-enable-format-on-save ()
-  "Enable `lsp-format-buffer' in `before-save-hook' (buffer-local)."
-  (add-hook 'before-save-hook #'lsp-format-buffer nil t))
 
 ;; ========================================================================== ;;
 

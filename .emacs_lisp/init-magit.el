@@ -50,7 +50,7 @@
   :straight t
   :commands magit
   :hook
-  (git-commit-setup . git-commit-turn-on-flyspell)
+  (git-commit-setup . git-commit-setup-flyspell)
   (magit-mode . dn-magit-split-height-threshold)
   :config
   (defun dn-magit-push-to-all-remotes ()
