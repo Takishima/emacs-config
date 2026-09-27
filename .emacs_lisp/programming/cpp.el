@@ -73,6 +73,10 @@
    ("\\.txx$" . c++-mode))
   )
 
+(when (treesit-available-p)
+  (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode)))
+
 (use-package c-ts-mode
   :straight nil
   :custom

@@ -47,6 +47,9 @@
 (use-package go-mode
   :straight t)
 
+(when (treesit-available-p)
+  (add-to-list 'major-mode-remap-alist '(go-mode . go-ts-mode)))
+
 ;; ========================================================================== ;;
 
 (use-package go-ts-mode

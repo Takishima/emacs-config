@@ -42,6 +42,9 @@
 
 ;; ========================================================================== ;;
 
+(when (treesit-available-p)
+  (add-to-list 'major-mode-remap-alist '(json-mode . json-ts-mode)))
+
 (use-package json-ts-mode
   :straight nil
   :mode "\\.json\\'"

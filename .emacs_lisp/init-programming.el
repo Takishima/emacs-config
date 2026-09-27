@@ -154,19 +154,8 @@
                   (treesit-install-language-grammar language))))
 
   ;; Enable treesit modes by default where available
-  (setq major-mode-remap-alist
-        '((c-mode . c-ts-mode)
-          (c++-mode . c++-ts-mode)
-          (cmake-mode . cmake-ts-mode)
-          (conf-toml-mode . toml-ts-mode)
-          (css-mode . css-ts-mode)
-          (go-mode . go-ts-mode)
-          (js-mode . js-ts-mode)
-          (javascript-mode . js-ts-mode)
-          (json-mode . json-ts-mode)
-          (python-mode . python-ts-mode)
-          (sh-mode . bash-ts-mode)
-          (typescript-mode . typescript-ts-mode))))
+  (add-to-list 'major-mode-remap-alist '(conf-toml-mode . toml-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(sh-mode . bash-ts-mode)))
 
 ;; ========================================================================== ;;
 

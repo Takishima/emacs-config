@@ -45,6 +45,9 @@
 
 ;; ========================================================================== ;;
 
+(when (treesit-available-p)
+  (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode)))
+
 (use-package python
   :straight nil
   :config

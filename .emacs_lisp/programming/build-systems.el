@@ -51,6 +51,9 @@
   (setq-local devdocs-current-docs '("cmake~3.31"))
   (setq-local dash-docs-docsets '("CMake")))
 
+(when (treesit-available-p)
+  (add-to-list 'major-mode-remap-alist '(cmake-mode . cmake-ts-mode)))
+
 (use-package cmake-mode
   :straight t
   :mode

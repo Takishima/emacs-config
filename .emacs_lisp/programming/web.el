@@ -37,6 +37,12 @@
 
 ;; ========================================================================== ;;
 
+(when (treesit-available-p)
+  (add-to-list 'major-mode-remap-alist '(css-mode . css-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(js-mode . js-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(javascript-mode . js-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(typescript-mode . typescript-ts-mode)))
+
 (use-package web-mode
   :straight t
   :custom
