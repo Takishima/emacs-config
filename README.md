@@ -13,6 +13,17 @@ ln -s "$PWD/early-init.el" ~/.emacs.d/early-init.el
 
 To run another checkout without relinking, start `emacs --init-directory <checkout>`. `early-init.el` keeps `user-emacs-directory` at `~/.emacs.d`, so straight's builds and session state are shared. Set `EMACS_USER_DIRECTORY` to use another directory instead, for example a throwaway one that straight bootstraps from scratch.
 
+## Package manager
+
+`dn-package-manager` decides who puts packages on `load-path`. The default, `straight`, bootstraps straight.el and installs every `:straight` package. With `nix`, the packages are expected on `load-path` already (an `emacsWithPackages` wrapper), straight is never loaded and the `:straight` keyword is a no-op. Set it with `setq` before `init.el` runs, for example from a two-line `~/.emacs.d/init.el` written by home-manager, which links `early-init.el` beside it:
+
+```elisp
+(setq dn-package-manager 'nix)
+(load "/nix/store/<hash>-source/init.el" nil 'nomessage)
+```
+
+or through `DN_PACKAGE_MANAGER=nix` for `make check` and `--init-directory`.
+
 When the checkout is read-only, set `config-local-dir` (or `DN_EMACS_LOCAL_DIR`) to a writable directory: `init-pre.el`, `init-post.el` and `custom.el` are read from and written to it instead of the checkout, and a module file there replaces the tracked one. Unset, everything stays in the checkout as described below.
 
 # Loading order
@@ -75,4 +86,6 @@ Check-in and check-out take a prefix argument (`C-u C-c w i`) to enter the time 
 
 `make compile` loads the config the same way, then byte-compiles the configuration's own files into a temporary directory. It exits non-zero if any file fails to compile or emits a warning.
 
-Both load `init.el`, so the first run on a machine clones every package and takes a while.
+`make packages` loads the config the same way and checks that every package declared with `:straight` can be found on `load-path`.
+
+All three load `init.el`, so the first run on a machine clones every package and takes a while.

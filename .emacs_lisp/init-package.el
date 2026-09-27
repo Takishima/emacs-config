@@ -33,24 +33,44 @@
 
 ;;; Code:
 
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name
-        "straight/repos/straight.el/bootstrap.el"
-        (or (bound-and-true-p straight-base-dir)
-            user-emacs-directory)))
-      (bootstrap-version 7))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
-(straight-use-package 'org)
+(defun dn--system-packages-refuse (pack &rest _)
+  "Warn that PACK is missing instead of installing it.
+With nix on PATH, `system-packages-install' would run `nix-env -i'
+behind home-manager's back."
+  (display-warning
+   'dn (format "%s is not on PATH: add it to the Nix packages" pack)))
 
-(straight-use-package 'diminish)
+(pcase dn-package-manager
+  ('nix
+   ;; Without a handler use-package drops every form carrying `:straight'.
+   ;; Nix already put the packages on `load-path', so the keyword is a no-op.
+   (require 'use-package)
+   (unless (memq :straight use-package-keywords)
+     (push :straight use-package-keywords)
+     (defun use-package-normalize/:straight (_name _keyword args) args)
+     (defun use-package-handler/:straight (name _keyword _args rest state)
+       (use-package-process-keywords name rest state)))
+   (advice-add 'system-packages-install :override #'dn--system-packages-refuse))
+  ('straight
+   (defvar bootstrap-version)
+   (let ((bootstrap-file
+          (expand-file-name
+           "straight/repos/straight.el/bootstrap.el"
+           (or (bound-and-true-p straight-base-dir)
+               user-emacs-directory)))
+         (bootstrap-version 7))
+     (unless (file-exists-p bootstrap-file)
+       (with-current-buffer
+           (url-retrieve-synchronously
+            "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+            'silent 'inhibit-cookies)
+         (goto-char (point-max))
+         (eval-print-last-sexp)))
+     (load bootstrap-file nil 'nomessage))
+   (straight-use-package 'org)
+   (straight-use-package 'diminish))
+  (other (error "dn-package-manager is %S; expected straight or nix" other)))
+
 (require 'diminish)
 
 (with-eval-after-load 'use-package

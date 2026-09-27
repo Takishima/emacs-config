@@ -157,6 +157,21 @@
                          t))
     (kill-buffer)))
 
+;; lsp-mode picks plists or hash tables when byte-compiled; the build
+;; must agree with the LSP_USE_PLISTS that early-init.el sets.
+(when (memq 'init-lsp dn-modules)
+  (require 'lsp-mode)
+  (dn-smoke-check "lsp-mode compiled for plists" "x"
+                  (condition-case err
+                      (lsp:hover-contents (lsp--read-json "{\"contents\":\"x\"}"))
+                    (error err))))
+
+(when (eq dn-package-manager 'nix)
+  (dn-smoke-check "system-packages-install refused in nix mode" t
+                  (and (advice-member-p #'dn--system-packages-refuse
+                                        'system-packages-install)
+                       t)))
+
 (when config-local-dir
   (dn-smoke-check "init-pre.el read from config-local-dir" t
                   (bound-and-true-p dn-smoke-local-init-pre))

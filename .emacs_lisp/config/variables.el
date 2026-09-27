@@ -98,6 +98,17 @@ Override it per host in config/init-pre.el."
   :group 'dn
   :type '(repeat symbol))
 
+(defcustom dn-package-manager
+  (intern (or (getenv "DN_PACKAGE_MANAGER") "straight"))
+  "Who puts packages on `load-path': `straight' or `nix'.
+With `straight', init-package.el bootstraps straight.el and every
+`:straight' keyword installs its package.  With `nix', the packages are
+already on `load-path' and `:straight' is a no-op.  Set it with `setq'
+before this file loads, e.g. from a generated init.el, or through
+DN_PACKAGE_MANAGER for batch runs and `--init-directory'."
+  :group 'dn
+  :type '(choice (const straight) (const nix)))
+
 (defcustom config-local-dir (getenv "DN_EMACS_LOCAL_DIR")
   "Directory of the untracked per-host files, or nil.
 nil keeps init-pre.el, init-post.el and module overrides in `config-dir'
