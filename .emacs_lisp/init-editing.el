@@ -84,6 +84,18 @@
 
 ;; ========================================================================== ;;
 
+(use-package multiple-cursors
+  :straight t
+  :bind
+  (("M-m e" . mc/edit-lines)
+   ("M-m s" . mc/mark-next-like-this-symbol)
+   ("M-m w" . mc/mark-next-like-this-word))
+  :init
+  (global-unset-key (kbd "M-m"))
+  )
+
+;; ========================================================================== ;;
+
 (use-package whitespace-cleanup-mode
   :straight t
   :custom

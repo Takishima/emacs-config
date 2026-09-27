@@ -392,6 +392,76 @@ Return a list (candidate, icon, description)."
           )
 
 ;; ========================================================================== ;;
+;; Mergiraf support for smerge-mode
+
+(require 'smerge-mode)
+
+;; ========================================================================== ;;
+
+(defun dn-smerge-mergiraf-has-conflicts-p ()
+  "Check if the current buffer contains merge conflict markers."
+  (save-excursion
+    (goto-char (point-min))
+    (re-search-forward "^<<<<<<< " nil t)))
+
+(defun dn-smerge-mergiraf-solve ()
+  "Run `mergiraf solve' on the current buffer to resolve merge conflicts.
+After running mergiraf, the buffer is reverted and smerge-mode is re-enabled
+if conflicts remain."
+  (interactive)
+  (unless buffer-file-name
+    (user-error "Buffer is not visiting a file"))
+  (unless (dn-smerge-mergiraf-has-conflicts-p)
+    (user-error "No merge conflicts found in buffer"))
+
+  (let ((filename (buffer-file-name)))
+    ;; Save the buffer before running mergiraf
+    (save-buffer)
+
+    (message "Running mergiraf solve on %s..." (file-name-nondirectory filename))
+
+    ;; Run mergiraf synchronously and capture output
+    (let* ((output-buffer (generate-new-buffer "*mergiraf output*"))
+           (exit-code (call-process "mergiraf" nil output-buffer nil
+                                   "solve" filename)))
+      (if (= exit-code 0)
+          (progn
+            ;; Success - revert buffer and check for remaining conflicts
+            (revert-buffer t t t)
+            (if (dn-smerge-mergiraf-has-conflicts-p)
+                (progn
+                  (smerge-mode 1)
+                  (message "Mergiraf partially resolved conflicts. Manual resolution needed."))
+              (progn
+                (smerge-mode -1)
+                (message "Mergiraf successfully resolved all conflicts!"))))
+        (progn
+          ;; Failed - show error output
+          (message "Mergiraf failed to solve conflicts (exit code %d)" exit-code)
+          (with-current-buffer output-buffer
+            (goto-char (point-min))
+            (when (> (buffer-size) 0)
+              (message "Mergiraf output: %s" (buffer-string))))))
+      (kill-buffer output-buffer))))
+
+(defun dn-smerge-mergiraf-solve-and-save ()
+  "Run `mergiraf solve' on the current buffer and save the result.
+This is a convenience command that combines solving and saving."
+  (interactive)
+  (dn-smerge-mergiraf-solve)
+  (when (buffer-modified-p)
+    (save-buffer)))
+
+;; ========================================================================== ;;
+;; Add mergiraf command to smerge-mode keymap
+
+(with-eval-after-load 'smerge-mode
+  (define-key smerge-mode-map (kbd "C-c ^ m") 'dn-smerge-mergiraf-solve)
+  (define-key smerge-mode-map (kbd "C-c ^ M") 'dn-smerge-mergiraf-solve-and-save))
+
+;; ========================================================================== ;;
+
+;; ========================================================================== ;;
 
 (provide 'init-magit)
 

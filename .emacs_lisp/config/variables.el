@@ -83,9 +83,8 @@
 
 (defcustom dn-modules
   (append '(init-package init-env init-ui init-completion init-editing
-            init-project init-docs init-multiple-cursors init-magit
-            init-mergiraf init-llm init-lsp init-programming init-auctex
-            init-ispell)
+            init-project init-docs init-magit init-llm init-lsp
+            init-programming init-auctex init-ispell)
           (when (eq system-type 'darwin) '(init-os-darwin)))
   "Modules loaded in order by .emacs.
 Override it per host in config/init-pre.el, e.g.
