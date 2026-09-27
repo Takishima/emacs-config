@@ -133,15 +133,18 @@
 
 ;; -------------------------------------------------------------------------- ;;
 
+(eval-when-compile (require 're-builder))
+
 (defun reb-query-replace (to-string)
   "Query-replace the current `re-builder' regexp with TO-STRING from point.
 Work in `reb-target-buffer' through `query-replace-regexp'."
   (interactive
    (progn (barf-if-buffer-read-only)
-          (list (query-replace-read-to (reb-target-binding reb-regexp)
-                                       "Query replace"  t))))
+          (list (query-replace-read-to
+                 (buffer-local-value 'reb-regexp reb-target-buffer)
+                 "Query replace" t))))
   (with-current-buffer reb-target-buffer
-    (query-replace-regexp (reb-target-binding reb-regexp) to-string)))
+    (query-replace-regexp reb-regexp to-string)))
 
 ;; -------------------------------------------------------------------------- ;;
 
