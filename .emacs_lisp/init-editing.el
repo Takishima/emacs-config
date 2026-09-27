@@ -164,6 +164,7 @@
 
 (use-package yasnippet
   :straight t
+  :defer 1
   :custom
   (yas-indent-line 'auto)
   (yas-inhibit-overlay-modification-protection t)
@@ -178,6 +179,7 @@
 
 (use-package yasnippet-snippets
   :straight t
+  :after yasnippet
   :config
   (add-to-list 'yas-snippet-dirs yasnippet-snippets-dir t)
   )

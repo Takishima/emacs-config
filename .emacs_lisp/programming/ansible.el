@@ -44,10 +44,12 @@
 
 (use-package ansible
   :straight t
+  :defer t
   )
 
 (use-package ansible-doc
   :straight t
+  :defer t
   )
 
 ;; ========================================================================== ;;
