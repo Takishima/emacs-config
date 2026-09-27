@@ -56,7 +56,6 @@
 
 ;; use-package
 ;; https://github.com/jwiegley/use-package
-(straight-use-package 'use-package)
 (straight-use-package 'diminish)
 (require 'diminish)
 
@@ -65,7 +64,7 @@
   (require 'use-package-diminish))
 
 (use-package use-package
-  :straight t
+  :straight nil
   :custom
   (use-package-always-defer nil)
   (use-package-expand-minimally t))

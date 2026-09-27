@@ -131,6 +131,7 @@
 
 ;; Persist history over Emacs restarts. Vertico sorts by history position.
 (use-package savehist
+  :straight nil
   :init
   (savehist-mode))
 
