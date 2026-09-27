@@ -67,7 +67,7 @@
           (when result
             (progn
               (setq end_idx (match-end 0))
-              (setq cur_arg (string-as-unibyte (substring args_str result end_idx)))
+              (setq cur_arg (substring args_str result end_idx))
               (setq arg_list (concat arg_list cur_arg "####"))
               (setq index end_idx)
               )
@@ -86,7 +86,7 @@
             (end_idx 0)
             (cur_arg "")
             (result 0)
-            (ret_str (string-as-unibyte ret_str_raw))
+            (ret_str ret_str_raw)
             (ret_list "")
             )
         (progn
