@@ -1,25 +1,46 @@
 # My Emacs config
 
-This repository contains my emacs configuration files.
+This repository contains my Emacs configuration files. Tested on Emacs 31. The config's own code needs at least 29.1 (tree-sitter modes, `setopt`, `keymap-set`, `pos-eol`).
 
-# Customisations
+# Loading order
 
-This config allows some level of customisation in a few key places. Those are described below.
+`.emacs` loads, in order:
 
-## Custom config files
+1. `.emacs_lisp/config/init-pre.el`, if it exists, then calls `config-init-pre` if that file defines it.
+1. `init-custom.el`, then the custom file `.emacs_lisp/custom.el`, if it exists. Because the custom file loads before the other modules, `:custom` values in `use-package` blocks override values saved through Customize.
+1. Each module in `dn-modules`, in order. `init-programming.el` then loads every language module in `programming/` except those listed in `dn-disabled-languages`.
+1. `.emacs_lisp/config/init-post.el`, if it exists, then `config-init-post` if defined.
 
-This emacs config will attempt to load two files that are not under version control and can be used to further customize the Emacs configuration. 
+Modules are loaded with `config-require`, which looks in `.emacs_lisp/config/` before `.emacs_lisp/`. A file there with the same name as a tracked module replaces it.
 
-These two files are expected to be located within the ``.emacs_lisp/config`` folder and are:
-- `init-pre.el`
-- `init-post.el`
+# Per-host customisation
 
-Both of these files may contain a function `config-init-pre` (`config-init-post` respectively) that will be called after the file has been loaded. `init-pre.el` is loaded as soon as possible during the Emacs initialisation, whereas `init-post.el` is called at the very end of the Emacs initialisation.
+`init-pre.el`, `init-post.el` and `custom.el` are not under version control. `init-pre.el` runs before any module loads, so it can change what gets loaded:
 
-The custom file (`.emacs_lisp/custom.el`) is loaded right after `init-pre.el`, before the configuration modules, so `:custom` values in `use-package` blocks override values saved through Customize.
+```elisp
+(setq dn-modules (remq 'init-llm dn-modules))        ; skip a module
+(setq dn-disabled-languages '(matlab gnuplot rest))  ; skip language modules
+```
 
-## Programming languages
+`dn-disabled-languages` takes file base names from `programming/`, as symbols.
 
-The `init-programming.el` Emacs configuration file will attempt to compile and load any files contained in the `.emacs_lisp/programming` directory. Discovery of files within that directory is automatic.
+# Layout
 
-It is, however, possible to customize which files get loaded by adding a filed called `skip.txt` within that directory. Each line should contain the name of a file that should be skipped when loading the programming languages. Within that file, any lines starting with '#' or ';' are automatically ignored.
+| Path | Contents |
+|---|---|
+| `.emacs` | Entry point |
+| `.emacs_lisp/init-*.el` | One module per concern, listed in `dn-modules` |
+| `.emacs_lisp/programming/` | Language modules; `foo.el` must provide `init-prog-foo` |
+| `.emacs_lisp/config/` | Paths (`variables.el`), loader helpers (`functions.el`) and the untracked per-host files |
+| `.emacs_lisp/vendor/` | Third-party libraries |
+| `.emacs_lisp/lib/` | Own libraries |
+| `.emacs_lisp/patches/` | Code that modifies a package after it loads |
+| `.emacs_lisp/packages/` | Own packages (ROS 2 modes) |
+| `.emacs_lisp/yas-lib/` | Helpers for snippets; `foo.el` must provide `yas-lib-foo` |
+| `.emacs_lisp/snippets/` | yasnippet snippets |
+| `.emacs_lisp/abbrev_*` | Abbrev tables |
+| `.emacs_lisp/docsets/` | Dash docsets installed by `dn-dash-docs-install` |
+
+# Checking the config
+
+`make check` loads the whole config in batch mode and runs `test/smoke.el`. It exits non-zero on a load error, a `use-package` warning or a failed check.
