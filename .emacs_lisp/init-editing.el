@@ -112,9 +112,9 @@
   "Kill the emacs daemon"
   (interactive)
   (let (
-	(last-nonmenu-event nil)
-	(window-system nil)
-	)
+        (last-nonmenu-event nil)
+        (window-system nil)
+        )
     (save-buffers-kill-emacs t)))
 
 ;; -------------------------------------------------------------------------- ;;
@@ -132,7 +132,7 @@
   (dolist (buf (buffer-list))
     (with-current-buffer buf
       (when (and (buffer-file-name) (file-exists-p (buffer-file-name)) (not (buffer-modified-p)))
-	(revert-buffer t t t) )))
+        (revert-buffer t t t) )))
   (message "Refreshed open files.") )
 
 ;; -------------------------------------------------------------------------- ;;
@@ -148,8 +148,8 @@
   "Replace current RE from point with `query-replace-regexp'."
   (interactive
    (progn (barf-if-buffer-read-only)
-	  (list (query-replace-read-to (reb-target-binding reb-regexp)
-				       "Query replace"  t))))
+          (list (query-replace-read-to (reb-target-binding reb-regexp)
+                                       "Query replace"  t))))
   (with-current-buffer reb-target-buffer
     (query-replace-regexp (reb-target-binding reb-regexp) to-string)))
 

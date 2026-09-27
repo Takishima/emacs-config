@@ -233,7 +233,7 @@ active region is added to the search string."
       (when (use-region-p)
         (deactivate-mark))
       (when (< (car bounds) (point))
-	(goto-char (car bounds)))
+        (goto-char (car bounds)))
       (consult-line
        (buffer-substring-no-properties (car bounds) (cdr bounds))))
      (t
@@ -420,9 +420,9 @@ active region is added to the search string."
   :config
   ;; Hide the mode line of the Embark live/completions buffers
   (add-to-list 'display-buffer-alist
-	       '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-		 nil
-		 (window-parameters (mode-line-format . none)))))
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none)))))
 
 ;; Consult users will also want the embark-consult package.
 (use-package embark-consult

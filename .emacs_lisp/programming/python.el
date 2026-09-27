@@ -56,7 +56,7 @@
     ;; (add-hook 'python-base-mode-hook 'eldoc-mode)
     (add-hook 'python-base-mode-hook 'sphinx-doc-mode))
   :bind (:map python-base-mode-map
-	      (
+              (
                ("C-c i" . python-insert-docstring-with-google-style-at-point)
                ))
   :dash "Python 3" "NumPy" "SciPy"
@@ -181,16 +181,16 @@
   :straight t
   :after python
   :bind (:map python-base-mode-map
-	      (("C-x tp" . python-pytest-dispatch)
-	       ("C-x tt" . python-pytest)
-	       ("C-x tf" . python-pytest-file)
-	       ("C-x tF" . python-pytest-file-dwim)
-	       ("C-x tm" . python-pytest-function)
-	       ("C-x tM" . python-pytest-function-dwim)
-	       ("C-x tr" . python-pytest-repeat)
-	       ("C-x tl" . python-pytest-last-failed)
-	       ("C-x tk" . dn-python-pytest-close-buffer)
-	       ))
+              (("C-x tp" . python-pytest-dispatch)
+               ("C-x tt" . python-pytest)
+               ("C-x tf" . python-pytest-file)
+               ("C-x tF" . python-pytest-file-dwim)
+               ("C-x tm" . python-pytest-function)
+               ("C-x tM" . python-pytest-function-dwim)
+               ("C-x tr" . python-pytest-repeat)
+               ("C-x tl" . python-pytest-last-failed)
+               ("C-x tk" . dn-python-pytest-close-buffer)
+               ))
   :custom
   (python-pytest-arguments
    '("--color"          ;; colored output in the buffer
@@ -205,13 +205,13 @@
     "Close the python-pytest buffer (if it exists)."
     (interactive)
     (let ((name python-pytest-buffer-name)
-	  (window nil))
+          (window nil))
       (when python-pytest-project-name-in-buffer-name
-	(setq name (format "%s<%s>" name (python-pytest--project-name))))
+        (setq name (format "%s<%s>" name (python-pytest--project-name))))
       (setq window (get-buffer-window name))
       (when window
-	(quit-window t window)
-	)
+        (quit-window t window)
+        )
       )
     )
   )

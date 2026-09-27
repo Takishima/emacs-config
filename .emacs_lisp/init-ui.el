@@ -62,8 +62,8 @@
 
 ;; Always show matching paranthesis, line and column number
 (custom-set-variables '(show-paren-mode 1)
-		      '(line-number-mode t)
-		      '(column-number-mode t))
+                      '(line-number-mode t)
+                      '(column-number-mode t))
 
 (use-package hl-line+
   :config

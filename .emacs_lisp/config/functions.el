@@ -52,23 +52,23 @@
        )
     (progn
       (if (file-exists-p filename)
-	  (progn
-	    (load (file-name-sans-extension filename))
-	    (setq function (intern-soft function_name))
-	    (if (fboundp function)
-		(progn
-		  (message "INFO: calling function %s" function_name)
-		  (funcall function)
-		  )
-	      (if error_on_failure
-		  (user-error "Unable to find function '%s' in file '%s'" function_name filename)
-		)
-	      )
-	    )
-	(if error_on_failure
-	    (user-error "Unable to find file '%s'" filename)
-	  )
-	)
+          (progn
+            (load (file-name-sans-extension filename))
+            (setq function (intern-soft function_name))
+            (if (fboundp function)
+                (progn
+                  (message "INFO: calling function %s" function_name)
+                  (funcall function)
+                  )
+              (if error_on_failure
+                  (user-error "Unable to find function '%s' in file '%s'" function_name filename)
+                )
+              )
+            )
+        (if error_on_failure
+            (user-error "Unable to find file '%s'" filename)
+          )
+        )
       )
     )
   )
@@ -78,11 +78,11 @@
 (defun config-require (feature)
   "Same as (require FEATURE) but assuming the file is within config-dotemacs-lisp."
   (let* (
-	(feature-name (symbol-name feature))
-	(filename1 (concat config-dir feature-name ".el"))
-	(filename2 (concat config-dotemacs-lisp feature-name ".el"))
-	(filename (if (file-exists-p filename1) filename1 filename2))
-	)
+        (feature-name (symbol-name feature))
+        (filename1 (concat config-dir feature-name ".el"))
+        (filename2 (concat config-dotemacs-lisp feature-name ".el"))
+        (filename (if (file-exists-p filename1) filename1 filename2))
+        )
      (message "INFO: requiring %s from %s" feature-name filename)
      (require feature filename)
     )

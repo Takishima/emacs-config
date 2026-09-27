@@ -58,7 +58,7 @@
     (interactive)
     (dolist (remote (magit-list-remotes))
       (magit-push-current (concat remote "/" (magit-get-current-branch))
-			  (magit-push-arguments))))
+                          (magit-push-arguments))))
 
   (defun dn-magit-push-to-all-remotes-except-upstream ()
     "Push a branch to all the remotes (except upstream)."
@@ -67,7 +67,7 @@
       (
        if (not (string= remote "upstream"))
        (magit-push-current (concat remote "/" (magit-get-current-branch))
-			   (magit-push-arguments))
+                           (magit-push-arguments))
        )
       )
     )
@@ -79,7 +79,7 @@
       (
        if (not (string-match ".*github.*" remote))
        (magit-push-current (concat remote "/" (magit-get-current-branch))
-			   (magit-push-arguments))
+                           (magit-push-arguments))
        )
       )
     )
