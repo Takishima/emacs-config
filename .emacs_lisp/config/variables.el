@@ -81,6 +81,19 @@
     )
   )
 
+(defcustom dn-modules
+  (append '(init-package init-env init-ui init-completion init-editing
+            init-project init-docs init-multiple-cursors init-magit
+            init-mergiraf init-llm init-lsp init-programming init-auctex
+            init-ispell init-misc)
+          (when (eq system-type 'darwin) '(init-os-darwin))
+          '(init-keybindings init-custom-functions))
+  "Modules loaded in order by .emacs.
+Override it per host in config/init-pre.el, e.g.
+  (setq dn-modules (remq \\='init-llm dn-modules))"
+  :group 'dn
+  :type '(repeat symbol))
+
 (defcustom dn-disabled-languages '(matlab gnuplot)
   "Language modules in programming/ that are not loaded, by file base name.
 Override it per host in config/init-pre.el."

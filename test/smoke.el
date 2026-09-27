@@ -27,6 +27,8 @@
 (dn-smoke-check "ispell-extra-args overridden" nil
                 (equal (default-value 'ispell-extra-args) '("--reverse")))
 (dn-smoke-check "indent-tabs-mode" nil (default-value 'indent-tabs-mode))
+(dolist (module dn-modules)
+  (dn-smoke-check (format "module %s loaded" module) t (featurep module)))
 (dolist (lang dn-disabled-languages)
   (dn-smoke-check (format "disabled language %s loaded" lang) nil
                   (featurep (intern (format "init-prog-%s" lang)))))

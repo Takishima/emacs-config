@@ -49,28 +49,8 @@
 
 ;; ========================================================================== ;;
 
-(config-require 'init-package)
-(config-require 'init-env)
-(config-require 'init-ui)
-(config-require 'init-completion)
-(config-require 'init-editing)
-(config-require 'init-project)
-(config-require 'init-docs)
-(config-require 'init-multiple-cursors)
-(config-require 'init-magit)
-(config-require 'init-mergiraf)
-(config-require 'init-llm)
-(config-require 'init-lsp)
-(config-require 'init-programming)
-(config-require 'init-auctex)
-(config-require 'init-ispell)
-
-(config-require 'init-misc)
-(config-when-system 'darwin
-  (config-require 'init-os-darwin))
-
-(config-require 'init-keybindings)
-(config-require 'init-custom-functions)
+(dolist (module dn-modules)
+  (config-require module))
 
 ;; ========================================================================== ;;
 
