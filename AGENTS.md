@@ -30,7 +30,8 @@ Shortening a comment that failed 1 or 2 does not fix it. Delete it.
   symbols in `` `quotes' ``.
 - Own symbols take the `dn-` prefix; a library in `lib/` uses its file name as prefix
   (`dn-timesheet-`). Private helpers use a double dash (`dn-timesheet--day-heading`).
-- Every file opens with `-*- lexical-binding: t -*-` and ends with its `provide`.
+- Every file opens with `-*- lexical-binding: t -*-`. Modules and libraries end with their
+  `provide`; the entry points and `test/` scripts are loaded with `load` and need none.
 - A value someone may want to change per host is a `defcustom`, not a `defvar` or a literal.
 
 ## Keep the minimum Emacs version
