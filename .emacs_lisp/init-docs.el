@@ -40,7 +40,8 @@
 
 (use-package devdocs
   :straight t
-  :config
+  :defer t
+  :init
   (defun dn-devdocs-install()
     (interactive)
     (devdocs-install "bash")
