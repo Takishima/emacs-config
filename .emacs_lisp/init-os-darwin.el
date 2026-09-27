@@ -83,30 +83,25 @@
 
 ;; ========================================================================== ;;
 
-(defvar dn-compile-in-iterm-command "make")
-;; (defcustom dn-compile-in-iterm-history nil
-;;   "History variable for"
-;;   :type '(repeat string)
-;;   :group 'dn)
+(defvar dn-compile-in-iterm-command "make"
+  "Command `dn-compile-in-iterm' offers when its history is empty.")
 (defvar dn-compile-in-iterm-history nil)
+
 (defun dn-compile-in-iterm (command)
+  "Type COMMAND into the current iTerm session.
+An empty answer reuses the last command, or `dn-compile-in-iterm-command'."
   (interactive
-   (list
-    (read-from-minibuffer (format "Command [%s]: " (car dn-compile-in-iterm-history))
-                          nil ;; INITIAL-CONTENT (deprecated)
-                          nil ;; KEYMAP
-                          nil ;; READ
-                          'dn-compile-in-iterm-history
-                          (if 'dn-compile-in-iterm-history (car dn-compile-in-iterm-history) ("make")))
-    ))
-  (progn
-    (when (string= "" command) (setq command (car dn-compile-in-iterm-history)))
-    (do-applescript
-     (concat "tell application \"iTerm\"\ntell current session of current window\nwrite text \""
-             (replace-regexp-in-string "\"" "\\\"" command t t)
-             "\"\nend tell\nend tell")
-     )
-    ))
+   (let ((default (or (car dn-compile-in-iterm-history)
+                      dn-compile-in-iterm-command)))
+     (list (read-from-minibuffer (format "Command [%s]: " default)
+                                 nil nil nil 'dn-compile-in-iterm-history default))))
+  (when (string= "" command)
+    (setq command (or (car dn-compile-in-iterm-history)
+                      dn-compile-in-iterm-command)))
+  (do-applescript
+   (concat "tell application \"iTerm\"\ntell current session of current window\nwrite text \""
+           (replace-regexp-in-string "\"" "\\\"" command t t)
+           "\"\nend tell\nend tell")))
 
 (with-eval-after-load 'cc-mode
   (keymap-set c++-mode-map "C-c i" #'dn-compile-in-iterm))
