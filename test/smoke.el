@@ -31,12 +31,14 @@
   (dn-smoke-check (format "disabled language %s loaded" lang) nil
                   (featurep (intern (format "init-prog-%s" lang)))))
 
-(let ((dir (expand-file-name "programming" config-dotemacs-lisp)))
-  (dolist (file (directory-files dir nil "^[^#.].*\\.el\\'"))
-    (unless (memq (intern (file-name-base file)) dn-disabled-languages)
-      (let ((feature (concat "init-prog-" (file-name-base file))))
-        (dn-smoke-check (concat file " provides " feature) t
-                        (featurep (intern feature)))))))
+(let ((dir (expand-file-name "loader" dn-smoke-dir)))
+  (make-directory dir)
+  (with-temp-file (expand-file-name "foo.el" dir)
+    (insert "(provide 'bar)\n"))
+  (dn-smoke-check "dn-load-directory rejects a mismatched provide" t
+                  (condition-case nil
+                      (progn (dn-load-directory dir "dn-smoke-") nil)
+                    (error t))))
 
 (require 'magit)
 (dn-smoke-check "magit split-height-threshold" 200

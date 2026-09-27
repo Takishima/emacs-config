@@ -159,29 +159,8 @@
 
 ;; ========================================================================== ;;
 
-(let* (
-       (dir-path (file-name-as-directory (concat config-dotemacs-lisp "programming")))
-       (require-name)
-       (dir-list (directory-files dir-path t "^[^#\\.].*\\.el$"))
-       )
-  (dolist (fname dir-list)
-    (setq require-name (intern-soft (concat "init-prog-"
-        				    (file-name-sans-extension (file-name-nondirectory fname)))))
-    (unless (memq (intern (file-name-base fname)) dn-disabled-languages)
-      ;; (byte-recompile-file fname nil 0)
-      (if require-name
-          (progn
-            (message "INFO: requiring %s from %s" require-name fname)
-            (require require-name fname)
-            )
-        (progn
-          (setq fname (file-name-sans-extension fname))
-          (load fname)
-          )
-        )
-      )
-    )
-  )
+(dn-load-directory (concat config-dotemacs-lisp "programming") "init-prog-"
+                   dn-disabled-languages)
 
 ;; ========================================================================== ;;
 

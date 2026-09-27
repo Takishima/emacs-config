@@ -88,6 +88,16 @@
     )
   )
 
+(defun dn-load-directory (dir prefix &optional skip)
+  "Require each DIR/*.el, in sorted order, as feature PREFIX<base>.
+Files whose name starts with # or . are ignored, as are those whose
+base name, as a symbol, is in SKIP.  Each file is required by path, so
+one that does not provide PREFIX<base> signals an error."
+  (dolist (file (directory-files dir t "\\`[^#.].*\\.el\\'"))
+    (let ((base (file-name-base file)))
+      (unless (memq (intern base) skip)
+        (require (intern (concat prefix base)) file)))))
+
 ;; ========================================================================== ;;
 
 (defmacro config-when-system (type &rest body)
