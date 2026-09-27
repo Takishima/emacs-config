@@ -93,7 +93,6 @@ Each host must have the `direnv' executable in its default environment."
 
   (defun tramp-sh-handle-start-file-process@dn-direnv (args)
     "Wrap the program in ARGS with `direnv exec' on `dn-direnv-enabled-hosts'."
-    (message "tramp-sh-handle-start-file-process@dn-direnv")
     (with-parsed-tramp-file-name (expand-file-name default-directory) nil
       (if (member host dn-direnv-enabled-hosts)
           (pcase-let ((`(,name ,buffer ,program . ,args) args))

@@ -296,7 +296,6 @@ subdirectory as the root, so that consult searches the whole worktree."
 
 (use-package consult-dir
   :straight (:host github :repo "karthink/consult-dir" :files ("*.el"))
-  :straight t
   :bind (("C-x C-d" . consult-dir)
          :map vertico-map
          ("C-x C-d" . consult-dir)

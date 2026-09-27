@@ -50,16 +50,14 @@
 
 (use-package python
   :straight nil
-  :config
-  (progn
-    (add-hook 'python-base-mode-hook 'highlight-indentation-mode)
-    (add-hook 'python-base-mode-hook 'sphinx-doc-mode))
   :bind (:map python-base-mode-map
               (
                ("C-c i" . python-insert-docstring-with-google-style-at-point)
                ))
   :dash "Python 3" "NumPy" "SciPy"
   :config
+  (add-hook 'python-base-mode-hook 'highlight-indentation-mode)
+  (add-hook 'python-base-mode-hook 'sphinx-doc-mode)
   (add-hook 'python-base-mode-hook
             (lambda () (progn
                          (setq-local devdocs-current-docs '("python~3.12")))
@@ -73,8 +71,6 @@
      python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
      python-shell-completion-setup-code
      "from IPython.core.completerlib import module_completion"
-     python-shell-completion-string-code
-     "';'.join(module_completion('''%s'''))\n"
      python-shell-completion-string-code
      "';'.join(get_ipython().Completer.all_completions('''%s'''))\n"))
   )

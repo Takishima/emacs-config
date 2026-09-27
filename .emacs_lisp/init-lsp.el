@@ -162,7 +162,6 @@ Enable this if your flake or its inputs require impure evaluation."
   :functions dap-hydra/nil
   :diminish
   :after (lsp-mode)
-  :functions dap-hydra/nil
   :custom
   (dap-auto-configure-mode t)
   (dap-tooltip-mode 1)
@@ -170,9 +169,9 @@ Enable this if your flake or its inputs require impure evaluation."
   (dap-auto-configure-features
    '(sessions locals breakpoints expressions controls tooltip))
   :hook ((dap-mode . dap-ui-mode)
-         (dap-session-created . (lambda (&_rest) (dap-hydra)))
+         (dap-session-created . (lambda (_session) (dap-hydra)))
          (dap-stopped . (lambda (_args) (dap-hydra)))
-         (dap-terminated . (lambda (&_rest) (dap-hydra/nil)))
+         (dap-terminated . (lambda (_session) (dap-hydra/nil)))
          (python-base-mode . (lambda () (require 'dap-python)))
          (go-ts-mode . (lambda () (require 'dap-go)))
          (diff-mode . (lambda () (dap-mode -1)))

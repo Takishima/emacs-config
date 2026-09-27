@@ -60,8 +60,6 @@
 
 (setq-default indent-tabs-mode nil)
 
-(autoload 'nuke-trailing-whitespace "whitespace" nil t)
-
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
