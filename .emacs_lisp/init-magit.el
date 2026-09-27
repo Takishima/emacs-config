@@ -254,8 +254,8 @@ MERGE-ID is the merge identifier from git output."
 
 ;; ========================================================================== ;;
 
-(defvar conv-commit-type-desc nil "Type of conventional commit")
-(setq conv-commit-type-desc
+(defvar dn-conv-commit-type-desc nil "Type of conventional commit")
+(setq dn-conv-commit-type-desc
       '(("build"
          :desc "Changes that affect the build system or external dependencies."
          :icon ?🚧
@@ -303,17 +303,17 @@ MERGE-ID is the merge identifier from git output."
          :props (:foreground "dark green" :height 1.2)
          )))
 
-(defvar conv-commit-scope-icons
+(defvar dn-conv-commit-scope-icons
   `(("nix" :icon ,#xf1511 :props (:foreground "#7ebae4" :height 1.2))
     ("cmake" :icon ,#xe794 :props (:foreground "#064F8C" :height 1.2)))
   "Icons and face properties for conventional commit scopes.
 Icons use Nerd Font codepoints: nf-md-nix (U+F1511) and nf-dev-cmake (U+E794).")
 
-(defun add-conventional-commit-faces (&rest _args)
-  "Add face properties and compose symbols for buffer from conv-commit-type-desc."
+(defun dn-conv-commit-add-faces (&rest _args)
+  "Add face properties and compose symbols for buffer from dn-conv-commit-type-desc."
   (interactive)
   (with-silent-modifications
-    (dolist (elt conv-commit-type-desc nil)
+    (dolist (elt dn-conv-commit-type-desc nil)
       (let*
           (
            (type-data (cdr elt))
@@ -330,7 +330,7 @@ Icons use Nerd Font codepoints: nf-md-nix (U+F1511) and nf-dev-cmake (U+E794).")
             ;; Handle scope icons
             (when (match-beginning 3)
               (let* ((scope (match-string 3))
-                     (scope-data (cdr (assoc scope conv-commit-scope-icons))))
+                     (scope-data (cdr (assoc scope dn-conv-commit-scope-icons))))
                 (when scope-data
                   (compose-region (match-beginning 3) (match-end 3)
                                   (plist-get scope-data :icon))
@@ -347,17 +347,17 @@ Icons use Nerd Font codepoints: nf-md-nix (U+F1511) and nf-dev-cmake (U+E794).")
     )
   )
 
-(advice-add 'magit-status :after 'add-conventional-commit-faces)
-(advice-add 'magit-refresh-buffer :after 'add-conventional-commit-faces)
+(advice-add 'magit-status :after 'dn-conv-commit-add-faces)
+(advice-add 'magit-refresh-buffer :after 'dn-conv-commit-add-faces)
 
 
-(defun conv-commit-type-completion-decorate (type)
+(defun dn-conv-commit-type-completion-decorate (type)
   "Decorate the completions candidates with icon prefix and description suffix.
 
 TYPE is the type of conventional commit.
 Return a list (candidate, icon, description)."
 
-  (let ((type-data (cdr (assoc type conv-commit-type-desc))))
+  (let ((type-data (cdr (assoc type dn-conv-commit-type-desc))))
     (list
      type
      (concat
@@ -369,17 +369,17 @@ Return a list (candidate, icon, description)."
       (propertize (plist-get type-data :desc) 'face '(:foreground "gray" ))))))
 
 
-(defun conv-commit-type-prompt ()
+(defun dn-conv-commit-type-prompt ()
   (interactive)
   (let ((completion-extra-properties
          (list :affixation-function
                (lambda (types)
-                 (mapcar #'conv-commit-type-completion-decorate types)))))
-    (completing-read "Commit type: " conv-commit-type-desc)))
-(defun conv-commit-prompt ()
+                 (mapcar #'dn-conv-commit-type-completion-decorate types)))))
+    (completing-read "Commit type: " dn-conv-commit-type-desc)))
+(defun dn-conv-commit-prompt ()
   "Prompt for a conventional commit. and fill the buffer with the result."
   (interactive)
-  (insert (conv-commit-type-prompt))
+  (insert (dn-conv-commit-type-prompt))
   (let ((scope (completing-read "Scope: " nil)))
     (insert (if (string= scope "") "" (format "(%s)" scope))))
   (insert (if (y-or-n-p "Breaking change? ") "!" ""))
@@ -388,7 +388,7 @@ Return a list (candidate, icon, description)."
 
 (add-hook 'git-commit-setup-hook
           #'(lambda ()
-              (run-with-timer 0.5 nil #'(lambda () (when (eq (pos-eol) (pos-bol)) (conv-commit-prompt)))))
+              (run-with-timer 0.5 nil #'(lambda () (when (eq (pos-eol) (pos-bol)) (dn-conv-commit-prompt)))))
           )
 
 ;; ========================================================================== ;;

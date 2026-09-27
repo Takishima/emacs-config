@@ -61,14 +61,14 @@
 (dn-smoke-check "magit split-height-threshold" 200
                 (with-temp-buffer (magit-mode) split-height-threshold))
 
-(dn-smoke-check "conv-commit-type-prompt affixation" t
+(dn-smoke-check "dn-conv-commit-type-prompt affixation" t
                 (cl-letf (((symbol-function 'completing-read)
                            (lambda (_prompt collection &rest _)
                              (funcall (plist-get completion-extra-properties
                                                  :affixation-function)
                                       (list (caar collection))))))
                   (condition-case err
-                      (let ((triples (conv-commit-type-prompt)))
+                      (let ((triples (dn-conv-commit-type-prompt)))
                         (and (consp triples)
                              (seq-every-p (lambda (x) (= (length x) 3)) triples)))
                     (error err))))

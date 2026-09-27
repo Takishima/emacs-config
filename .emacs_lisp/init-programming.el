@@ -76,7 +76,7 @@
 ;; ========================================================================== ;;
 ;; Compilation
 
-(defun bury-compile-buffer-if-successful (buffer string)
+(defun dn-bury-compile-buffer-if-successful (buffer string)
   "Bury a compilation buffer if succeeded without warnings "
   (when (and
          (buffer-live-p buffer)
@@ -96,7 +96,7 @@
                       (kill-buffer buf)
                       )
                     buffer)))
-(add-hook 'compilation-finish-functions 'bury-compile-buffer-if-successful)
+(add-hook 'compilation-finish-functions 'dn-bury-compile-buffer-if-successful)
 
 ;; -------------------------------------------------------------------------- ;;
 
