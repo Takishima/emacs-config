@@ -166,6 +166,13 @@ size. This function also handles icons and modeline font sizes."
 
 ;; ========================================================================== ;;
 
+(use-package printing
+  :straight nil
+  :config
+  (pr-update-menus))
+
+;; ========================================================================== ;;
+
 (provide 'init-ui)
 
 ;;; init-ui.el ends here

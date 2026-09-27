@@ -100,6 +100,9 @@
   :hook (pkgbuild-mode . dn-pkgbuild-srcinfo-on-save)
   )
 
+(use-package pacfiles-mode
+  :straight t)
+
 ;; ========================================================================== ;;
 
 (provide 'init-prog-build-systems)
