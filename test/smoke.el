@@ -89,6 +89,10 @@
                       (bound-and-true-p dash-docs-docsets))
       (dn-smoke-check (concat file " " key) command (key-binding (kbd key))))))
 
+(with-current-buffer (dn-smoke-visit "t.cpp")
+  (dn-smoke-check "t.cpp C-c C-f" 'clang-format-buffer
+                  (key-binding (kbd "C-c C-f"))))
+
 (require 'yasnippet)
 (with-current-buffer (dn-smoke-visit "CMakeLists.txt")
   (dn-smoke-check "own cmake snippets loaded" t

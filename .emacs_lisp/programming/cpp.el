@@ -128,16 +128,14 @@
 
 (use-package clang-format
   :straight t
-  :bind
-  (:map c++-mode-map
-	(("C-c C-f" . clang-format-buffer)
-	 ("C-c C-r" . clang-format-region)
-	 )
-   :map c++-ts-mode-map
-	(("C-c C-f" . clang-format-buffer)
-	 ("C-c C-r" . clang-format-region)
-	 ))
-  )
+  :commands (clang-format-buffer clang-format-region)
+  :init
+  (with-eval-after-load 'cc-mode
+    (keymap-set c++-mode-map "C-c C-f" #'clang-format-buffer)
+    (keymap-set c++-mode-map "C-c C-r" #'clang-format-region))
+  (with-eval-after-load 'c-ts-mode
+    (keymap-set c++-ts-mode-map "C-c C-f" #'clang-format-buffer)
+    (keymap-set c++-ts-mode-map "C-c C-r" #'clang-format-region)))
 
 ;; ========================================================================== ;;
 
