@@ -6,7 +6,6 @@
 ;; Homepage: nil
 ;; Keywords: init
 
-
 ;; MIT License
 
 ;; Copyright (c) 2025 Damien Nguyen
@@ -29,19 +28,14 @@
 ;; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ;; SOFTWARE.
 
-
 ;;; Commentary:
 
 ;; Not fully tested!
 
 ;;; Code:
 
-;; ========================================================================== ;;
-
 (require 'config-functions (concat config-dir "functions.el"))
 (require 'use-package)
-
-;; ========================================================================== ;;
 
 (require 'cl-lib)
 
@@ -114,7 +108,6 @@ The values are saved in `latex-help-cmd-alist' for speed."
   (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
   (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
 
-
   (defun dn-tex-run-biber (name command file)
     "Create a process for NAME using COMMAND to format FILE with Biber."
     (let ((process (TeX-run-command name command file)))
@@ -141,17 +134,12 @@ _PROCESS and _NAME are the ignored arguments of a `TeX-sentinel-function'."
                        "Run LaTeX again to get citations right."))))
     (setq TeX-command-next TeX-command-default))
 
-
   )
-
-;; -------------------------------------------------------------------------- ;;
 
 (use-package ris
   :straight nil
   :mode ("\\.ris\\'")
   )
-
-;; -------------------------------------------------------------------------- ;;
 
 (use-package lsp-ltex
   :straight t
@@ -162,8 +150,6 @@ _PROCESS and _NAME are the ignored arguments of a `TeX-sentinel-function'."
   :custom
   (lsp-ltex-version "15.2.0")
   )
-
-;; ========================================================================== ;;
 
 (provide 'init-auctex)
 

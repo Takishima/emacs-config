@@ -7,7 +7,6 @@
 ;; Homepage: nil
 ;; Keywords: init
 
-
 ;; MIT License
 
 ;; Copyright (c) 2025 Damien Nguyen
@@ -30,29 +29,19 @@
 ;; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ;; SOFTWARE.
 
-
 ;;; Commentary:
 
 ;;; Code:
 
-;; ========================================================================== ;;
-
-
 (require 'cl-lib)
 (require 'use-package)
 (require 'config-functions (concat config-dir "functions.el"))
-
-;; ========================================================================== ;;
 
 (use-package diff-mode
   :straight nil
   :mode
   "\\.patch[0-9]*\\'"
   )
-
-;; ========================================================================== ;;
-
-;; ========================================================================== ;;
 
 (use-package flycheck
   :straight t
@@ -72,8 +61,6 @@
                                   (timestamp "ROS2"))))
   (logview-additional-timestamp-formats '(("ROS2" (java-pattern . "A.SSSSSSSSS"))))
   )
-
-;; ========================================================================== ;;
 
 (defun dn-bury-compile-buffer-if-successful (buffer string)
   "Kill compilation BUFFER if STRING reports success and it has no warnings."
@@ -96,17 +83,11 @@
                     buffer)))
 (add-hook 'compilation-finish-functions 'dn-bury-compile-buffer-if-successful)
 
-;; -------------------------------------------------------------------------- ;;
-
 (setopt compilation-scroll-output 'first-error)
-
-;; ========================================================================== ;;
 
 (use-package format-all
   :straight t
   )
-
-;; ========================================================================== ;;
 
 (when (and (fboundp 'treesit-available-p)
            (treesit-available-p))
@@ -150,12 +131,8 @@
   (add-to-list 'major-mode-remap-alist '(conf-toml-mode . toml-ts-mode))
   (add-to-list 'major-mode-remap-alist '(sh-mode . bash-ts-mode)))
 
-;; ========================================================================== ;;
-
 (dn-load-directory (concat config-dotemacs-lisp "programming") "init-prog-"
                    dn-disabled-languages)
-
-;; ========================================================================== ;;
 
 (provide 'init-programming)
 

@@ -7,7 +7,6 @@
 ;; Homepage: nil
 ;; Keywords: init
 
-
 ;; MIT License
 
 ;; Copyright (c) 2025 Damien Nguyen
@@ -30,17 +29,11 @@
 ;; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ;; SOFTWARE.
 
-
 ;;; Commentary:
-
 
 ;;; Code:
 
-;; ========================================================================== ;;
-
 (require 'use-package)
-
-;; ========================================================================== ;;
 
 (use-package projectile
   :straight t
@@ -50,13 +43,9 @@
 (use-package projectile-ripgrep
   :straight t)
 
-;; ========================================================================== ;;
-
 (use-package ztree
   :straight t
 )
-
-;; ========================================================================== ;;
 
 (use-package bufler
   :straight (:host github :repo "alphapapa/bufler.el"
@@ -67,17 +56,11 @@
   (bufler-mode t)
   )
 
-;; ========================================================================== ;;
-
 (use-package dtrt-indent
   :straight t)
 
-;; -------------------------------------------------------------------------- ;;
-
 (use-package project-directory
   :straight nil)
-
-;; ========================================================================== ;;
 
 (use-package direnv
   :if (executable-find "direnv")
@@ -110,8 +93,6 @@ Each host must have the `direnv' executable in its default environment."
                 :filter-args #'tramp-sh-handle-start-file-process@dn-direnv))
   )
 
-;; ========================================================================== ;;
-
 (use-package editorconfig
   :straight t
   :config
@@ -128,8 +109,6 @@ Each host must have the `direnv' executable in its default environment."
 
 (use-package editorconfig-custom-majormode
   :straight t)
-
-;; ========================================================================== ;;
 
 (provide 'init-project)
 

@@ -7,7 +7,6 @@
 ;; Homepage: nil
 ;; Keywords: init
 
-
 ;; MIT License
 
 ;; Copyright (c) 2025 Damien Nguyen
@@ -30,17 +29,12 @@
 ;; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ;; SOFTWARE.
 
-
 ;;; Commentary:
 
 ;;; Code:
 
-;; ========================================================================== ;;
-
 (require 'use-package)
 (require 'config-functions (concat config-dir "functions.el"))
-
-;; ========================================================================== ;;
 
 ;; go-mode is installed so third-party utilities that hook go-mode-hook keep
 ;; working; .go files are remapped to go-ts-mode via major-mode-remap-alist.
@@ -49,8 +43,6 @@
 
 (when (treesit-available-p)
   (add-to-list 'major-mode-remap-alist '(go-mode . go-ts-mode)))
-
-;; ========================================================================== ;;
 
 (defun dn-go-enable-format-on-save ()
   "Enable `lsp-format-buffer' in `before-save-hook' (buffer-local)."
@@ -70,8 +62,6 @@
               (setq-local devdocs-current-docs '("go"))
               (setq-local dash-docs-docsets '("Go")))))
 
-;; ========================================================================== ;;
-
 (use-package go-tag
   :straight t
   :after go-ts-mode
@@ -79,15 +69,11 @@
               ("C-c t a" . go-tag-add)
               ("C-c t r" . go-tag-remove)))
 
-;; -------------------------------------------------------------------------- ;;
-
 (use-package go-impl
   :straight t
   :after go-ts-mode
   :bind (:map go-ts-mode-map
               ("C-c t i" . go-impl)))
-
-;; -------------------------------------------------------------------------- ;;
 
 (use-package gotest
   :straight t
@@ -102,13 +88,9 @@
   :config
   (which-key-add-major-mode-key-based-replacements 'go-ts-mode "t" "Testing"))
 
-;; ========================================================================== ;;
-
 (with-eval-after-load 'go-ts-mode
   (keymap-set go-ts-mode-map "C-c C-f" #'lsp-format-buffer)
   (keymap-set go-ts-mode-map "C-c C-r" #'lsp-format-region))
-
-;; ========================================================================== ;;
 
 (provide 'init-prog-go)
 

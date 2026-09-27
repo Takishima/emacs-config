@@ -33,8 +33,6 @@
 
 ;;; Code:
 
-;; ========================================================================== ;;
-
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name
@@ -52,8 +50,6 @@
   (load bootstrap-file nil 'nomessage))
 (straight-use-package 'org)
 
-;; ========================================================================== ;;
-
 (straight-use-package 'diminish)
 (require 'diminish)
 
@@ -68,8 +64,6 @@
 
 (use-package system-packages
   :straight t)
-
-;; ========================================================================== ;;
 
 (provide 'init-package)
 

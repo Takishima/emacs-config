@@ -29,14 +29,10 @@
 (let ((dir (file-name-directory (or load-file-name buffer-file-name))))
   (require 'config-variables (concat dir ".emacs_lisp/config/variables.el")))
 
-;; ========================================================================== ;;
-
 (require 'config-functions (concat config-dir "functions.el"))
 
 (dolist (dir '("vendor" "lib"))
   (add-to-list 'load-path (expand-file-name dir config-dotemacs-lisp)))
-
-;; -------------------------------------------------------------------------- ;;
 
 (config-load-file-exec-func (concat config-dir "init-pre.el")
 			    'config-init-pre
@@ -45,18 +41,12 @@
 (custom-set-variables '(custom-file (concat config-dotemacs-lisp "custom.el")))
 (load custom-file t)
 
-;; ========================================================================== ;;
-
 (dolist (module dn-modules)
   (config-require module))
-
-;; ========================================================================== ;;
 
 (config-load-file-exec-func (concat config-dir "init-post.el")
 			    'config-init-post
 			    nil)
-
-;; ========================================================================== ;;
 
 (when (memq window-system '(mac ns x))
     (x-focus-frame nil))

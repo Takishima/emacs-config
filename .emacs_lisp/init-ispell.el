@@ -7,7 +7,6 @@
 ;; Homepage: nil
 ;; Keywords: init
 
-
 ;; MIT License
 
 ;; Copyright (c) 2025 Damien Nguyen
@@ -30,7 +29,6 @@
 ;; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ;; SOFTWARE.
 
-
 ;;; Commentary:
 
 ;; Use aspell if installed, otherwise hunspell, always with the British English
@@ -39,12 +37,8 @@
 
 ;;; Code:
 
-;; ========================================================================== ;;
-
 (require 'use-package)
 (require 'ispell)
-
-;; ========================================================================== ;;
 
 (defun dn-flyspell-detect-ispell-args (&optional run-together)
   "Return the ispell arguments for the current spell checker.
@@ -114,15 +108,11 @@ If RUN-TOGETHER is non-nil, also spell check CamelCase words."
   (interactive)
   (ispell-change-dictionary "de_DE"))
 
-;; ========================================================================== ;;
-
 (use-package flycheck-aspell
   :straight t
   :ensure-system-package aspell
   :config
   (add-to-list 'flycheck-checkers 'tex-aspell-dynamic))
-
-;; ========================================================================== ;;
 
 (provide 'init-ispell)
 

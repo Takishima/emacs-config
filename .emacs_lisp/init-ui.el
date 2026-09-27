@@ -7,7 +7,6 @@
 ;; Homepage: nil
 ;; Keywords: init
 
-
 ;; MIT License
 
 ;; Copyright (c) 2025 Damien Nguyen
@@ -30,17 +29,11 @@
 ;; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ;; SOFTWARE.
 
-
 ;;; Commentary:
-
 
 ;;; Code:
 
-;; ========================================================================== ;;
-
 (require 'use-package)
-
-;; ========================================================================== ;;
 
 (use-package leuven-theme
   :straight t
@@ -48,14 +41,10 @@
   :config
   (load-theme 'leuven t))
 
-;; ========================================================================== ;;
-
 (use-package which-key
   :straight t
   :config
   (which-key-mode +1))
-
-;; ========================================================================== ;;
 
 (custom-set-variables '(show-paren-mode 1)
                       '(line-number-mode t)
@@ -69,8 +58,6 @@
 (global-hl-line-mode 0)
 
 (tool-bar-mode -1)
-
-;; ========================================================================== ;;
 
 (use-package dashboard
   :straight t
@@ -102,8 +89,6 @@
     (switch-to-buffer "*dashboard*"))
   )
 
-;; ========================================================================== ;;
-
 (use-package helpful
   :straight t
   :bind
@@ -114,14 +99,10 @@
    ("C-c C-d" . helpful-at-point))
   )
 
-;; ========================================================================== ;;
-
 (use-package display-line-numbers
   :straight nil
   :config
   (global-display-line-numbers-mode 1))
-
-;; ========================================================================== ;;
 
 (defcustom dn-default-font-size
   98
@@ -157,14 +138,10 @@ Also resize the mode line and, when `company-box' is loaded, its icons."
       (company-box-icons-resize new-size)))
   )
 
-;; ========================================================================== ;;
-
 (use-package printing
   :straight nil
   :config
   (pr-update-menus))
-
-;; ========================================================================== ;;
 
 (provide 'init-ui)
 

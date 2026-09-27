@@ -7,7 +7,6 @@
 ;; Homepage: nil
 ;; Keywords: init
 
-
 ;; MIT License
 
 ;; Copyright (c) 2025 Damien Nguyen
@@ -30,12 +29,9 @@
 ;; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ;; SOFTWARE.
 
-
 ;;; Commentary:
 
 ;;; Code:
-
-;; ========================================================================== ;;
 
 (require 'yaml-mode)
 
@@ -92,8 +88,6 @@
   (setq comment-start "#")
   (setq comment-end "")
   )
-
-;; ========================================================================== ;;
 
 (provide 'ros2-action-msg-src-mode)
 

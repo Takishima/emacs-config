@@ -30,20 +30,13 @@
 
 ;;; Commentary:
 
-
 ;;; Code:
-
-;; ========================================================================== ;;
 
 (require 'use-package)
 (require 'config-functions (concat config-dir "functions.el"))
 
-;; ========================================================================== ;;
-
 (use-package highlight-indentation
   :straight t)
-
-;; ========================================================================== ;;
 
 (when (treesit-available-p)
   (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode)))
@@ -76,20 +69,14 @@
      "';'.join(get_ipython().Completer.all_completions('''%s'''))\n"))
   )
 
-;; -------------------------------------------------------------------------- ;;
-
 (use-package python-insert-docstring
   :straight t)
-
-;; -------------------------------------------------------------------------- ;;
 
 (use-package blacken
   :straight t)
 
 (use-package python-black
   :straight t)
-
-;; -------------------------------------------------------------------------- ;;
 
 (use-package python-isort
   :straight t)
@@ -101,8 +88,6 @@
   :straight (:host github :repo "emacs-lsp/lsp-pylyzer" :files ("*.el"))
   :after lsp-mode
   )
-
-;; -------------------------------------------------------------------------- ;;
 
 (use-package lsp-pyright
   :straight t
@@ -127,8 +112,6 @@
        ("0\n" (message "Pyright is up to date."))
        ("1\n" (message "A pyright update is available."))))))
 
-;; -------------------------------------------------------------------------- ;;
-
 (use-package pyvenv
   :straight t
   :after python
@@ -144,16 +127,12 @@
                            (nth 0 (split-string (buffer-string))))))))
   )
 
-;; -------------------------------------------------------------------------- ;;
-
 (use-package cython-mode
   :straight t
   :mode (("\\.pyx\\'"  . cython-mode)
          ("\\.spyx\\'" . cython-mode)
          ("\\.pxd\\'"  . cython-mode)
          ("\\.pxi\\'"  . cython-mode)))
-
-;; ========================================================================== ;;
 
 (use-package yapfify
   :straight t
@@ -162,13 +141,9 @@
         ("C-c C-y" . yapfify-region-or-buffer))
   )
 
-;; ========================================================================== ;;
-
 (use-package python-coverage
   :straight t
   :after python)
-
-;; ========================================================================== ;;
 
 (use-package python-pytest
   :straight t
@@ -209,18 +184,12 @@
     )
   )
 
-;; ========================================================================== ;;
-
 (use-package sphinx-mode
   :straight t
   )
 
-;; -------------------------------------------------------------------------- ;;
-
 (use-package sphinx-doc
   :straight t)
-
-;; ========================================================================== ;;
 
 (provide 'init-prog-python)
 

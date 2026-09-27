@@ -7,7 +7,6 @@
 ;; Homepage: nil
 ;; Keywords: init
 
-
 ;; MIT License
 
 ;; Copyright (c) 2025 Damien Nguyen
@@ -30,14 +29,11 @@
 ;; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ;; SOFTWARE.
 
-
 ;;; Commentary:
 
 ;; Loaded from .emacs only when `system-type' is `darwin'.
 
 ;;; Code:
-
-;; ========================================================================== ;;
 
 (require 'use-package)
 (require 'cl-lib)
@@ -48,11 +44,7 @@
 (defvar rst-mode-map)
 (declare-function do-applescript "nsfns.m" (script))
 
-;; ========================================================================== ;;
-
 (add-to-list 'default-frame-alist '(font . "Monaco" ))
-
-;; ========================================================================== ;;
 
 (setq mac-command-modifier 'meta
       mac-option-modifier 'super
@@ -70,8 +62,6 @@
 (keymap-global-set "s-/" (lambda() (interactive) (insert "\\")))
 (keymap-global-set "s-n" (lambda() (interactive) (insert "~")))
 
-;; ========================================================================== ;;
-
 (add-to-list 'jka-compr-compression-info-list
              ["\\.plist$"
               "converting text XML to binary plist"
@@ -83,8 +73,6 @@
               nil nil "bplist"])
 ;; Changes to `jka-compr-compression-info-list' take effect only after this.
 (jka-compr-update)
-
-;; ========================================================================== ;;
 
 (defvar dn-compile-in-iterm-command "make"
   "Command `dn-compile-in-iterm' offers when its history is empty.")
@@ -114,8 +102,6 @@ An empty answer reuses the last command, or `dn-compile-in-iterm-command'."
 (with-eval-after-load 'rst
   (keymap-set rst-mode-map "C-c i" #'dn-compile-in-iterm))
 
-;; ========================================================================== ;;
-
 (with-eval-after-load 'tex
   (let (
         (skim-path "/Applications/Skim.app/Contents/SharedSupport/")
@@ -136,8 +122,6 @@ An empty answer reuses the last command, or `dn-compile-in-iterm-command'."
   (setenv "PATH" (concat (getenv "PATH") ":/Library/TeX/texbin"))
   (add-to-list 'exec-path "/Library/TeX/texbin" t)
   )
-
-;; ========================================================================== ;;
 
 (use-package htmlize
   :straight t
@@ -170,8 +154,6 @@ An empty answer reuses the last command, or `dn-compile-in-iterm-command'."
            "textutil -stdin -format html -convert rtf -stdout | pbcopy"))
         (kill-buffer buf)
         ))))
-
-;; ========================================================================== ;;
 
 (provide 'init-os-darwin)
 

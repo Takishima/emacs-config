@@ -7,7 +7,6 @@
 ;; Homepage: nil
 ;; Keywords: init
 
-
 ;; MIT License
 
 ;; Copyright (c) 2025 Damien Nguyen
@@ -30,16 +29,11 @@
 ;; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ;; SOFTWARE.
 
-
 ;;; Commentary:
 
 ;;; Code:
 
-;; ============================================================================================== ;;
-
 (require 'use-package)
-
-;; ============================================================================================== ;;
 
 (use-package eat :straight t)
 
@@ -61,8 +55,6 @@
               ("C-TAB" . 'copilot-accept-completion-by-word)
               ("C-<tab>" . 'copilot-accept-completion-by-word))
   )
-
-;; ============================================================================================== ;;
 
 (provide 'init-llm)
 

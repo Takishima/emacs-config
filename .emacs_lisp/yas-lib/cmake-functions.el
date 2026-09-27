@@ -7,7 +7,6 @@
 ;; Homepage: nil
 ;; Keywords: init
 
-
 ;; MIT License
 
 ;; Copyright (c) 2025 Damien Nguyen
@@ -33,8 +32,6 @@
 ;;; Commentary:
 
 ;;; Code:
-
-;; ========================================================================== ;;
 
 (require 'cl-lib)
 
@@ -92,8 +89,6 @@ the arguments and the body.  Return nil if there is no match."
       )
     )
   )
-
-;; -------------------------------------------------------------------------- ;;
 
 (defun yas-lib-cmake-get-function ()
   "Find a function/macro declaration starting at the current point."
@@ -155,8 +150,6 @@ the arguments and the body.  Return nil if there is no match."
 
       )
     ))
-
-;; ========================================================================== ;;
 
 (provide 'yas-lib-cmake-functions)
 

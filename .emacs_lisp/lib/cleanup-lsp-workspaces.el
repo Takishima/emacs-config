@@ -7,7 +7,6 @@
 ;; Homepage: nil
 ;; Keywords: lsp, workspace, cleanup
 
-
 ;; MIT License
 
 ;; Copyright (c) 2025 Damien Nguyen
@@ -30,7 +29,6 @@
 ;; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ;; SOFTWARE.
 
-
 ;;; Commentary:
 
 ;; This package provides utilities to clean up lsp-mode workspace folders.
@@ -47,8 +45,6 @@
 ;;; Code:
 
 (require 'lsp-mode)
-
-;; ========================================================================== ;;
 
 (defun dn-lsp-cleanup-workspaces-nonexistent ()
   "Remove only non-existent workspace folders.
@@ -89,8 +85,6 @@ This is safe to run automatically on startup."
       (when (> removed-count 0)
         (lsp--persist-session session)
         (message "LSP workspace cleanup: Removed %d non-existent folders." removed-count)))))
-
-;; ========================================================================== ;;
 
 (defun dn-lsp-cleanup-workspaces ()
   "Remove remote, missing, /tmp and /nix/store folders from LSP workspaces.
@@ -141,8 +135,6 @@ This is safe and won't trigger Tramp connections."
       (message "Cleanup complete! Removed %d folders, %d remaining."
                removed-count (length kept-folders)))))
 
-;; ========================================================================== ;;
-
 (defun dn-lsp-list-workspaces ()
   "List all LSP workspace folders (safe - no Tramp)."
   (interactive)
@@ -159,8 +151,6 @@ This is safe and won't trigger Tramp connections."
                      ((file-directory-p folder) "✓")
                      (t "✗"))))
           (princ (format "%s %s\n" icon folder)))))))
-
-;; ========================================================================== ;;
 
 (defun dn-lsp-cleanup-workspaces-keep-home-only ()
   "Keep only workspace folders under your home directory."
@@ -199,8 +189,6 @@ This is safe and won't trigger Tramp connections."
         (message "Kept only $HOME folders. Removed %d, %d remaining."
                  removed-count (length kept-folders))))))
 
-;; ========================================================================== ;;
-
 (defun dn-lsp-cleanup-workspaces-remove-all ()
   "Remove ALL workspace folders from LSP session.
 Use this to start fresh with a clean workspace list."
@@ -222,8 +210,6 @@ Use this to start fresh with a clean workspace list."
       (lsp--persist-session session)
 
       (message "Removed all %d workspace folders." removed-count))))
-
-;; ========================================================================== ;;
 
 (provide 'cleanup-lsp-workspaces)
 

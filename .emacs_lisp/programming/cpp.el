@@ -7,7 +7,6 @@
 ;; Homepage: nil
 ;; Keywords: init
 
-
 ;; MIT License
 
 ;; Copyright (c) 2025 Damien Nguyen
@@ -30,17 +29,12 @@
 ;; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ;; SOFTWARE.
 
-
 ;;; Commentary:
 
 ;;; Code:
 
-;; ========================================================================== ;;
-
 (require 'use-package)
 (require 'config-functions (concat config-dir "functions.el"))
-
-;; ========================================================================== ;;
 
 (defun dn-cpp-docs-setup ()
   "Set the devdocs and dash docsets for C/C++ buffers."
@@ -86,12 +80,8 @@
   :bind (:map c-ts-base-mode-map
               ("C-c c" . recompile)))
 
-;; ========================================================================== ;;
-
 (use-package cuda-mode
   :straight t)
-
-;; ========================================================================== ;;
 
 (use-package modern-cpp-font-lock
   :straight t
@@ -100,13 +90,9 @@
 
 (add-hook 'c++-mode-hook 'which-function-mode)
 
-;; ========================================================================== ;;
-
 (use-package google-c-style
   :straight t
   )
-
-;; ========================================================================== ;;
 
 (use-package flycheck-clang-analyzer
   :straight t
@@ -115,16 +101,12 @@
   :config (flycheck-clang-analyzer-setup)
   )
 
-;; -------------------------------------------------------------------------- ;;
-
 (use-package flycheck-clang-tidy
   :straight t
   :functions flycheck-clang-tidy-setup
   :after flycheck
   :config (flycheck-clang-tidy-setup)
   )
-
-;; ========================================================================== ;;
 
 (defcustom dn-do-clang-format nil
   "Run clang-format before saving C/C++ buffers in projects with a .clang-format."
@@ -154,13 +136,9 @@
     (keymap-set c++-ts-mode-map "C-c C-f" #'clang-format-buffer)
     (keymap-set c++-ts-mode-map "C-c C-r" #'clang-format-region)))
 
-;; ========================================================================== ;;
-
 (use-package demangle-mode
   :straight t
   :hook asm-mode)
-
-;; ========================================================================== ;;
 
 (provide 'init-prog-cpp)
 

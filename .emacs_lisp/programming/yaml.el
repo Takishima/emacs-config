@@ -7,7 +7,6 @@
 ;; Homepage: nil
 ;; Keywords: init
 
-
 ;; MIT License
 
 ;; Copyright (c) 2025 Damien Nguyen
@@ -30,12 +29,9 @@
 ;; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ;; SOFTWARE.
 
-
 ;;; Commentary:
 
 ;;; Code:
-
-;; ========================================================================== ;;
 
 (use-package yaml-mode
   :straight t
@@ -43,12 +39,8 @@
   (yaml-mode . flycheck-mode)
   )
 
-;; -------------------------------------------------------------------------- ;;
-
 (use-package flycheck-yamllint
   :straight t)
-
-;; ========================================================================== ;;
 
 (provide 'init-prog-yaml)
 

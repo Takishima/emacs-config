@@ -7,7 +7,6 @@
 ;; Homepage: nil
 ;; Keywords: init
 
-
 ;; MIT License
 
 ;; Copyright (c) 2025 Damien Nguyen
@@ -30,19 +29,14 @@
 ;; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ;; SOFTWARE.
 
-
 ;;; Commentary:
 
 ;; The daily timesheet (lib/dn-timesheet.el).
 
 ;;; Code:
 
-;; ========================================================================== ;;
-
 (require 'config-functions (concat config-dir "functions.el"))
 (require 'use-package)
-
-;; ========================================================================== ;;
 
 (use-package dn-timesheet
   :straight nil
@@ -60,8 +54,6 @@
   (keymap-global-set "C-c w" dn-timesheet-map)
   (with-eval-after-load 'which-key
     (which-key-add-key-based-replacements "C-c w" "timesheet")))
-
-;; ========================================================================== ;;
 
 (provide 'init-org)
 

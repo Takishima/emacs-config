@@ -6,7 +6,6 @@
 ;; Homepage: homepage
 ;; Keywords: keywords
 
-
 ;; MIT License
 
 ;; Copyright (c) 2025 Damien Nguyen
@@ -29,9 +28,7 @@
 ;; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ;; SOFTWARE.
 
-
 ;;; Commentary:
-
 
 ;;; Code:
 
@@ -40,8 +37,6 @@
       )
   (require 'config-variables (concat here "variables.el"))
   )
-
-;; ========================================================================== ;;
 
 (defun config-load-file-exec-func (filename function &optional err)
   "Load file FILENAME if it exists and then call FUNCTION.
@@ -75,8 +70,6 @@ missing."
     )
   )
 
-;; ========================================================================== ;;
-
 (defun config-require (feature)
   "Require FEATURE from its file in `config-dir' or `config-dotemacs-lisp'."
   (let* (
@@ -100,8 +93,6 @@ one that does not provide PREFIX<base> signals an error."
       (unless (memq (intern base) skip)
         (require (intern (concat prefix base)) file)))))
 
-;; ========================================================================== ;;
-
 (defmacro config-when-system (type &rest body)
   "Evaluate BODY if `system-type' equals TYPE or is a member of it."
   (declare (indent defun))
@@ -124,8 +115,6 @@ one that does not provide PREFIX<base> signals an error."
      )
   )
 
-;; ========================================================================== ;;
-
 ;; From https://github.com/KaratasFurkan/.emacs.d
 (defun dn-async-process (command &optional name filter)
   "Run the COMMAND string with bash asynchronously and return the process.
@@ -140,8 +129,6 @@ its output.  By default it messages the output."
    :filter (if filter filter
              (lambda (_process output) (message (string-trim output)))))
   )
-
-;; ========================================================================== ;;
 
 (provide 'config-functions)
 

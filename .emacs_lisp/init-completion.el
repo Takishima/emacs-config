@@ -6,7 +6,6 @@
 ;; Homepage: nil
 ;; Keywords: init
 
-
 ;; MIT License
 
 ;; Copyright (c) 2025 Damien Nguyen
@@ -29,24 +28,17 @@
 ;; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ;; SOFTWARE.
 
-
 ;;; Commentary:
 
 ;;; Code:
 
-;; ========================================================================== ;;
-
 (require 'use-package)
-
-;; ========================================================================== ;;
 
 (use-package prescient
   :straight t
   :defer t
   :functions prescient-persist-mode
   :config (prescient-persist-mode))
-
-;; ========================================================================== ;;
 
 (use-package vertico
   :straight t
@@ -111,7 +103,6 @@
      (eglot (styles prescient flex))))
   :config
   (vertico-prescient-mode 1))
-
 
 ;; Vertico sorts by history position.
 (use-package savehist
@@ -181,10 +172,8 @@ For example [CRM,] when `crm-separator' is a comma."
   :config
   (marginalia-mode 1))
 
-
 (use-package hotfuzz
   :straight t)
-
 
 (defun dn--consult-line-thing-at-point ()
   "Run `consult-line' with the \"thing\" found near point as initial input.
@@ -294,7 +283,6 @@ subdirectory as the root, so that consult searches the whole worktree."
    :preview-key '(:debounce 0.4 any))
   )
 
-
 (use-package consult-dir
   :straight (:host github :repo "karthink/consult-dir" :files ("*.el"))
   :bind (("C-x C-d" . consult-dir)
@@ -312,7 +300,6 @@ subdirectory as the root, so that consult searches the whole worktree."
 
 (use-package consult-flycheck
   :straight t)
-
 
 (use-package embark
   :straight t
@@ -341,8 +328,6 @@ subdirectory as the root, so that consult searches the whole worktree."
 (use-package wgrep
   :straight (:host github :repo "mhayashi1120/Emacs-wgrep" :files ("wgrep.el"))
 )
-
-;; ========================================================================== ;;
 
 (provide 'init-completion)
 

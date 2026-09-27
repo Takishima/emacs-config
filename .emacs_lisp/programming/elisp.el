@@ -7,7 +7,6 @@
 ;; Homepage: nil
 ;; Keywords: init
 
-
 ;; MIT License
 
 ;; Copyright (c) 2025 Damien Nguyen
@@ -30,17 +29,12 @@
 ;; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ;; SOFTWARE.
 
-
 ;;; Commentary:
 
 ;;; Code:
 
-;; ========================================================================== ;;
-
 (require 'use-package)
 (require 'config-functions (concat config-dir "functions.el"))
-
-;; ========================================================================== ;;
 
 (add-hook 'emacs-lisp-mode-hook
           (lambda () (progn
@@ -48,13 +42,9 @@
             (setq-local dash-docs-docsets '("Emacs Lisp")))
           )
 
-;; -------------------------------------------------------------------------- ;;
-
 (use-package flycheck-elsa
   :straight t
   )
-
-;; ========================================================================== ;;
 
 (provide 'init-prog-elisp)
 

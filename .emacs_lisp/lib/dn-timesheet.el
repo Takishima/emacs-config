@@ -80,8 +80,6 @@ Docs: https://orgmode.org/manual/Clocking-Work-Time.html
   :type 'string
   :group 'dn-timesheet)
 
-;; ---------------------------------------------------------------------------- ;;
-
 (defun dn-timesheet-buffer ()
   "Return the buffer visiting `dn-timesheet-file', creating the file if needed."
   (let* ((file (expand-file-name dn-timesheet-file))
@@ -179,8 +177,6 @@ With DAY-POS, the clock must also be on the heading at that position."
 (defun dn-timesheet--clock (time)
   "Format TIME as a wall-clock time, for messages."
   (format-time-string "%H:%M" time))
-
-;; ---------------------------------------------------------------------------- ;;
 
 ;;;###autoload
 (defun dn-timesheet-check-in (&optional time)

@@ -30,15 +30,9 @@
 
 ;;; Commentary:
 
-
 ;;; Code:
 
-;; ========================================================================== ;;
-
 (require 'use-package)
-
-;; ========================================================================== ;;
-
 
 (use-package cmake-font-lock
   :straight t
@@ -61,8 +55,6 @@
   :hook ((cmake-mode cmake-ts-mode) . dn-cmake-docs-setup)
   )
 
-;; -------------------------------------------------------------------------- ;;
-
 (use-package cmake-format
   :straight nil
   :defines cmake-ts-mode-map
@@ -77,19 +69,13 @@
     (keymap-set cmake-ts-mode-map "C-c C-f" #'cmake-format-buffer))
   )
 
-;; -------------------------------------------------------------------------- ;;
-
 ;; Find makefile by going up the directory hierarchy
 (require 'project-directory)
-
-;; -------------------------------------------------------------------------- ;;
 
 (use-package make-mode
   :straight nil
   :mode ("Makefile\\'" "makefile\\'" "Make.obj\\'")
   )
-
-;; ========================================================================== ;;
 
 (defun dn-pkgbuild-srcinfo-on-save ()
   "Update .SRCINFO when saving this PKGBUILD buffer."
@@ -104,8 +90,6 @@
 
 (use-package pacfiles-mode
   :straight t)
-
-;; ========================================================================== ;;
 
 (provide 'init-prog-build-systems)
 

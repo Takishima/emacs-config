@@ -7,7 +7,6 @@
 ;; Homepage: nil
 ;; Keywords: init
 
-
 ;; MIT License
 
 ;; Copyright (c) 2025 Damien Nguyen
@@ -30,18 +29,14 @@
 ;; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ;; SOFTWARE.
 
-
 ;;; Commentary:
 
 ;;; Code:
-
-;; ========================================================================== ;;
 
 (require 'ros)
 
 (defvar ros2-keybindings-mode--keymap (make-keymap) "Keymap for `ros2-keybindings-mode'.")
 (keymap-set ros2-keybindings-mode--keymap "C-c C-r" 'hydra-ros-main/body)
-
 
 (define-minor-mode ros2-keybindings-mode
   "Minor mode binding keys to commands of the `ros' package.
@@ -52,8 +47,6 @@
   :keymap
   ros2-keybindings-mode--keymap
   )
-
-;; ========================================================================== ;;
 
 (provide 'ros2-keybindings-mode)
 

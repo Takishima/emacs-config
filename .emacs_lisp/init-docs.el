@@ -7,7 +7,6 @@
 ;; Homepage: nil
 ;; Keywords: init
 
-
 ;; MIT License
 
 ;; Copyright (c) 2025 Damien Nguyen
@@ -30,12 +29,9 @@
 ;; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ;; SOFTWARE.
 
-
 ;;; Commentary:
 
 ;;; Code:
-
-;; ============================================================================================== ;;
 
 (use-package devdocs
   :straight t
@@ -55,9 +51,6 @@
     (devdocs-update-all)
     )
   )
-
-
-;; ---------------------------------------------------------------------------------------------- ;;
 
 (use-package dash-docs
   :straight t
@@ -89,8 +82,6 @@ The Nix docsets come from the tarballs under `config-dotemacs-lisp'."
 (use-package consult-dash
   :straight t
   :after consult)
-
-;; ============================================================================================== ;;
 
 (provide 'init-docs)
 

@@ -34,11 +34,7 @@
 
 ;;; Code:
 
-;; ========================================================================== ;;
-
 (require 'use-package)
-
-;; ========================================================================== ;;
 
 (use-package exec-path-from-shell
   :if (or (memq window-system '(mac ns))
@@ -54,15 +50,11 @@
   (exec-path-from-shell-initialize)
   )
 
-;; ========================================================================== ;;
-
 (use-package keychain-environment
   :if (member system-type '(gnu gnu/linux gnu/kfreebsd))
   :straight t
   :config
   (keychain-refresh-environment))
-
-;; ========================================================================== ;;
 
 (use-package auth-source-1password
   :straight t
@@ -73,14 +65,10 @@
 (use-package aio
   :straight t)
 
-;; ========================================================================== ;;
-
 (use-package epg
   :straight nil
   :custom
   (epg-pinentry-mode 'loopback))
-
-;; ========================================================================== ;;
 
 (provide 'init-env)
 

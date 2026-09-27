@@ -7,7 +7,6 @@
 ;; Homepage: nil
 ;; Keywords: init
 
-
 ;; MIT License
 
 ;; Copyright (c) 2025 Damien Nguyen
@@ -30,17 +29,12 @@
 ;; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ;; SOFTWARE.
 
-
 ;;; Commentary:
 
 ;;; Code:
 
-;; ========================================================================== ;;
-
 (require 'cl-lib)
 (require 'use-package)
-
-;; ========================================================================== ;;
 
 (defcustom dn-lsp-mode-disabled
   (append '(emacs-lisp-mode lisp-mode makefile-mode direnv-envrc-mode bat-mode)
@@ -49,8 +43,6 @@
   "Major modes for which `prog-mode-hook' does not start `lsp-deferred'."
   :type '(repeat symbol)
   :group 'dn)
-
-;; -------------------------------------------------------------------------- ;;
 
 (use-package lsp-mode
   :straight t
@@ -143,8 +135,6 @@ Enable this if your flake or its inputs require impure evaluation."
     (lsp-install-server t))
   )
 
-;; ========================================================================== ;;
-
 (use-package cleanup-lsp-workspaces
   :straight nil
   :after (lsp-mode)
@@ -153,8 +143,6 @@ Enable this if your flake or its inputs require impure evaluation."
              dn-lsp-list-workspaces
              dn-lsp-cleanup-workspaces-keep-home-only
              dn-lsp-cleanup-workspaces-remove-all))
-
-;; ========================================================================== ;;
 
 (use-package dap-mode
   :straight t
@@ -233,16 +221,12 @@ TEST? is non-nil when `lsp-server-present?' only checks for the server."
   :commands (treemacs)
   :after (lsp-mode))
 
-;; -------------------------------------------------------------------------- ;;
-
 (use-package consult-lsp
   :straight t
   :bind (
          ("M-s l" . consult-lsp-file-symbols)
          )
   )
-
-;; ========================================================================== ;;
 
 (provide 'init-lsp)
 

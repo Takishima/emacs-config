@@ -7,7 +7,6 @@
 ;; Homepage: nil
 ;; Keywords: init
 
-
 ;; MIT License
 
 ;; Copyright (c) 2025 Damien Nguyen
@@ -30,17 +29,12 @@
 ;; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ;; SOFTWARE.
 
-
 ;;; Commentary:
 
 ;;; Code:
 
-;; ========================================================================== ;;
-
 (require 'use-package)
 (require 'org)
-
-;; ========================================================================== ;;
 
 (defun dn-magit-split-height-threshold ()
   "Set `split-height-threshold' to 200 in the current magit buffer."
@@ -106,8 +100,6 @@
     :argument "--until="
     :reader #'dn-magit-org-read-date)
 
-  ;; ------------------------------------------------------------------------ ;;
-
   (transient-append-suffix 'magit-log "-L"
     '(magit-log:--since))
 
@@ -123,8 +115,6 @@
   (transient-append-suffix 'magit-push "a"
     '("g" "All (except github)" dn-magit-push-to-all-remotes-except-github))
 
-  ;; ------------------------------------------------------------------------ ;;
-
   (defun dn-magit-run-precommit-manual ()
     "Run `pre-commit run --hook-stage manual' in the current repository."
     (interactive)
@@ -136,8 +126,6 @@
 
   (transient-append-suffix 'magit-run "b"
     '("P" "Pre-commit manual" dn-magit-run-precommit-manual))
-
-  ;; ------------------------------------------------------------------------ ;;
 
   (defun dn-magit-run-mergiraf-solve-file ()
     "Run `mergiraf solve' on the file at point or prompt for a file."
@@ -217,14 +205,10 @@ MERGE-ID is the merge identifier from git output."
     '("m" "Mergiraf" dn-magit-run-mergiraf))
   )
 
-;;----------------------------------------------------------------------------;;
-
 (use-package magit-gitflow
   :straight t
   :hook (magit-mode . turn-on-magit-gitflow)
   )
-
-;; ========================================================================== ;;
 
 (use-package magit-delta
   :straight t
@@ -233,8 +217,6 @@ MERGE-ID is the merge identifier from git output."
   :custom
   (magit-delta-delta-args '("--max-line-distance" "0.6" "--true-color" "always" "--color-only" "--features" "magit-delta"))
   )
-
-;; ========================================================================== ;;
 
 (use-package difftastic
   :defer t
@@ -252,8 +234,6 @@ MERGE-ID is the merge identifier from git output."
     [("D" "Difftastic diff (dwim)" difftastic-magit-diff)
      ("S" "Difftastic show" difftastic-magit-show)])
   )
-
-;; ========================================================================== ;;
 
 (defvar dn-conv-commit-type-desc nil
   "Conventional commit types, each with a description, an icon and face properties.")
@@ -353,7 +333,6 @@ Types come from `dn-conv-commit-type-desc', scopes from
 (advice-add 'magit-status :after 'dn-conv-commit-add-faces)
 (advice-add 'magit-refresh-buffer :after 'dn-conv-commit-add-faces)
 
-
 (defun dn-conv-commit-type-completion-decorate (type)
   "Decorate the completions candidates with icon prefix and description suffix.
 
@@ -370,7 +349,6 @@ Return a list (candidate, icon, description)."
      (concat
       (string-pad " " (- 10 (length type)))
       (propertize (plist-get type-data :desc) 'face '(:foreground "gray" ))))))
-
 
 (defun dn-conv-commit-type-prompt ()
   "Read a conventional commit type, showing each type's icon and description."
@@ -395,11 +373,7 @@ Return a list (candidate, icon, description)."
               (run-with-timer 0.5 nil #'(lambda () (when (eq (pos-eol) (pos-bol)) (dn-conv-commit-prompt)))))
           )
 
-;; ========================================================================== ;;
-
 (require 'smerge-mode)
-
-;; ========================================================================== ;;
 
 (defun dn-smerge-mergiraf-has-conflicts-p ()
   "Check if the current buffer contains merge conflict markers."
@@ -451,15 +425,9 @@ This is a convenience command that combines solving and saving."
   (when (buffer-modified-p)
     (save-buffer)))
 
-;; ========================================================================== ;;
-
 (with-eval-after-load 'smerge-mode
   (keymap-set smerge-mode-map "C-c ^ m" 'dn-smerge-mergiraf-solve)
   (keymap-set smerge-mode-map "C-c ^ M" 'dn-smerge-mergiraf-solve-and-save))
-
-;; ========================================================================== ;;
-
-;; ========================================================================== ;;
 
 (provide 'init-magit)
 

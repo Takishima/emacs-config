@@ -7,7 +7,6 @@
 ;; Homepage: nil
 ;; Keywords: init
 
-
 ;; MIT License
 
 ;; Copyright (c) 2025 Damien Nguyen
@@ -30,31 +29,21 @@
 ;; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ;; SOFTWARE.
 
-
 ;;; Commentary:
-
 
 ;;; Code:
 
-;; ========================================================================== ;;
-
 (require 'use-package)
-
-;; ========================================================================== ;;
 
 (use-package browse-kill-ring
   :straight t
   :bind (("s-y" . browse-kill-ring))
   )
 
-;; ========================================================================== ;;
-
 (use-package smart-shift
   :straight t
   :config
   (global-smart-shift-mode +1))
-
-;; ========================================================================== ;;
 
 (custom-set-variables '(make-backup-files nil))
 
@@ -72,8 +61,6 @@
 
 (delete-selection-mode)
 
-;; ========================================================================== ;;
-
 (use-package multiple-cursors
   :straight t
   :bind
@@ -84,8 +71,6 @@
   (keymap-global-unset "M-m")
   )
 
-;; ========================================================================== ;;
-
 (use-package whitespace-cleanup-mode
   :straight t
   :custom
@@ -94,8 +79,6 @@
   (diff-mode . (lambda () (whitespace-cleanup-mode -1)))
   :config
   (global-whitespace-cleanup-mode))
-
-;; ========================================================================== ;;
 
 (defun shutdown-emacs-server ()
   "Kill the Emacs daemon, saving modified buffers without asking."
@@ -106,14 +89,10 @@
         )
     (save-buffers-kill-emacs t)))
 
-;; -------------------------------------------------------------------------- ;;
-
 (defun kill-from-line-beginning ()
   "Kill from the beginning of the line to point."
   (interactive)
   (kill-region (pos-bol) (point)))
-
-;; -------------------------------------------------------------------------- ;;
 
 (defun revert-all-buffers ()
   "Revert every unmodified buffer whose file still exists."
@@ -124,14 +103,10 @@
         (revert-buffer t t t) )))
   (message "Refreshed open files.") )
 
-;; -------------------------------------------------------------------------- ;;
-
 (defun dn-display-ansi-colors ()
   "Render the ANSI colour codes in the current buffer."
   (interactive)
   (ansi-color-apply-on-region (point-min) (point-max)))
-
-;; -------------------------------------------------------------------------- ;;
 
 (eval-when-compile (require 're-builder))
 
@@ -146,13 +121,9 @@ Work in `reb-target-buffer' through `query-replace-regexp'."
   (with-current-buffer reb-target-buffer
     (query-replace-regexp reb-regexp to-string)))
 
-;; -------------------------------------------------------------------------- ;;
-
 (keymap-global-set "M-s M-l" 'sort-lines)
 (keymap-global-set "s-R" 'revert-all-buffers)
 (keymap-global-set "s-r" 'revert-buffer)
-
-;; ========================================================================== ;;
 
 (setq-default abbrev-mode t)
 (read-abbrev-file (expand-file-name "abbrev_defs" config-dotemacs-lisp))
@@ -173,8 +144,6 @@ Work in `reb-target-buffer' through `query-replace-regexp'."
   (read-abbrev-file)
   (read-abbrev-file (expand-file-name "abbrev_fr_defs" config-dotemacs-lisp))
   )
-
-;; ========================================================================== ;;
 
 (unless (boundp 'config-yasnippet-dir)
   (defconst config-yasnippet-dir (concat config-dotemacs-lisp "snippets/")))
@@ -204,8 +173,6 @@ Work in `reb-target-buffer' through `query-replace-regexp'."
   )
 
 (dn-load-directory (concat config-dotemacs-lisp "yas-lib") "yas-lib-")
-
-;; ========================================================================== ;;
 
 (provide 'init-editing)
 

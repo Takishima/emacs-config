@@ -30,12 +30,9 @@
 
 ;;; Commentary:
 
-
 ;;; Code:
 
 (require 'use-package)
-
-;; ========================================================================== ;;
 
 (when (treesit-available-p)
   (add-to-list 'major-mode-remap-alist '(css-mode . css-ts-mode))
@@ -55,21 +52,15 @@
   ("\\.html$" . web-mode)
   )
 
-;; -------------------------------------------------------------------------- ;;
-
 (use-package json
   :straight nil
   )
-
-;; -------------------------------------------------------------------------- ;;
 
 (use-package auto-rename-tag
   :straight t
   :hook
   (web-mode . auto-rename-tag-mode)
   )
-
-;; ========================================================================== ;;
 
 (provide 'init-prog-web)
 

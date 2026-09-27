@@ -7,7 +7,6 @@
 ;; Homepage: nil
 ;; Keywords: init
 
-
 ;; MIT License
 
 ;; Copyright (c) 2025 Damien Nguyen
@@ -30,17 +29,12 @@
 ;; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ;; SOFTWARE.
 
-
 ;;; Commentary:
 
 ;;; Code:
 
-;; ========================================================================== ;;
-
 (require 'use-package)
 (require 'config-functions (concat config-dir "functions.el"))
-
-;; ========================================================================== ;;
 
 (when (treesit-available-p)
   (add-to-list 'major-mode-remap-alist '(json-mode . json-ts-mode)))
@@ -49,8 +43,6 @@
   :straight nil
   :mode "\\.json\\'"
   )
-
-;; ========================================================================== ;;
 
 (provide 'init-prog-json)
 

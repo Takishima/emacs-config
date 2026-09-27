@@ -7,7 +7,6 @@
 ;; Homepage: nil
 ;; Keywords: init
 
-
 ;; MIT License
 
 ;; Copyright (c) 2025 Damien Nguyen
@@ -30,17 +29,12 @@
 ;; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ;; SOFTWARE.
 
-
 ;;; Commentary:
 
 ;;; Code:
 
-;; ========================================================================== ;;
-
 (require 'use-package)
 (require 'config-functions (concat config-dir "variables.el"))
-
-;; ========================================================================== ;;
 
 (use-package ros
   :straight t
@@ -55,8 +49,6 @@
   :straight nil
   :load-path (lambda () (concat config-packages-dir "ros2-keybindings"))
   )
-
-;; ========================================================================== ;;
 
 (provide 'init-prog-ros)
 
