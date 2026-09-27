@@ -79,6 +79,14 @@
                       (bound-and-true-p dash-docs-docsets))
       (dn-smoke-check (concat file " " key) command (key-binding (kbd key))))))
 
+(require 'yasnippet)
+(with-current-buffer (dn-smoke-visit "CMakeLists.txt")
+  (dn-smoke-check "own cmake snippets loaded" t
+                  (and (member "damien-mit"
+                               (mapcar #'yas--template-name
+                                       (yas--all-templates (yas--get-snippet-tables))))
+                       t)))
+
 (with-current-buffer (dn-smoke-visit "t.tex")
   (dn-smoke-check "t.tex major-mode" 'LaTeX-mode major-mode)
   (dn-smoke-check "t.tex latexmk command" t

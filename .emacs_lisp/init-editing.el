@@ -173,6 +173,7 @@
   :init
   (setq yasnippet-snippets-dir "")
   :config
+  (add-to-list 'yas-snippet-dirs config-yasnippet-dir)
   (yas-reload-all)
   (yas-global-mode t)
   )
