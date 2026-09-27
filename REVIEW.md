@@ -1,8 +1,8 @@
 # Emacs config review: cleanup and modularity
 
 Scope: every tracked `.el` file, the entry point, README, snippets layout,
-service file and repo metadata, originally as of `47ec94c`, re-assessed against main `bd40982` after the
-46 cleanup commits that followed the first pass. Findings were
+service file and repo metadata, originally as of `47ec94c`, re-assessed against main `7514b9b` after the
+73 cleanup and restructuring commits that followed the first pass. Findings were
 checked against a running Emacs 31.1 session with this config loaded (via
 `emacsclient`). Items marked **verify** still need a manual repro. Each
 numbered item now starts with its status: **Done** (fixed on main),
@@ -12,41 +12,38 @@ Numbers that frame the rest of the review:
 
 | Metric | Value |
 |---|---|
-| `use-package` declarations | 144 (was 155) |
-| Own init modules (`init-*.el`) | 16 (`init-org.el` deleted) |
-| Language modules (`programming/*.el`) | 20 (two skipped; `diff.el` and `makefile.el` removed) |
-| Largest own module | `init-emacs.el`, 770 lines |
-| Vendored third-party code | 4 files, ~950 lines (`explain-pause-mode.el` deleted) |
-| Own top-level helper libraries | 2 (`dashboard-worktrees-patch.el`, `cleanup-lsp-workspaces.el`) |
+| `use-package` declarations | 143 (was 155), 67 of 123 blocks with a lazy trigger |
+| Own init modules (`init-*.el`) | 22 (after the split of `init-emacs.el` and `init-programming.el`) |
+| Language modules (`programming/*.el`) | 22 (two disabled via `dn-disabled-languages`) |
+| Largest own module | `init-completion.el`, 440 lines (`init-emacs.el` is gone) |
+| Vendored third-party code | 4 files, ~950 lines, now under `vendor/` |
+| Own libraries | 2, now under `lib/` |
 | Commented-out `use-package` blocks | 0 (was 12) |
 
-## Status after main `bd40982`
+## Status after main `7514b9b`
 
-Main now carries migration phases 1 and 2 from Part 2 in full, most of
-phase 0, and a batch smoke test (`test/smoke.el`, run by `make check`).
+Main now carries every migration phase from Part 2, including the
+restructure. The entry points are `init.el` and `early-init.el` at the
+repository root, modules are listed in `dn-modules`, languages are
+discovered by `dn-load-directory` under an enforced naming rule, macOS code
+lives in `init-os-darwin.el`, and third-party and own libraries sit in
+`vendor/` and `lib/`. `make check` batch-loads the config through the real
+entry points and fails on any `use-package` warning.
+
 Of the 37 cleanup items:
 
 | Status | Items |
 |---|---|
-| Done | 1, 3-7, 9-22, 24, 25, 27-30, 35 |
-| Partly | 2, 8, 26, 31, 32, 33 |
-| Open | 23, 34, 36, 37 |
+| Done | 1, 3-7, 9-22, 24-30, 35-37 |
+| Partly | 2, 8, 31, 32, 33 |
+| Open | 23, 34 |
 
-The smoke test covers the regressions that were fixed and now also
-enforces the `init-prog-<file>` naming rule for every language module,
-which is the right shape for phase 0. `make check` runs it. Still missing:
-a CI job, and a byte-compile pass over the own modules (the check that
-would catch item 37). The test is not hermetic: it loads `.emacs`, so it
-needs a bootstrapped `straight/` directory with every package already
-cloned.
-
-Sections A and B are closed apart from the built-in `use-package`
-declaration (23). Of section C, the header/provide/footer drift (29) and
-the `Local Variables` footers (30) are gone and `.dir-locals.el` now pins
-spaces for new edits (33), though 11 files still contain the old tabs.
-What remains is the namespace cleanup (31), the `lexical-binding` cookie
-(37), the re-indent pass, and the README (36). Everything in Part 2 still
-applies; phase 3 (re-cutting the modules) is the next real step.
+What is left is small: `(use-package use-package :straight t)` (23), the
+host-specific `emacs.service` (34), a `:straight nil` on `savehist` (32),
+about 25 unprefixed own functions (31), tabs in 7 own files (33), and the
+ispell setup still nested inside `flycheck-aspell` (2). Part 2 below has
+been rewritten as an assessment of the new layout, with the remaining
+structural gaps and a short list of next steps.
 
 ---
 
@@ -213,7 +210,7 @@ duplicated code, C is consistency and hygiene.
     `matlab.el:45-46`, `pov-ray.el:41`). By the time `:config` runs the
     package is loaded, so the autoload is a no-op.
 
-23. **Open.** **`(use-package use-package :straight t)`** in `init-package.el`.
+23. **Open** (the `org` duplicate is gone with `init-org.el`). **`(use-package use-package :straight t)`** in `init-package.el`.
     `use-package` is built into Emacs 29+; straight will clone the
     upstream repo and shadow the built-in. Also `straight-use-package 'org`
     appears in both `init-package.el` and `init-org.el`.
@@ -228,7 +225,7 @@ duplicated code, C is consistency and hygiene.
     `line-end-position`). `conv-commit-type-prompt` calls the private
     `consult--read`.
 
-26. **Partly.** The duplicate `c-basic-indent`, the `:functions` line, and the global `indent-tabs-mode` (now a `setq-default` in `init-emacs.el`) are fixed. Still open: `compile-in-iterm` is bound in four keymaps in `cpp.el` and in `rest.el` but only defined on darwin. **`programming/cpp.el`:** `c-basic-indent` is set both in `:custom` and
+26. **Done.** `dn-compile-in-iterm` now lives in `init-os-darwin.el` and binds itself with `with-eval-after-load`, so nothing references it on other systems. **`programming/cpp.el`:** `c-basic-indent` is set both in `:custom` and
     in a later `custom-set-variables`, and that same `custom-set-variables`
     sets `indent-tabs-mode nil` globally from inside a C++ module.
     `flycheck-clang-tidy` declares `:functions flycheck-clang-analyzer-setup`
@@ -277,7 +274,7 @@ duplicated code, C is consistency and hygiene.
     the repo root, or with a proper load-path so flymake/flycheck can find
     `config-functions`.
 
-31. **Partly** (`defgroup dn` exists now; names unchanged). **Namespace.** Personal symbols use `dn-`, `dn/`, `dn--`, `my-`, `pd--`,
+31. **Partly.** Commands that lived in other packages' namespaces (`magit-*`, `smerge-*`, `lsp-*`, `treesit-*`) are prefixed, and `defgroup dn` exists. About 25 unprefixed own functions remain: `conv-commit-*`, `add-conventional-commit-faces`, `en-abb`/`fr-abb`, `en-dic`/`fr-dic`/`de-dic`, `my-ispell-word`, `my-flyspell-auto-correct-word`, `text-mode-hook-setup`, `crm-indicator`, `imdoc*`, `formatted-copy-*`, `revert-all-buffers`, `kill-from-line-beginning`, `shutdown-emacs-server`, `reb-query-replace`, `bury-compile-buffer-if-successful`, `latex-help-get-cmd-alist`. **Namespace.** Personal symbols use `dn-`, `dn/`, `dn--`, `my-`, `pd--`,
     `conv-commit-`, `yas-lib-`, or no prefix at all (`en-abb`, `fr-abb`,
     `imdoc`, `crm-indicator`, `revert-all-buffers`, `kill-from-line-beginning`,
     `shutdown-emacs-server`, `magit-push-to-all-remotes`,
@@ -288,12 +285,12 @@ duplicated code, C is consistency and hygiene.
     Pick one prefix (`dn-`) and one customization group (`dn`, which is
     referenced by six `defcustom`s but never `defgroup`ed).
 
-32. **Partly.** `epg`, `diff-mode`, `display-line-numbers`, `printing`, `json`, `json-ts-mode` are fixed; `use-package` itself is still `:straight t` and `savehist` has no `:straight` at all. **Built-in libraries declared inconsistently.** `cc-mode`, `python`,
+32. **Partly.** Everything is fixed except `use-package` itself (item 23) and `savehist` in `init-completion.el`, which has no `:straight` keyword at all. **Built-in libraries declared inconsistently.** `cc-mode`, `python`,
     `make-mode`, `rst`, `lsp-nix`, `vertico-*` correctly use `:straight nil`;
     `epg`, `diff-mode`, `display-line-numbers`, `printing`, `json`,
     `json-ts-mode`, `savehist`, `use-package` do not.
 
-33. **Partly** (`.dir-locals.el` sets `indent-tabs-mode nil`; the existing tabs in 11 files were not re-indented). **Formatting.** 13 files mix tabs and spaces; closing parens are
+33. **Partly** (`.dir-locals.el` sets `indent-tabs-mode nil`; 7 own files still contain tabs: `config/functions.el`, `init-completion.el`, `init-ui.el`, `init-magit.el`, `init-editing.el`, `init-ispell.el`, `programming/python.el`). **Formatting.** 13 files mix tabs and spaces; closing parens are
     routinely on their own line; `(if x (progn …))` instead of `when`;
     `'(lambda …)` instead of `#'`/`lambda`; `(progn …)` as the sole body of
     `:config`. A one-time pass with `indent-region` under
@@ -311,7 +308,7 @@ duplicated code, C is consistency and hygiene.
 35. **Done.** **`.emacs` trailing statement.** `(put 'narrow-to-region 'disabled nil)`
     sits after the `;;; .emacs ends here` footer.
 
-36. **Open** (the custom-file paragraph was added; the rest is not). **README gaps.** It does not mention that `config-require` looks in
+36. **Done** (the README now covers installation, `--init-directory`, load order, the `config/` shadowing, per-host overrides, layout and the Emacs version). **README gaps.** It does not mention that `config-require` looks in
     `.emacs_lisp/config/` *first* (`functions.el:82-87`), so a gitignored
     `config/init-magit.el` silently replaces the tracked module. That is a
     useful override hook but it is undocumented and easy to trip over. The
@@ -319,7 +316,7 @@ duplicated code, C is consistency and hygiene.
     which Emacs version is required (the config assumes 29+: `treesit`,
     `setopt`, built-in `use-package`).
 
-37. **Open.** **Missing `lexical-binding` cookies.** Emacs 31 warns at startup for
+37. **Done** for own code (`dashboard-worktrees-patch.el` became `lib/dn-dashboard-worktrees.el` with a cookie). Only the vendored `ris.el` lacks one. **Missing `lexical-binding` cookies.** Emacs 31 warns at startup for
     `dashboard-worktrees-patch.el` (tracked) and for the untracked
     `custom.el`, `config/init-post.el` and `~/.emacs.d/early-init.el`.
 
@@ -327,217 +324,150 @@ duplicated code, C is consistency and hygiene.
 
 ## Part 2: Modularity, structure and architecture
 
-### What exists today
+This part was originally a proposal. Main has since implemented it, so it
+is now an assessment of what landed, what the new layout still lacks, and
+what to do next.
+
+### What exists now
 
 ```
-.emacs                          entry point (paths, ordered config-require list)
+early-init.el, init.el         entry points at the repo root (linked from ~/.emacs.d or --init-directory)
+.emacs                         loads config/, init-pre, custom.el, dn-modules, init-post
 .emacs_lisp/
-  config/variables.el           paths as defcustoms
-  config/functions.el           config-require, config-load-file-exec-func, config-when-system
-  config/init-pre.el, init-post.el   (gitignored) user hooks
-  custom.el                     (gitignored)
-  init-*.el                     17 topic modules, loaded in a fixed order
-  programming/*.el              auto-discovered language modules, skip.txt opt-out
-  yas-lib/*.el                  auto-discovered snippet helpers
-  packages/<name>/              two own packages (ros2)
-  *.el at top level             5 vendored third-party files + 1 patch
-  snippets/, abbrev_*, docsets/
+  config/variables.el          defgroup dn; paths; dn-modules; dn-disabled-languages
+  config/functions.el          config-require, config-load-file-exec-func, dn-load-directory,
+                               config-when-system, dn-async-process
+  config/init-pre.el, init-post.el, custom.el   (gitignored) per-host overrides
+  init-package.el              straight bootstrap, use-package defaults
+  init-env.el                  exec-path-from-shell, keychain, 1Password, aio
+  init-ui.el                   theme, which-key, hl-line+, dashboard (+ lib/dn-dashboard-worktrees), helpful, line numbers
+  init-completion.el           vertico, consult, orderless, marginalia, embark, prescient, hotfuzz, wgrep
+  init-editing.el              browse-kill-ring, smart-shift, whitespace-cleanup, abbrev, yasnippet, yas-lib
+  init-project.el              projectile, bufler, ztree, dtrt-indent, direnv, editorconfig, project-directory
+  init-docs.el, init-multiple-cursors.el, init-magit.el, init-mergiraf.el, init-llm.el
+  init-lsp.el                  lsp-mode, lsp-ui, dap, lsp-booster, treemacs, workspace cleanup
+  init-programming.el          flycheck, compilation helpers, treesit sources, format-all, datetime, logview,
+                               then dn-load-directory over programming/
+  init-auctex.el, init-ispell.el, init-misc.el
+  init-os-darwin.el            every darwin-only bit, loaded only on darwin via dn-modules
+  init-keybindings.el, init-custom-functions.el, init-custom.el
+  programming/<lang>.el        22 language modules, each providing init-prog-<lang>
+  lib/                         own libraries (dn-dashboard-worktrees, cleanup-lsp-workspaces)
+  vendor/                      hl-line+, ris, project-directory, cmake-format
+  packages/, yas-lib/, snippets/, abbrev_*, docsets/
+Makefile, test/smoke.el        make check: batch load through early-init.el + init.el, fail on warnings
 ```
 
-**What works well and should be kept:**
-- `use-package` + straight everywhere, so each block is self-describing.
-- The idea of per-topic and per-language files, with automatic discovery.
-- Explicit, gitignored extension points (`init-pre`, `init-post`,
-  `custom.el`, `skip.txt`, `config/` shadowing).
-- Helper macros for OS branching.
+### What the restructure achieved
 
-**Where modularity breaks down:**
+Measured against the mechanisms proposed in the first version of this
+review:
 
-1. **Module boundaries do not match the file names.** `init-emacs.el`
-   holds the theme, UI toggles, the entire minibuffer completion stack
-   (vertico/consult/orderless/marginalia/embark, ~350 lines), dashboard,
-   bufler, 1Password, `aio`, font-size helpers and generic utility
-   functions. `init-completion.el` holds abbrevs, prescient and yasnippet,
-   but not completion. `init-programming.el` mixes cross-language tooling
-   (lsp/dap/treesit/flycheck/editorconfig/compilation) with the language
-   loader and with grab-bag packages that are themselves languages
-   (`ansible`, `hcl-mode`, `nix-mode`, `gitlab-ci-mode`, `format-all`).
-   `init-custom.el` is not about `custom.el`. `init-llm.el` also owns the
-   terminals (`vterm`, `eat`).
+- **One loader, one naming rule.** `dn-load-directory` requires each file
+  by path as `init-prog-<base>`, so a wrong `provide` is a load error, and
+  the smoke test checks every module independently. The `intern-soft`
+  heuristic is gone.
+- **A module list instead of a require chain.** `dn-modules` and
+  `dn-disabled-languages` are `defcustom`s that `init-pre.el` can override
+  per host; `skip.txt` is gone. `init-os-darwin` is appended to the list
+  only on darwin.
+- **OS-specific code in one place.** The only darwin checks outside
+  `init-os-darwin.el` are the computed variable list in `init-env.el`, the
+  `dn-modules` default, and the pyright hook in `programming/python.el`.
+- **Own, patched and vendored code separated.** `vendor/` holds pristine
+  third-party files, `lib/` holds own libraries, and the dashboard patch
+  became a proper library with a test for its porcelain parser.
+- **Module boundaries match names.** `init-emacs.el` is gone; UI,
+  completion, editing and project each have a file, and LSP tooling has its
+  own module instead of sharing one with the language loader.
+- **Self-contained entry points.** `init.el` and `early-init.el` at the
+  root work both symlinked and via `--init-directory`; `early-init.el`
+  also owns `LSP_USE_PLISTS`, which used to live in `emacs.service`.
+- **Verification.** `make check` goes through the real entry points,
+  fails on `use-package` warnings, and asserts that `lsp-mode`, `yasnippet`
+  and `devdocs` stay deferred.
 
-2. **Two discovery mechanisms, four naming conventions, one heuristic.**
-   Top-level modules are listed by hand in `.emacs`; language and yas-lib
-   modules are globbed. The glob loader decides between `require` and
-   `load` with `intern-soft`, i.e. based on whether a symbol happens to be
-   interned yet. That is why the wrong `provide` in `python.el` goes
-   unnoticed.
+### Remaining structural gaps
 
-3. **Implicit cross-module coupling through load order.**
-   `dn-lsp-mode-disabled` (defined in `init-custom`) is used in
-   `init-programming`; `dn-async-process` (in `init-emacs`) in
-   `programming/python.el`; `compile-in-iterm` (in `init-programming`,
-   darwin only) is bound in `cpp.el` and `rest.el` on every OS;
-   `projectile-project-root` is used in `python.el` and
-   `init-custom-functions.el`; `consult` is assumed present by
-   `init-docs`/`init-magit`. None of these declare the dependency; they
-   work because `.emacs` happens to order the requires that way.
+1. **`init-custom.el` is still loaded outside `dn-modules`** (hardcoded in
+   `.emacs`), still misnamed, and holds two unrelated things:
+   `dn-lsp-mode-disabled`, which only `init-lsp.el` reads, and
+   `dn-editorconfig-major-mode-hook`, which nothing calls. Move the
+   variable into `init-lsp.el` (or `config/variables.el` beside the other
+   `defcustom`s), delete the unused hook, and drop the module.
 
-4. **OS-specific code is smeared across 9 files** (`config-when-system` /
-   `system-type` checks in env, keybindings, misc, auctex, emacs,
-   programming, cpp, build-systems, python). There is no single place to
-   look for "what changes on macOS".
+2. **Three leftover grab-bag modules.** `init-misc.el` (epg, pacfiles,
+   printing), `init-keybindings.el` (three global bindings) and
+   `init-custom-functions.el` (one command, one clang-format hook) are each
+   under 70 lines and have no theme. Fold them into `init-editing.el`,
+   `init-ui.el` and `programming/cpp.el` respectively. The same applies to
+   the single-package `init-multiple-cursors.el` (editing) and
+   `init-mergiraf.el` (magit/vcs).
 
-5. **Own code, patches and vendored code share one directory.**
-   `hl-line+.el`, `ris.el`, `project-directory.el`, `cmake-format.el` (all
-   third-party) sit next to `init-*.el`,
-   `dashboard-worktrees-patch.el` and the new own library
-   `cleanup-lsp-workspaces.el`. Nothing marks which files are edited
-   locally, which are pristine copies, and which could be straight recipes.
+3. **Two infrastructure prefixes.** `config-require`,
+   `config-load-file-exec-func` and `config-when-system` coexist with
+   `dn-load-directory`, `dn-modules` and `dn-async-process`, and the
+   `config` and `dn` customization groups both exist. Pick `dn-` and
+   rename the four `config-*` helpers; `config-when-system` can become
+   `(when (memq system-type (ensure-list TYPE)) …)`.
 
-6. **Feature toggles are all-or-nothing edits to tracked files.** The only
-   knobs are `skip.txt` (tracked, so per-host choices become commits) and
-   commenting out a `config-require` in `.emacs`. There is no way for
-   `init-pre.el` to say "no LLM module on this machine".
+4. **`.emacs` is now an implementation detail.** `init.el` only loads it.
+   Its 30 lines could live in `init.el` directly, which would also remove
+   the dot-file from the repo root and the `file-truename` indirection.
 
-7. **Startup is fully eager.** `use-package-always-defer` is nil, most
-   blocks have no `:defer`/`:commands`/`:hook`, `yas-reload-all` and
-   `devdocs-update-all` run at boot, and `gc-cons-threshold` is tuned as a
-   side effect of the `lsp-mode` block. The repo has no `early-init.el`;
-   the host has one in `~/.emacs.d/` that lives outside this repo.
+5. **`early-init.el` pins `user-emacs-directory` to `~/.emacs.d`.** This
+   is deliberate, so several checkouts share straight's builds, but it
+   means `--init-directory` and `make check` are not hermetic: a fresh
+   machine still needs a bootstrapped `~/.emacs.d`. Worth documenting in
+   the README's checking section, and worth an `EMACS_USER_DIR` override
+   for CI.
 
-8. **Verification is most of the way there.** `make check` batch-loads the
-   config through `test/smoke.el`, which checks the fixed regressions and
-   the language-module naming rule. Nothing runs it automatically (no CI),
-   and nothing byte-compiles the own modules. Item 37 in Part 1 would be
-   caught by `byte-compile-file` with `byte-compile-error-on-warn`, which
-   the smoke test cannot see.
+6. **Deferral is still opt-in.** `use-package-always-defer` is nil and
+   `straight-use-package-by-default` is unset; 56 of 123 blocks have no
+   lazy trigger. Three packages are verified deferred by the test. A
+   `use-package-compute-statistics` run followed by `:defer t` on the
+   long tail is the remaining startup lever, and each newly deferred
+   package can be added to the smoke test's deferral list.
 
-### Proposed target structure
+7. **No byte-compile, no CI.** `make check` catches load errors and
+   warnings but not the class of problems `byte-compile-file` finds
+   (unused variables, wrong arities, obsolete calls). A `make compile`
+   target over `config/`, `init-*.el`, `programming/`, `lib/` with
+   `byte-compile-error-on-warn`, and a GitHub Actions job running both,
+   closes phase 0.
 
-The proposal keeps every idea that works and changes the layout so that
-each concern has exactly one home, dependencies are declared, and the repo
-can be tested in isolation.
+8. **Implicit dependencies remain in a few places.** `programming/python.el`
+   and `init-custom-functions.el` call `projectile-project-root` without
+   requiring `init-project`; `init-docs.el` binds consult commands; the
+   language modules assume `init-lsp` and `init-docs` loaded first. This is
+   fine while `dn-modules` fixes the order, but a `(require 'init-lsp)` at
+   the top of a module that needs it makes the order explicit and lets a
+   host drop modules from `dn-modules` safely.
 
-```
-emacs-config/
-├── early-init.el            gc during startup, package-enable-at-startup nil, UI flags
-├── init.el                  ~40 lines: paths, straight bootstrap, load core, run module list
-├── lisp/
-│   ├── core/
-│   │   ├── dn-paths.el      defgroup dn; dn-root, dn-lisp-dir, dn-local-dir …
-│   │   ├── dn-lib.el        dn-require, dn-load-directory, dn-when-system, dn-async-process,
-│   │   │                    generic commands (revert-all-buffers, kill-from-line-beginning…)
-│   │   └── dn-packages.el   straight bootstrap, use-package defaults, diminish, system-packages
-│   ├── modules/             one concern per file, each (provide 'dn-mod-<name>)
-│   │   ├── ui.el            theme, which-key, dashboard (+ worktrees patch), line numbers, hl-line, fonts
-│   │   ├── completion.el    vertico, consult, orderless, marginalia, embark, prescient, hotfuzz
-│   │   ├── editing.el       multiple-cursors, smart-shift, whitespace-cleanup, subword, abbrev, yasnippet, yas-lib
-│   │   ├── project.el       projectile, bufler, direnv, editorconfig, dtrt-indent
-│   │   ├── vcs.el           magit + extensions, conventional commits, mergiraf (magit + smerge), difftastic
-│   │   ├── lsp.el           lsp-mode, lsp-ui, dap, lsp-booster, treesit, flycheck, compilation helpers
-│   │   ├── docs.el          devdocs, dash-docs, helpful
-│   │   ├── spell.el         ispell/flyspell/flycheck-aspell, lsp-ltex
-│   │   ├── tex.el           auctex, ris
-│   │   ├── ai.el            copilot, copilot-chat, aidermacs, claude-code
-│   │   ├── shell.el         vterm, eat, exec-path-from-shell, keychain
-│   │   ├── org.el           (if kept)
-│   │   ├── os-darwin.el     every darwin-only bit: modifiers, Swiss keyboard, Skim, texbin, plist, iTerm
-│   │   └── os-linux.el
-│   ├── lang/                renamed programming/, each (provide 'dn-lang-<name>)
-│   ├── lib/                 own reusable libraries: cleanup-lsp-workspaces.el (as dn-lsp-workspaces.el)
-│   ├── vendor/              pristine third-party: hl-line+, ris, project-directory, cmake-format
-│   ├── patches/             dashboard-worktrees-patch.el (files that modify a package after load)
-│   └── packages/            own packages (ros2-*), unchanged
-├── etc/                     snippets/, abbrev/, docsets/  (data, not code)
-├── local/                   gitignored: init-pre.el, init-post.el, custom.el, module overrides
-├── Makefile                 make check  → batch load + byte-compile + checkdoc
-└── .github/workflows/ci.yml
-```
+### Migration plan status
 
-Key mechanisms behind the layout:
+| Phase | Status |
+|---|---|
+| 0. Safety net | Mostly done: `make check`, `.dir-locals.el`, naming rule enforced. Missing: byte-compile target, CI. |
+| 1. Delete | Done. |
+| 2. Fix bugs | Done. |
+| 3. Re-cut modules | Done: `init-emacs.el` split, LSP extracted, languages moved, `os-darwin`, `vendor/` + `lib/`. |
+| 4. Loader + naming | Done for the loader, module list and cross-package command names. Left: the `config-` helpers and the unprefixed own functions (item 31). |
+| 5. Init directory | Done: `early-init.el`, `init.el`, `--init-directory`, README. Left: the defer audit and `straight-use-package-by-default`. |
 
-**a. One loader, one naming rule.** `dn-load-directory DIR PREFIX &optional
-SKIP` sorts the directory, and for `foo.el` does
-`(require (intern (concat PREFIX "foo")) file)`. The convention "file
-`lang/cpp.el` provides `dn-lang-cpp`" is enforced, not guessed. Replace
-`intern-soft` with this and the `python.el` mistake becomes an immediate
-load error.
+### Next steps, in order
 
-**b. A module list instead of a hand-written require chain.**
-
-```elisp
-(defcustom dn-modules
-  '(ui completion editing project vcs lsp docs spell tex ai shell)
-  "Modules to load, in order. Override in local/init-pre.el.")
-(defcustom dn-disabled-languages '(matlab gnuplot) "…")
-```
-
-`init.el` loads `local/init-pre.el` first, then iterates `dn-modules`. A
-host that wants no AI tooling sets `(setq dn-modules (remq 'ai dn-modules))`
-in its untracked `init-pre.el`. `skip.txt` becomes `dn-disabled-languages`
-and stops being a tracked file that encodes per-host choices.
-
-**c. Explicit dependencies.** Every module starts with `(require 'dn-lib)`
-and, where it uses another module's symbols, `(require 'dn-mod-lsp)` (or a
-`declare-function`/`defvar` for soft dependencies). Shared helpers
-(`dn-async-process`, `compile-in-iterm`, `dn-lsp-mode-disabled`) move to
-`dn-lib.el` or to the module that owns the concept, never to a "misc"
-file. Packages that other modules assume (`consult`, `projectile`,
-`s`, `f`) are declared with `:straight t` where they are first used.
-
-**d. OS modules instead of scattered branches.** `os-darwin.el` is only
-loaded when `system-type` is `darwin` and owns everything currently behind
-`config-when-system 'darwin`. Language modules stop binding
-`compile-in-iterm` on Linux; `os-darwin.el` adds the binding to
-`c++-mode-map` with `with-eval-after-load`.
-
-**e. A self-contained init directory.** With `early-init.el` and
-`init.el` at the repo root, the config runs with
-`emacs --init-directory ~/emacs-config` (Emacs 29+) with no symlinks, and
-CI can run it in a clean container. straight's `straight/` and
-`eln-cache/` land inside the repo and are gitignored. The
-`config-dotemacs-d` variable and the `.emacs` vs `.emacs.d` split go away.
-
-**f. Straight defaults.** Set `straight-use-package-by-default t` and use
-`:straight nil` only for built-ins. Consider `:defer t` as the default with
-`:demand t` on the handful of always-on modes (vertico, which-key,
-projectile, editorconfig); with 149 packages this is the single biggest
-startup-time lever. `use-package-compute-statistics` + `M-x
-use-package-report` shows where the time goes before touching anything.
-
-**g. Verification.** `make check` runs
-`emacs --batch --init-directory . --eval '(kill-emacs 0)'` (fails on any
-load error) and byte-compiles `lisp/core lisp/modules lisp/lang` with
-`byte-compile-error-on-warn`. A GitHub Actions job with `purcell/setup-emacs`
-on Emacs 29 and 30 makes provide/header drift impossible to merge.
-
-### Migration plan
-
-Each phase is one PR, independently mergeable, with the config working at
-every step.
-
-| Phase | Content | Risk |
-|---|---|---|
-| 0. Safety net (**mostly done**) | `make check`, `.dir-locals.el`, header/provide fixes and footer removal landed. Left: a CI job and a byte-compile target for the own modules. | none |
-| 1. Delete (**done**) | Only `(use-package use-package :straight t)` (23) is left. | none |
-| 2. Fix bugs (**done**) | Items 1-15 landed on main, as did 22, 25, 28. The one leftover is the cross-OS `compile-in-iterm` binding (26). | low |
-| 3. Re-cut modules | Split `init-emacs.el` into `ui`/`completion`/`editing`; move tooling out of `init-programming.el` into `lsp.el`; move language packages into `lang/`; create `os-darwin.el`; `lib/` + `vendor/` + `patches/` split. Pure moves, no behaviour change. | low |
-| 4. Loader + naming | `dn-` prefix everywhere; `defgroup dn`; single `dn-load-directory`; `dn-modules`/`dn-disabled-languages`; README rewrite. | medium |
-| 5. Init directory | `early-init.el` + `init.el`, `--init-directory` support, custom-file ordering fix, `straight-use-package-by-default`, defer audit. | medium |
-
-Phases 0-2 are worth doing regardless of whether the restructuring in 3-5
-is adopted.
-
-### Quick wins (under an hour total)
-
-Everything from the original quick-wins list has landed except these:
-
-- Add a byte-compile target to the `Makefile` and a CI job that runs
-  `make check`.
-- Re-indent the 11 files that still contain tabs now that `.dir-locals.el`
-  pins spaces.
-- Replace `(use-package use-package :straight t)` with `:straight nil`, and
-  add `:straight nil` to `savehist`.
-- Guard the `compile-in-iterm` bindings in `cpp.el` and `rest.el` with the
-  darwin check, or define a no-op elsewhere.
-- Add the `lexical-binding` cookie to `dashboard-worktrees-patch.el`.
+1. Add `make compile` (byte-compile own modules, warnings as errors) and a
+   CI workflow that runs `make check` and `make compile` on Emacs 29 and
+   the current release.
+2. Fold `init-custom.el`, `init-misc.el`, `init-keybindings.el`,
+   `init-custom-functions.el`, `init-multiple-cursors.el` and
+   `init-mergiraf.el` into their natural homes; update `dn-modules` and
+   the README layout table.
+3. Rename the `config-*` helpers to `dn-*`, merge the `config` group into
+   `dn`, and prefix the remaining own functions (item 31).
+4. Run `use-package-compute-statistics`, defer the long tail, extend the
+   smoke test's deferral list as each package moves.
+5. Re-indent the seven files that still contain tabs; add `:straight nil`
+   to `savehist` and `use-package`; unnest the ispell setup; move
+   `emacs.service` out of the repo or template its paths.
