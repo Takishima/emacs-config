@@ -4,8 +4,7 @@
 
 ;; Run with `make compile', after early-init.el and init.el have loaded the
 ;; configuration.  Every own Emacs Lisp file is byte-compiled into a temporary
-;; directory; a file that fails to compile fails the run.  Warnings are
-;; printed but do not fail it.
+;; directory; a file that fails to compile or emits a warning fails the run.
 
 ;;; Code:
 
@@ -27,10 +26,20 @@
           (expand-file-name (concat (file-name-nondirectory file) "c")
                             dn-compile-out)))
 
-(let ((failures 0))
+(defvar dn-compile-warnings 0
+  "Number of warnings emitted while compiling the current file.")
+
+(let ((failures 0)
+      (log-warning byte-compile-log-warning-function))
+  (setq byte-compile-log-warning-function
+        (lambda (string &optional position fill level)
+          (when (eq (or level :warning) :warning)
+            (setq dn-compile-warnings (1+ dn-compile-warnings)))
+          (funcall log-warning string position fill level)))
   (dolist (dir dn-compile-dirs)
     (dolist (file (directory-files dir t "\\`[^#.].*\\.el\\'"))
-      (unless (byte-compile-file file)
+      (setq dn-compile-warnings 0)
+      (unless (and (byte-compile-file file) (zerop dn-compile-warnings))
         (setq failures (1+ failures))
         (message "FAIL %s" file))))
   (delete-directory dn-compile-out t)

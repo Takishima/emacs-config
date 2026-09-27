@@ -55,7 +55,7 @@ task outranks this file.
 ## Check before committing
 
 1. `make check` passes: the config loads in batch mode without errors or `use-package` warnings.
-2. `make compile` passes, and the files you touched add no byte-compile warnings.
+2. `make compile` passes. It fails on any byte-compile warning.
 3. Every comment you added survives the three questions above.
 4. Behaviour a user sees (a command, a key, a `defcustom`) is documented in its docstring, and in
    `README.md` when it belongs to a documented feature such as the timesheet.
