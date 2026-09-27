@@ -55,6 +55,7 @@
 (config-require 'init-mergiraf)
 (config-require 'init-llm)
 (config-require 'init-completion)
+(config-require 'init-lsp)
 (config-require 'init-programming)
 (config-require 'init-auctex)
 (config-require 'init-ispell)

@@ -536,13 +536,6 @@ active region is added to the search string."
          ("C-x C-d" . consult-dir)
          ("C-x C-j" . consult-dir-jump-file)))
 
-(use-package consult-lsp
-  :straight t
-  :bind (
-         ("M-s l" . consult-lsp-file-symbols)
-         )
-  )
-
 (use-package consult-projectile
   :straight t
   :bind (
