@@ -65,6 +65,8 @@
 
 (use-package cmake-format
   :straight nil
+  :defines cmake-ts-mode-map
+  :functions cmake-format-buffer
   :hook
   ((cmake-mode cmake-ts-mode) . cmake-format-mode)
   (cmake-mode . lsp-deferred)

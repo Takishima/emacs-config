@@ -50,6 +50,7 @@
 
 (use-package python
   :straight nil
+  :defines dash-docs-docsets
   :bind (:map python-base-mode-map
               (
                ("C-c i" . python-insert-docstring-with-google-style-at-point)

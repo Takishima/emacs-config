@@ -182,6 +182,7 @@ Work in `reb-target-buffer' through `query-replace-regexp'."
 (use-package yasnippet
   :straight t
   :defer 1
+  :functions yas-reload-all
   :custom
   (yas-indent-line 'auto)
   (yas-inhibit-overlay-modification-protection t)

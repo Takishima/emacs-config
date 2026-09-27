@@ -138,7 +138,7 @@ its output.  By default it messages the output."
    :name (if name name
            "async-process")
    :filter (if filter filter
-             (lambda (process output) (message (string-trim output)))))
+             (lambda (_process output) (message (string-trim output)))))
   )
 
 ;; ========================================================================== ;;

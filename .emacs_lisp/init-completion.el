@@ -43,6 +43,7 @@
 (use-package prescient
   :straight t
   :defer t
+  :functions prescient-persist-mode
   :config (prescient-persist-mode))
 
 ;; ========================================================================== ;;

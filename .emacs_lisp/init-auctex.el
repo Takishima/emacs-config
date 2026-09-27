@@ -49,6 +49,7 @@
   :straight auctex
   :defer t
   :defines (latex-help-cmd-alist latex-help-file)
+  :functions (TeX-run-command TeX-synchronous-sentinel)
   :custom
   (TeX-auto-local "tex-tmp")
   (TeX-parse-self t)
@@ -122,9 +123,9 @@ The values are saved in `latex-help-cmd-alist' for speed."
           process
         (TeX-synchronous-sentinel name file process))))
 
-  (defun dn-tex-biber-sentinel (process name)
+  (defun dn-tex-biber-sentinel (_process _name)
     "Report the warnings and errors Biber wrote to the TeX output buffer.
-PROCESS and NAME are the arguments of a `TeX-sentinel-function'."
+_PROCESS and _NAME are the ignored arguments of a `TeX-sentinel-function'."
     (goto-char (point-max))
     (cond
      ((re-search-backward (concat

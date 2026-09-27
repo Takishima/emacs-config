@@ -46,9 +46,17 @@
   "Set `split-height-threshold' to 200 in the current magit buffer."
   (setq-local split-height-threshold 200))
 
+(defun dn-magit-org-read-date (&rest _ignored)
+  "Read a date with `org-read-date', ignoring the transient reader arguments."
+  (org-read-date))
+
 (use-package magit
   :straight t
   :commands magit
+  :functions (magit-list-remotes magit-get-current-branch magit-push-arguments
+              magit-toplevel magit-start-process magit-process-buffer
+              magit-file-at-point magit-read-file magit-run-git magit-refresh
+              magit-git-lines)
   :hook
   (git-commit-setup . git-commit-setup-flyspell)
   (magit-mode . dn-magit-split-height-threshold)
@@ -83,10 +91,6 @@
        )
       )
     )
-
-  (defun dn-magit-org-read-date (&rest _ignored)
-    "Read a date with `org-read-date', ignoring the transient reader arguments."
-    (org-read-date))
 
   (transient-define-argument magit-log:--since ()
     :description "Show commits more recent than a specific date."
@@ -148,7 +152,7 @@
             (message "Running mergiraf solve on %s..." file)
             (set-process-sentinel
              proc
-             (lambda (process event)
+             (lambda (process _event)
                (when (eq (process-status process) 'exit)
                  (if (= (process-exit-status process) 0)
                      (progn
@@ -175,7 +179,7 @@
                      (length conflicted-files))
             (set-process-sentinel
              proc
-             (lambda (process event)
+             (lambda (process _event)
                (when (eq (process-status process) 'exit)
                  (if (= (process-exit-status process) 0)
                      (progn
@@ -309,7 +313,8 @@ Icons use Nerd Font codepoints: nf-md-nix (U+F1511) and nf-dev-cmake (U+E794).")
 
 (defun dn-conv-commit-add-faces (&rest _args)
   "Compose icons and add faces for conventional commit headers in the buffer.
-Types come from `dn-conv-commit-type-desc', scopes from `dn-conv-commit-scope-icons'."
+Types come from `dn-conv-commit-type-desc', scopes from
+`dn-conv-commit-scope-icons'."
   (interactive)
   (with-silent-modifications
     (dolist (elt dn-conv-commit-type-desc nil)

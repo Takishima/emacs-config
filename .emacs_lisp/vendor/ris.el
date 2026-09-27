@@ -1,4 +1,4 @@
-;;; ris.el --- major mode for editing RIS bibliography files
+;;; ris.el --- major mode for editing RIS bibliography files -*- lexical-binding: nil -*-
 ;; $Id: ris.el,v 1.9 2005/05/08 19:34:02 mhoenicka Exp $
 
 ;; Copyright (C) 2001-2005  Markus Hoenicka

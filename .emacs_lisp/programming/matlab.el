@@ -41,6 +41,7 @@
 
 (use-package matlab
   :straight t
+  :defines matlab-mode-map
   :bind
   (:map matlab-mode-map
         ("M-;" . nil)
@@ -113,9 +114,6 @@
   "Insert a MATLAB documentation template for the buffer's first function."
   (interactive)
   (let (
-        (counter 0)
-        (keep-on t)
-        (index 0)
         (func_ret "")
         (func_name "")
         (func_args "")
@@ -123,7 +121,7 @@
         )
     (progn
       (goto-char 0)
-      (condition-case err
+      (condition-case nil
           (progn
             (re-search-forward "\\s-*function\\s-*\\(\\[?[a-zA-Z0-9_, ]+\\]?\\)\\s-*=\\s-*\\([a-zA-Z0-9_]+\\)\\s-*(?\\(.*\\))?")
             (setq func_ret  (match-string 1))

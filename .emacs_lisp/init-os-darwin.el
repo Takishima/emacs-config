@@ -42,6 +42,12 @@
 (require 'use-package)
 (require 'cl-lib)
 
+(defvar mac-command-modifier)
+(defvar mac-option-modifier)
+(defvar c++-ts-mode-map)
+(defvar rst-mode-map)
+(declare-function do-applescript "nsfns.m" (script))
+
 ;; ========================================================================== ;;
 
 (add-to-list 'default-frame-alist '(font . "Monaco" ))
@@ -141,8 +147,7 @@ An empty answer reuses the last command, or `dn-compile-in-iterm-command'."
   "Export buffer to HTML, and copy it to the clipboard as rich text."
   (interactive)
   (save-window-excursion
-    (let* ((buf (htmlize-buffer))
-           (html (with-current-buffer buf (buffer-string))))
+    (let ((buf (htmlize-buffer)))
       (with-current-buffer buf
         (progn
           (shell-command-on-region
@@ -156,8 +161,7 @@ An empty answer reuses the last command, or `dn-compile-in-iterm-command'."
   "Export region to HTML, and copy it to the clipboard."
   (interactive)
   (save-window-excursion
-    (let* ((buf (htmlize-region (region-beginning) (region-end)))
-           (html (with-current-buffer buf (buffer-string))))
+    (let ((buf (htmlize-region (region-beginning) (region-end))))
       (with-current-buffer buf
         (progn
           (shell-command-on-region

@@ -38,7 +38,8 @@ If nil, no worktrees are listed."
   "Cache of the generated align format.")
 
 (defun dn-dashboard-worktrees--parse (output)
-  "Return the worktree paths with a branch in `git worktree list --porcelain' OUTPUT."
+  "Return the worktree paths with a branch in OUTPUT.
+OUTPUT is the output of `git worktree list --porcelain'."
   (let ((worktrees '())
         (current-path nil))
     (dolist (line (split-string output "\n" t))
