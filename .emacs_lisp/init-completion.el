@@ -95,7 +95,7 @@
 
 (use-package vertico-prescient
   :after vertico prescient
-  :straight nil
+  :straight t
   :custom
   (vertico-prescient-enable-sorting t)
   (vertico-prescient-override-sorting nil)
