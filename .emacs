@@ -34,19 +34,19 @@
 (dolist (dir '("vendor" "lib"))
   (add-to-list 'load-path (expand-file-name dir config-dotemacs-lisp)))
 
-(config-load-file-exec-func (concat config-dir "init-pre.el")
-			    'config-init-pre
-			    nil)
+(config-load-file-exec-func (config-local-file "init-pre.el")
+                            'config-init-pre
+                            nil)
 
-(custom-set-variables '(custom-file (concat config-dotemacs-lisp "custom.el")))
+(custom-set-variables '(custom-file (config-local-file "custom.el" config-dotemacs-lisp)))
 (load custom-file t)
 
 (dolist (module dn-modules)
   (config-require module))
 
-(config-load-file-exec-func (concat config-dir "init-post.el")
-			    'config-init-post
-			    nil)
+(config-load-file-exec-func (config-local-file "init-post.el")
+                            'config-init-post
+                            nil)
 
 (when (memq window-system '(mac ns x))
     (x-focus-frame nil))

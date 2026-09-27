@@ -157,6 +157,12 @@
                          t))
     (kill-buffer)))
 
+(when config-local-dir
+  (dn-smoke-check "init-pre.el read from config-local-dir" t
+                  (bound-and-true-p dn-smoke-local-init-pre))
+  (dn-smoke-check "custom-file in config-local-dir" t
+                  (file-in-directory-p custom-file config-local-dir)))
+
 (dn-smoke-check "use-package warnings" nil
                 (when-let* ((buf (get-buffer "*Warnings*")))
                   (with-current-buffer buf

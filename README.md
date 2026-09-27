@@ -13,6 +13,8 @@ ln -s "$PWD/early-init.el" ~/.emacs.d/early-init.el
 
 To run another checkout without relinking, start `emacs --init-directory <checkout>`. `early-init.el` keeps `user-emacs-directory` at `~/.emacs.d`, so straight's builds and session state are shared. Set `EMACS_USER_DIRECTORY` to use another directory instead, for example a throwaway one that straight bootstraps from scratch.
 
+When the checkout is read-only, set `config-local-dir` (or `DN_EMACS_LOCAL_DIR`) to a writable directory: `init-pre.el`, `init-post.el` and `custom.el` are read from and written to it instead of the checkout, and a module file there replaces the tracked one. Unset, everything stays in the checkout as described below.
+
 # Loading order
 
 `init.el` loads `.emacs`, which loads, in order:

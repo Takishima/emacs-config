@@ -98,6 +98,19 @@ Override it per host in config/init-pre.el."
   :group 'dn
   :type '(repeat symbol))
 
+(defcustom config-local-dir (getenv "DN_EMACS_LOCAL_DIR")
+  "Directory of the untracked per-host files, or nil.
+nil keeps init-pre.el, init-post.el and module overrides in `config-dir'
+and custom.el in `config-dotemacs-lisp', as when the checkout is
+writable.  Set it when the checkout is read-only, e.g. in the Nix store."
+  :group 'config
+  :type '(choice (const nil) directory))
+
+(defun config-local-file (name &optional default-dir)
+  "Per-host file NAME under `config-local-dir'.
+With `config-local-dir' nil, NAME under DEFAULT-DIR, or `config-dir'."
+  (expand-file-name name (or config-local-dir default-dir config-dir)))
+
 (provide 'config-variables)
 
 ;;; config-variables.el ends here

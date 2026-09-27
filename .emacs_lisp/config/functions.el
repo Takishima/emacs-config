@@ -71,17 +71,18 @@ missing."
   )
 
 (defun config-require (feature)
-  "Require FEATURE from its file in `config-dir' or `config-dotemacs-lisp'."
-  (let* (
-        (feature-name (symbol-name feature))
-        (filename1 (concat config-dir feature-name ".el"))
-        (filename2 (concat config-dotemacs-lisp feature-name ".el"))
-        (filename (if (file-exists-p filename1) filename1 filename2))
-        )
-     (message "INFO: requiring %s from %s" feature-name filename)
-     (require feature filename)
-    )
-  )
+  "Require FEATURE from its file in `config-dotemacs-lisp'.
+A file of the same name in `config-local-dir', then in `config-dir',
+replaces the tracked module."
+  (let* ((feature-name (symbol-name feature))
+         (local (config-local-file (concat feature-name ".el")))
+         (tracked-override (concat config-dir feature-name ".el"))
+         (tracked (concat config-dotemacs-lisp feature-name ".el"))
+         (filename (cond ((file-exists-p local) local)
+                         ((file-exists-p tracked-override) tracked-override)
+                         (t tracked))))
+    (message "INFO: requiring %s from %s" feature-name filename)
+    (require feature filename)))
 
 (defun dn-load-directory (dir prefix &optional skip)
   "Require each DIR/*.el, in sorted order, as feature PREFIX<base>.
