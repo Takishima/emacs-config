@@ -45,6 +45,14 @@ With `manageElispPackages` (the default) every name in `elispPackages`, which de
 
 `tools.enableAll` puts the everyday groups of `nix/tools.nix` on the wrapped Emacs's PATH, ahead of the profile's. `tools.<group>.enable` and `tools.<group>.packages` control one group, and each option's description names its tools. `tools.base` (aspell and delta) is always there, and fonts go to the profile. nixpkgs' `copilot` carries the unfree `copilot-language-server`: allow it in `nixpkgs.config.allowUnfreePredicate`, or drop `copilot` from `elispPackages`.
 
+A local checkout can stand in at two levels. `checkout` loads the elisp from it: edits apply on the next Emacs start, with no switch, while the module, the package roster and the tools still come from the flake input. To take those from the checkout too, override the input when switching, without touching the consumer's `flake.nix` or its lock:
+
+```sh
+home-manager switch --flake ~/src/home-manager-modules --override-input emacs-config ~/src/emacs-config
+```
+
+A path that is a git repository counts as tracked files only, so `git add` a new file before switching. Use both together while working on the config: the override for a new package or option, `checkout` for everything else.
+
 `nix flake check` runs `make check`, `make compile` and `make packages` with the built Emacs and no network, checks that `nix/elisp-packages.nix` names exactly what `test/packages.el` prints, evaluates the module in both modes and builds its wrapper. `nix run` starts the built Emacs on this checkout; `nix develop` gives a shell where `make packages` runs in nix mode.
 
 # Loading order
