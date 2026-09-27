@@ -41,10 +41,6 @@
 
 ;; ============================================================================================== ;;
 
-(use-package vterm
-  :straight t)
-
-;; for eat terminal backend:
 (use-package eat :straight t)
 
 (use-package claude-code-ide
