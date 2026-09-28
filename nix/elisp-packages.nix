@@ -199,6 +199,8 @@ rec {
           dash
           yaml-mode
         ];
+        # The keyword generator: dev-only, and needs f.
+        postUnpack = "rm $sourceRoot/docker-compose-mode-helpers.el";
       };
       # The fork keeps nixpkgs' MELPA recipe (:files (:defaults "*.extmap")).
       datetime = super.datetime.overrideAttrs (_: {
