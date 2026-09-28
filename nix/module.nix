@@ -124,6 +124,17 @@ in
       '';
     };
 
+    freshArchives = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Take MELPA, ELPA and NonGNU from emacs-overlay's daily archives
+        instead of nixpkgs' snapshots, which lag by up to a few weeks.
+        cache.nixos.org has none of those builds, so every bump of the
+        emacs-overlay input rebuilds each package whose version moved.
+      '';
+    };
+
     checkout = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
@@ -220,7 +231,13 @@ in
         ++ lib.optionals cfg.treesitGrammars [ epkgs.treesit-grammars.with-all-grammars ]
         ++ lib.optionals cfg.tools.fonts.enable [ epkgs.nerd-icons ];
       overrides = lib.mkIf cfg.manageElispPackages (
-        lib.composeExtensions (elisp.overrides pkgs) cfg.extraOverrides
+        lib.composeManyExtensions (
+          lib.optional cfg.freshArchives elisp.archives
+          ++ [
+            (elisp.overrides pkgs)
+            cfg.extraOverrides
+          ]
+        )
       );
     };
 

@@ -149,6 +149,25 @@ rec {
     "consult-lsp"
   ];
 
+  # emacs-overlay's overlays/package.nix, minus the archives the merge shadows.
+  # It rebuilds the scope's base, so it must precede `overrides', never follow.
+  archives =
+    _self: super:
+    let
+      repos = "${inputs.emacs-overlay}/repos";
+    in
+    super.override {
+      melpaPackages = super.melpaPackages.override {
+        archiveJson = "${repos}/melpa/recipes-archive-melpa.json";
+      };
+      elpaPackages = super.elpaPackages.override {
+        generated = "${repos}/elpa/elpa-generated.nix";
+      };
+      nongnuPackages = super.nongnuPackages.override {
+        generated = "${repos}/nongnu/nongnu-generated.nix";
+      };
+    };
+
   overrides =
     pkgs: self: super:
     let

@@ -7,6 +7,10 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    emacs-overlay = {
+      url = "github:nix-community/emacs-overlay";
+      flake = false;
+    };
     # Sources straight clones from GitHub and nixpkgs does not carry.
     # Bump with `nix flake update <name>'.
     claude-code-ide = {
