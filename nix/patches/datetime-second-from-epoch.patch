@@ -1,0 +1,123 @@
+From 5016d6704dbcfd4bc6a5b026f2eb4a9032d942f8 Mon Sep 17 00:00:00 2001
+From: Damien Nguyen <ngn.damien@gmail.com>
+Date: Tue, 19 Nov 2024 23:17:50 +0100
+Subject: [PATCH] Add support for second-from-epoch for parsing
+
+Modified the following functions:
+
+- datetime--parse-java-pattern
+- datetime-parser-to-float
+- datetime-matching-regexp
+
+These are mostly used by logview to parse tiemstampsc
+---
+ datetime.el | 23 ++++++++++++++++++++---
+ 1 file changed, 20 insertions(+), 3 deletions(-)
+
+diff --git a/datetime.el b/datetime.el
+index 7e6d13c..79cfac3 100644
+--- a/datetime.el
++++ b/datetime.el
+@@ -118,6 +118,7 @@
+ 
+ (require 'extmap)
+ 
++(defconst datetime--forked-by "takishima" "Forked by Takishima")
+ 
+ (defun datetime--define-error (name message)
+   (if (fboundp #'define-error)
+@@ -430,6 +431,7 @@ form:
+                                                       (_ (error "Pattern character `%c' must come in exactly 1, 4 or 5 repetitions" character)))))
+                        (?m (cons 'minute            num-repetitions))
+                        (?s (cons 'second            num-repetitions))
++                       (?A (cons 'second-from-epoch num-repetitions))
+                        (?S (cons 'second-fractional num-repetitions))
+                        (?z (cons 'timezone          (if (>= num-repetitions 4) 'full 'abbreviated)))
+                        (?O (cons 'timezone          (pcase num-repetitions
+@@ -1174,6 +1176,7 @@ unless specified otherwise.
+          hour-am-pm-1-12-part-indices
+          hour-am-pm-0-11-part-indices
+          minute-part-indices
++         second-from-epoch-part-indices
+          second-part-indices
+          second-fractional-part-indices
+          timezone-offset-part-indices
+@@ -1243,6 +1246,10 @@ unless specified otherwise.
+                         (`minute                  (when (or validating (null minute-part-indices))
+                                                     (push part-index minute-part-indices))
+                                                   59)
++                        (`second-from-epoch       (when (or validating (null second-from-epoch-part-indices))
++                                                    (push part-index second-from-epoch-part-indices))
++                                                  ;; Magic number for the next loop.
++                                                  -1)
+                         (`second                  (when (or validating (null second-part-indices))
+                                                     (push part-index second-part-indices))
+                                                   59)
+@@ -1277,7 +1284,9 @@ unless specified otherwise.
+         (push (if (integerp regexp)
+                   (let ((run-together-numeric-groups (or last-part-was-numeric (integerp (caar regexp-part-sources)))))
+                     (setf last-part-was-numeric t)
+-                    (if (= regexp 0)
++                    (if (= regexp -1)
++                        (rx (1+ (any "0-9")))
++                        (if (= regexp 0)
+                         ;; Magic number for years.
+                         (cond ((or (memq details '(1 add-century-when-parsing)) (not (plist-get options :require-leading-zeros)))
+                                (rx (1+ (any "0-9"))))
+@@ -1295,7 +1304,7 @@ unless specified otherwise.
+                               ((>= regexp 20)
+                                (format (if run-together-numeric-groups "[0-%d][0-9]" "0*[1-%d]?[0-9]") (/ regexp 10)))
+                               (t
+-                               (if run-together-numeric-groups "[01][0-9]" "0*1?[0-9]"))))))
++                               (if run-together-numeric-groups "[01][0-9]" "0*1?[0-9]")))))))
+                 (if (consp regexp)
+                     (setf last-part-was-numeric (cdr regexp)
+                           regexp                (car regexp))
+@@ -1320,6 +1329,7 @@ unless specified otherwise.
+           hour-am-pm-0-11-part-indices   (nreverse hour-am-pm-0-11-part-indices)
+           regexp-parts                   (nreverse regexp-parts)
+           minute-part-indices            (nreverse minute-part-indices)
++          second-from-epoch-part-indices (nreverse second-from-epoch-part-indices)
+           second-part-indices            (nreverse second-part-indices)
+           second-fractional-part-indices (nreverse second-fractional-part-indices)
+           timezone-offset-part-indices   (nreverse timezone-offset-part-indices))
+@@ -1340,7 +1350,8 @@ unless specified otherwise.
+                                           year-part-indices month-number-part-indices month-name-part-indices day-of-month-part-indices
+                                           am-pm-part-indices day-period-part-indices
+                                           hour-0-23-part-indices hour-1-24-part-indices hour-am-pm-1-12-part-indices hour-am-pm-0-11-part-indices
+-                                          minute-part-indices second-part-indices second-fractional-part-indices timezone-offset-part-indices))
++                                          minute-part-indices second-from-epoch-part-indices second-part-indices second-fractional-part-indices
++                                          timezone-offset-part-indices))
+            (part-index              0)
+            (group-index             1))
+       (while regexp-parts
+@@ -1391,6 +1402,10 @@ unless specified otherwise.
+            (minute-computation (or (datetime--parser-computation pattern "minute" validating nil 59
+                                                                  (minute-part-indices datetime--parser-int-computation))
+                                    (plist-get 'minute defaults) 0))
++           (second-from-epoch-computation
++            (or (datetime--parser-computation pattern "second-from-epoch" validating nil nil
++                                              (second-from-epoch-part-indices datetime--parser-int-computation))
++                (plist-get 'second-from-epoch defaults) 0))
+            (second-computation (or (datetime--parser-computation pattern "second" validating nil 59
+                                                                  (second-part-indices datetime--parser-int-computation))
+                                    (plist-get 'second defaults) 0))
+@@ -1424,6 +1439,7 @@ unless specified otherwise.
+                                            ,(* 24 60 60))))
+                                   (* ,hour-computation ,(* 60 60))
+                                   (* ,minute-computation 60)
++                                  ,second-from-epoch-computation
+                                   ,second-computation
+                                   ,@(when timezone-offset-computation
+                                       `((- ,timezone-offset-computation)))
+@@ -1666,6 +1682,7 @@ specified otherwise.
+                           (`hour-am-pm-0-11         11)
+                           (`hour-am-pm-1-12         12)
+                           (`minute                  59)
++                          (`second-from-epoch       (rx (+ (any "0-9"))))
+                           (`second                  59)
+                           (`decimal-separator       (rx (or "." ",")))
+                           (`second-fractional       (apply #'concat (make-list details (rx (any "0-9")))))
+-- 
+2.55.0
+

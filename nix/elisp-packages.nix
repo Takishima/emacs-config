@@ -202,10 +202,8 @@ rec {
         # The keyword generator: dev-only, and needs f.
         postUnpack = "rm $sourceRoot/docker-compose-mode-helpers.el";
       };
-      # The fork keeps nixpkgs' MELPA recipe (:files (:defaults "*.extmap")).
-      datetime = super.datetime.overrideAttrs (_: {
-        version = "0.10.2-unstable-${dateOf inputs.datetime}";
-        src = inputs.datetime;
+      datetime = super.datetime.overrideAttrs (prev: {
+        patches = (prev.patches or [ ]) ++ [ ./patches/datetime-second-from-epoch.patch ];
       });
     };
 }

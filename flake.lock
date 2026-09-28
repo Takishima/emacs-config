@@ -16,22 +16,6 @@
         "type": "github"
       }
     },
-    "datetime": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1732056021,
-        "narHash": "sha256-p9X0MDIWj8zCV2XqTtBEpXiKBpvz6Pru4U782GVuApE=",
-        "owner": "Takishima",
-        "repo": "datetime",
-        "rev": "c25b998642eac905d63a48728ecccd035cb658f6",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Takishima",
-        "repo": "datetime",
-        "type": "github"
-      }
-    },
     "docker-compose-mode": {
       "flake": false,
       "locked": {
@@ -103,7 +87,6 @@
     "root": {
       "inputs": {
         "claude-code-ide": "claude-code-ide",
-        "datetime": "datetime",
         "docker-compose-mode": "docker-compose-mode",
         "emacs-overlay": "emacs-overlay",
         "home-manager": "home-manager",

@@ -21,10 +21,6 @@
       url = "github:meqif/docker-compose-mode";
       flake = false;
     };
-    datetime = {
-      url = "github:Takishima/datetime";
-      flake = false;
-    };
   };
 
   outputs =
