@@ -43,7 +43,7 @@
   :straight auctex
   :defer t
   :defines (latex-help-cmd-alist latex-help-file)
-  :functions (TeX-run-command TeX-synchronous-sentinel)
+  :functions (TeX-run-command TeX-synchronous-sentinel Info-goto-node)
   :custom
   (TeX-auto-local "tex-tmp")
   (TeX-parse-self t)

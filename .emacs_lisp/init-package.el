@@ -40,6 +40,8 @@ behind home-manager's back."
   (display-warning
    'dn (format "%s is not on PATH: add it to the Nix packages" pack)))
 
+(declare-function straight-use-package "straight")
+
 (pcase dn-package-manager
   ('nix
    ;; Without a handler use-package drops every form carrying `:straight'.
