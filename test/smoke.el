@@ -25,9 +25,11 @@
 ;; Keep language servers from starting in batch.
 (advice-add 'lsp-deferred :override #'ignore)
 
-(dolist (feature '(lsp-mode yasnippet devdocs dn-timesheet))
+(dolist (feature '(lsp-mode yasnippet devdocs dn-timesheet embark vertico-grid))
   (dn-smoke-check (format "%s deferred at startup" feature) nil
                   (featurep feature)))
+(dolist (fn '(embark-eldoc-first-target vertico-grid-mode))
+  (dn-smoke-check (format "%s autoloaded" fn) t (fboundp fn)))
 (dn-smoke-check "config-require leaks filename" nil (boundp 'filename))
 (dn-smoke-check "dashboard worktrees item registered" 'dn-dashboard-insert-worktrees
                 (alist-get 'worktrees dashboard-item-generators))

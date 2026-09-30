@@ -50,7 +50,10 @@ behind home-manager's back."
      (defun use-package-normalize/:straight (_name _keyword args) args)
      (defun use-package-handler/:straight (name _keyword _args rest state)
        (use-package-process-keywords name rest state)))
-   (advice-add 'system-packages-install :override #'dn--system-packages-refuse))
+   (advice-add 'system-packages-install :override #'dn--system-packages-refuse)
+   ;; early-init.el turns off startup activation for straight's sake, and
+   ;; activation is what loads the autoloads of the wrapper's packages.
+   (package-activate-all))
   ('straight
    (defvar bootstrap-version)
    (let ((bootstrap-file
