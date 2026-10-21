@@ -77,6 +77,7 @@ rec {
     "highlight-indentation"
     "hotfuzz"
     "htmlize"
+    "kdl-mode"
     "keychain-environment"
     "leuven-theme"
     "logview"
