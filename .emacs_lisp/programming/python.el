@@ -64,9 +64,7 @@
      python-shell-prompt-regexp "In \\[[0-9]+\\]: "
      python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
      python-shell-completion-setup-code
-     "from IPython.core.completerlib import module_completion"
-     python-shell-completion-string-code
-     "';'.join(get_ipython().Completer.all_completions('''%s'''))\n"))
+     "from IPython.core.completerlib import module_completion"))
   )
 
 (use-package python-insert-docstring

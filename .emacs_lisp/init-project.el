@@ -65,6 +65,8 @@
 (use-package direnv
   :if (executable-find "direnv")
   :straight t
+  :defines dn-direnv-enabled-hosts
+  :functions tramp-sh-handle-start-file-process@dn-direnv
   :config
   (direnv-mode)
   (defcustom dn-direnv-enabled-hosts nil

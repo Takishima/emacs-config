@@ -175,39 +175,39 @@ Enable this if your flake or its inputs require impure evaluation."
   (require 'dap-gdb-lldb)
   )
 
+(defun dn-lsp-booster--advice-json-parse (old-fn &rest args)
+  "Read the bytecode emacs-lsp-booster emits, else call OLD-FN with ARGS."
+  (or
+   (when (equal (following-char) ?#)
+     (let ((bytecode (read (current-buffer))))
+       (when (byte-code-function-p bytecode)
+         (funcall bytecode))))
+   (apply old-fn args)))
+
+(defun dn-lsp-booster--advice-final-command (old-fn cmd &optional test?)
+  "Prepend emacs-lsp-booster to the command OLD-FN resolves for CMD.
+TEST? is non-nil when `lsp-server-present?' only checks for the server."
+  (let ((orig-result (funcall old-fn cmd test?)))
+    (if (and (not test?)
+             (not (file-remote-p default-directory)) ; `lsp-resolve-final-command' adds a shell wrapper
+             lsp-use-plists
+             (not (functionp 'json-rpc-connection)) ; native json-rpc
+             (executable-find "emacs-lsp-booster"))
+        (progn
+          (when-let* ((command-from-exec-path (executable-find (car orig-result)))) ; may be on `exec-path' but not $PATH
+            (setcar orig-result command-from-exec-path))
+          (message "Using emacs-lsp-booster for %s!" orig-result)
+          (cons "emacs-lsp-booster" orig-result))
+      orig-result)))
+
 (when (executable-find "emacs-lsp-booster")
-  (defun dn-lsp-booster--advice-json-parse (old-fn &rest args)
-    "Read the bytecode emacs-lsp-booster emits, else call OLD-FN with ARGS."
-    (or
-     (when (equal (following-char) ?#)
-       (let ((bytecode (read (current-buffer))))
-         (when (byte-code-function-p bytecode)
-           (funcall bytecode))))
-     (apply old-fn args)))
   (advice-add (if (progn (require 'json)
                          (fboundp 'json-parse-buffer))
                   'json-parse-buffer
                 'json-read)
               :around
               #'dn-lsp-booster--advice-json-parse)
-
-  (defun dn-lsp-booster--advice-final-command (old-fn cmd &optional test?)
-    "Prepend emacs-lsp-booster to the command OLD-FN resolves for CMD.
-TEST? is non-nil when `lsp-server-present?' only checks for the server."
-    (let ((orig-result (funcall old-fn cmd test?)))
-      (if (and (not test?)
-               (not (file-remote-p default-directory)) ; `lsp-resolve-final-command' adds a shell wrapper
-               lsp-use-plists
-               (not (functionp 'json-rpc-connection)) ; native json-rpc
-               (executable-find "emacs-lsp-booster"))
-          (progn
-            (when-let* ((command-from-exec-path (executable-find (car orig-result)))) ; may be on `exec-path' but not $PATH
-              (setcar orig-result command-from-exec-path))
-            (message "Using emacs-lsp-booster for %s!" orig-result)
-            (cons "emacs-lsp-booster" orig-result))
-        orig-result)))
-  (advice-add 'lsp-resolve-final-command :around #'dn-lsp-booster--advice-final-command)
-  )
+  (advice-add 'lsp-resolve-final-command :around #'dn-lsp-booster--advice-final-command))
 
 (use-package lsp-treemacs
   :after (lsp-mode treemacs)
