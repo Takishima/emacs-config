@@ -79,6 +79,7 @@ rec {
     "htmlize"
     "kdl-mode"
     "keychain-environment"
+    "khalel"
     "leuven-theme"
     "logview"
     "lsp-ltex"

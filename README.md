@@ -109,6 +109,10 @@ Modules are loaded with `config-require`, which looks in `.emacs_lisp/config/` b
 
 Check-in and check-out take a prefix argument (`C-u C-c w i`) to enter the time by hand, for a forgotten check-in or check-out. A second check-in on the same day is a no-op.
 
+# Calendar
+
+`init-org.el` imports the khal calendars into `khalel-import-org-file` (set to `~/.emacs.d/calendar.org`) ten seconds after startup and every 15 minutes after that, and adds the file to `org-agenda-files`. The import covers the past week and the next 30 days and replaces the file each time, so edits there are lost. `M-x khalel-import-events` refreshes it by hand. Emacs only reads through `khal`; syncing the calendars is left to vdirsyncer outside Emacs.
+
 # Checking the config
 
 `make check` loads the whole config in batch mode and runs `test/smoke.el`. It exits non-zero on a load error, a `use-package` warning or a failed check.

@@ -31,7 +31,8 @@
 
 ;;; Commentary:
 
-;; The daily timesheet (lib/dn-timesheet.el).
+;; The daily timesheet (lib/dn-timesheet.el), and the khal calendar
+;; imported into the agenda through khalel.
 
 ;;; Code:
 
@@ -54,6 +55,19 @@
   (keymap-global-set "C-c w" dn-timesheet-map)
   (with-eval-after-load 'which-key
     (which-key-add-key-based-replacements "C-c w" "timesheet")))
+
+(use-package khalel
+  :straight t
+  :commands khalel-import-events
+  :custom
+  (khalel-import-org-file (locate-user-emacs-file "calendar.org"))
+  (khalel-import-org-file-confirm-overwrite nil)
+  (khalel-import-start-date "-7d")
+  (khalel-import-end-date "+30d")
+  :init
+  (run-at-time 10 900 #'khalel-import-events)
+  :config
+  (add-to-list 'org-agenda-files khalel-import-org-file))
 
 (provide 'init-org)
 
