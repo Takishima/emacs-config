@@ -51,6 +51,20 @@
         ((pkgs.emacsPackagesFor base).overrideScope (elisp.overrides pkgs)).emacsWithPackages (
           epkgs: elisp.packages epkgs ++ [ epkgs.treesit-grammars.with-all-grammars ]
         );
+      checkInputs =
+        pkgs:
+        [
+          self.packages.${pkgs.stdenv.hostPlatform.system}.emacs
+          pkgs.gnumake
+        ]
+        ++ (import ./nix/tools.nix { inherit pkgs; }).check;
+      # The caller sets $root to a scratch directory before splicing this in.
+      checkSetup = pkgs: ''
+        export DN_PACKAGE_MANAGER=nix HOME=$root EMACS_USER_DIRECTORY=$root/emacs.d SHELL=${pkgs.bash}/bin/bash
+        export DN_EMACS_LOCAL_DIR=$root/local/
+        mkdir -p "$EMACS_USER_DIRECTORY" "$DN_EMACS_LOCAL_DIR"
+        echo '(defvar dn-smoke-local-init-pre t)' > "$DN_EMACS_LOCAL_DIR/init-pre.el"
+      '';
     in
     {
       lib = {
@@ -109,6 +123,20 @@
               ''
             );
           };
+          check = {
+            type = "app";
+            program = toString (
+              pkgs.writeShellScript "emacs-config-check" ''
+                set -eu
+                export PATH=${lib.makeBinPath (checkInputs pkgs ++ [ pkgs.coreutils ])}
+                root=$(mktemp -d)
+                trap 'rm -rf "$root"' EXIT
+                ${checkSetup pkgs}
+                [ $# -gt 0 ] || set -- check compile packages
+                make EMACS=emacs "$@"
+              ''
+            );
+          };
         }
       );
 
@@ -116,25 +144,11 @@
         system:
         let
           pkgs = pkgsFor.${system};
-          tools = import ./nix/tools.nix { inherit pkgs; };
-          # A make target in the sandbox: the wrapped Emacs, nix mode, the
-          # per-host files in a local directory as from the store, no network.
           batch =
             target:
-            pkgs.runCommand "emacs-config-${target}"
-              {
-                nativeBuildInputs = [
-                  self.packages.${system}.emacs
-                  pkgs.gnumake
-                ]
-                ++ tools.check;
-                env.DN_PACKAGE_MANAGER = "nix";
-              }
-              ''
-                export HOME=$TMPDIR EMACS_USER_DIRECTORY=$TMPDIR/emacs.d SHELL=${pkgs.bash}/bin/bash
-                export DN_EMACS_LOCAL_DIR=$TMPDIR/local/
-                mkdir -p "$EMACS_USER_DIRECTORY" "$DN_EMACS_LOCAL_DIR"
-                echo '(defvar dn-smoke-local-init-pre t)' > "$DN_EMACS_LOCAL_DIR/init-pre.el"
+            pkgs.runCommand "emacs-config-${target}" { nativeBuildInputs = checkInputs pkgs; } ''
+                root=$TMPDIR
+                ${checkSetup pkgs}
                 cd ${self}
                 make ${target} EMACS=emacs
                 touch $out

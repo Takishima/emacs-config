@@ -118,3 +118,5 @@ Check-in and check-out take a prefix argument (`C-u C-c w i`) to enter the time 
 `make packages` loads the config the same way and checks that every package declared with `:straight` can be found on `load-path`.
 
 All three load `init.el`, so the first run on a machine clones every package and takes a while.
+
+The `make` targets run the `emacs` on PATH. Under home-manager that is the installed wrapper, which lacks any package added to the checkout since the last switch. `nix run .#check`, from the checkout root, runs `check`, `compile` and `packages` on the working tree as the flake checks do: with the checkout's package list, a scratch home and none of the host's tools. Name targets to run fewer, as in `nix run .#check -- compile`.

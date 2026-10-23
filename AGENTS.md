@@ -54,8 +54,14 @@ task outranks this file.
 
 ## Check before committing
 
-1. `make check` passes: the config loads in batch mode without errors or `use-package` warnings.
-2. `make compile` passes. It fails on any byte-compile warning.
+1. `nix run .#check` passes. It runs `make check` (the config loads without errors or `use-package`
+   warnings), `make compile` (no byte-compile warning) and `make packages` with the packages this
+   checkout declares and no tools on PATH. A plain `make` runs whatever `emacs` is installed, so its
+   result depends on when you last switched and on what is on PATH. For Nix changes, run
+   `nix flake check`, after a `git add` of new files.
+2. Code compiles the same whether or not an optional tool is installed: keep `defun`s and
+   `defcustom`s at top level, not inside `(when (executable-find ...))`, or use `:defines` and
+   `:functions`.
 3. Every comment you added survives the three questions above.
 4. Behaviour a user sees (a command, a key, a `defcustom`) is documented in its docstring, and in
    `README.md` when it belongs to a documented feature such as the timesheet.
