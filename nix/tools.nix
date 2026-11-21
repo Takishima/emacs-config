@@ -142,10 +142,9 @@ in
       ];
     };
     nix = {
-      description = "nil, nixd, nixfmt, nixpkgs-fmt and sops for Nix files";
+      description = "nixd, nixfmt, nixpkgs-fmt and sops for Nix files";
       everyday = true;
       packages = [
-        nil
         nixd
         nixfmt
         nixpkgs-fmt

@@ -12,59 +12,10 @@
   :after (lsp-mode)
   :demand t
   :custom
-  (lsp-nix-nil-formatter ["nixfmt"])
-  )
-
-(with-eval-after-load 'lsp-mode
-  (defgroup lsp-nix-nixd nil
-    "LSP support for Nix, using nixd language server."
-    :group 'lsp-mode
-    :link '(url-link "https://github.com/nix-community/nixd"))
-
-  (defcustom lsp-nix-nixd-server-path "nixd"
-    "Executable path for the nixd server."
-    :group 'lsp-nix-nixd
-    :type 'string
-    :package-version '(lsp-mode . "8.0.0"))
-
-  (lsp-defcustom lsp-nix-nixd-formatting-command nil
-    "External formatter command with arguments."
-    :type 'lsp-string-vector
-    :group 'lsp-nix-nixd
-    :lsp-path "nixd.formatting.command"
-    :package-version '(lsp-mode . "9.0.1"))
-
-  (lsp-defcustom lsp-nix-nixd-nixpkgs-expr nil
-    "Expression for nixpkgs toplevel.  Provides package, lib completion/information."
-    :type 'string
-    :group 'lsp-nix-nixd
-    :lsp-path "nixd.nixpkgs.expr"
-    :package-version '(lsp-mode . "9.0.1"))
-
-  (lsp-defcustom lsp-nix-nixd-nixos-options-expr nil
-    "Option set for NixOS option completion."
-    :type 'string
-    :group 'lsp-nix-nixd
-    :lsp-path "nixd.options.nixos.expr"
-    :package-version '(lsp-mode . "9.0.1"))
-
-  (lsp-defcustom lsp-nix-nixd-home-manager-options-expr nil
-    "Option set for home-manager option completion."
-    :type 'string
-    :group 'lsp-nix-nixd
-    :lsp-path "nixd.options.home-manager.expr"
-    :package-version '(lsp-mode . "9.0.1"))
-
-  (lsp-register-client
-   (make-lsp-client :new-connection (lsp-stdio-connection (lambda () lsp-nix-nixd-server-path))
-                    :major-modes '(nix-mode)
-                    :initialized-fn (lambda (workspace)
-                                      (with-lsp-workspace workspace
-                                        (lsp--set-configuration
-                                         (lsp-configuration-section "nixd"))))
-                    :synchronize-sections '("nixd")
-                    :server-id 'nixd-lsp
-                    :priority -1)))
+  (lsp-nix-nixd-formatting-command ["nixfmt"])
+  :config
+  ;; nil outranks nixd in lsp-mode's client priorities.
+  (add-to-list 'lsp-disabled-clients 'nix-nil))
 
 (use-package nix-mode
   :straight t
