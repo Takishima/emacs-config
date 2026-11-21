@@ -97,7 +97,6 @@ rec {
     "modern-cpp-font-lock"
     "multiple-cursors"
     "nix-mode"
-    "nixpkgs-fmt"
     "orderless"
     "pacfiles-mode"
     "pkgbuild-mode"

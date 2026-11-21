@@ -4,9 +4,6 @@
 
 ;;; Code:
 
-(use-package nixpkgs-fmt
-  :straight t)
-
 (use-package lsp-nix
   :straight nil
   :after (lsp-mode)

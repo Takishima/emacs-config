@@ -142,12 +142,11 @@ in
       ];
     };
     nix = {
-      description = "nixd, nixfmt, nixpkgs-fmt and sops for Nix files";
+      description = "nixd, nixfmt and sops for Nix files";
       everyday = true;
       packages = [
         nixd
         nixfmt
-        nixpkgs-fmt
         sops
       ];
     };
