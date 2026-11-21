@@ -12,7 +12,7 @@
   :after (lsp-mode)
   :demand t
   :custom
-  (lsp-nix-nil-formatter ["alejandra"])
+  (lsp-nix-nil-formatter ["nixfmt"])
   )
 
 (with-eval-after-load 'lsp-mode
